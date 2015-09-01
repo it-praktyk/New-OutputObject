@@ -1,5 +1,5 @@
 Function New-ReportFileNameFullPath {
-
+    
 <#
 
 	.SYNOPSIS
@@ -41,6 +41,7 @@ Function New-ReportFileNameFullPath {
    
 	VERSIONS HISTORY
 	0.1.0 - 2015-09-01 - Initial release
+    0.1.1 - 2015-09-01 - Minor update
 	
 	TODO
 	Update help
@@ -226,7 +227,7 @@ param (
 	#Replacing doubled chars \\ , -- , ..
 	[String]$ReportFilePath = "{0}{1}" -f $ReportFilePathTemp.substring(0,2) , (($ReportFilePathTemp.substring(2,$ReportFilePathTemp.length-2).replace("\\",'\')).replace("--","-")).replace("..",".")
 	
-	If ( $CheckIfReportFileExist - and Test-Path -Path $ReportFilePath -PathType Leaf ) {
+	If ( $CheckIfReportFileExist -and (Test-Path -Path $ReportFilePath -PathType Leaf)) {
 	
 		[String]$MessageText = "The file {0} already exist" -f $ReportFilePath
 			
