@@ -1,36 +1,37 @@
-Function New-ReportFileNameFullPath {
+Function New-OutputFileNameFullPath {
     
 <#
 
 	.SYNOPSIS
-	Function intended for 
+	Function intended for preparing filename for output files like reports or logs
    
 	.DESCRIPTION
+	Function intended for preparing filename for output files like reports or logs based on prefix, middle name part, date, etc. with verification
 	
-	.PARAMETER CreateReportFileDirectory
+	.PARAMETER CreateOutputFileDirectory
 	
-	.PARAMETER ReportFileDirectoryPath
+	.PARAMETER OutputFileDirectoryPath
 	
-	.PARAMETER ReportFileNamePrefix
+	.PARAMETER OutputFileNamePrefix
 	
-	.PARAMETER ReportFileNameMidPart
+	.PARAMETER OutputFileNameMidPart
 	
 	.PARAMETER IncludeDateTimePartInFileName
 	
 	.PARAMETER DateTimePartInFileName
 	
-	.PARAMETER ReportFileNameExtension
+	.PARAMETER OutputFileNameExtension
 	
-	.PARAMETER CheckIfReportFileExist
+	.PARAMETER CheckIfOutputFileExist
 	
 	.PARAMETER BreakIfError
 
 	.EXAMPLE
 	
-	[PS] > New-ReportFileNameFullPath 
+	[PS] > New-OutputFileNameFullPath 
 	 
 	.LINK
-	https://github.com/it-praktyk/New-ReportFileNameFullPath
+	https://github.com/it-praktyk/New-OutputFileNameFullPath
 	
 	.LINK
 	https://www.linkedin.com/in/sciesinskiwojciech
@@ -42,7 +43,8 @@ Function New-ReportFileNameFullPath {
 	VERSIONS HISTORY
 	0.1.0 - 2015-09-01 - Initial release
     0.1.1 - 2015-09-01 - Minor update
-	
+    0.2.0 - 2015-09-08 - Corrected, function renamed to New-OutputFileNameFullPath from New-ReportFileNameFullPath 
+    
 	TODO
 	Update help
 
@@ -61,196 +63,190 @@ Function New-ReportFileNameFullPath {
 	along with this program. If not, see <http://www.gnu.org/licenses/>
 	
 #>
-	
-
-param (
-
-	[parameter(Mandatory = $false)]
-	[Switch]$CreateReportFileDirectory = $true,
+    
+    [cmdletbinding()]
+    
+    param (
         
-    [parameter(Mandatory = $false)]
-	[String]$ReportFileDirectoryPath = ".\reports\",
+        [parameter(Mandatory = $false)]
+        [Switch]$CreateOutputFileDirectory = $true,
+        [parameter(Mandatory = $false)]
+        [String]$OutputFileDirectoryPath = ".\Outputs\",
+        [parameter(Mandatory = $false)]
+        [String]$OutputFileNamePrefix = "Output-",
+        [parameter(Mandatory = $false)]
+        [String]$OutputFileNameMidPart,
+        [parameter(Mandatory = $false)]
+        [Switch]$IncludeDateTimePartInFileName = $true,
+        [parameter(Mandatory = $false)]
+        [String]$DateTimePartInFileName,
+        [parameter(Mandatory = $false)]
+        [String]$OutputFileNameExtension = ".csv",
+        [parameter(Mandatory = $false)]
+        [Switch]$CheckIfOutputFileExist = $true,
+        [parameter(Mandatory = $false)]
+        [Switch]$BreakIfError = $true
         
-	[parameter(Mandatory = $false)]
-	[String]$ReportFileNamePrefix = "Report-",
-	
-	[parameter(Mandatory = $false)]
-	[String]$ReportFileNameMidPart,
-	
-	[parameter(Mandatory = $false)]
-	[Switch]$IncludeDateTimePartInFileName = $true,
-	
-	[parameter(Mandatory = $false)]
-	[String]$DateTimePartInFileName, 
-	
-	[parameter(Mandatory = $false)]
-	[String]$ReportFileNameExtension = ".csv",
-	
-	[parameter(Mandatory = $false)]
-	[Switch]$CheckIfReportFileExist=$true,
-		
-	[parameter(Mandatory = $false)]
-	[Switch]$BreakIfError=$true
-
-)
-
-	#Declare variable
-	
-	[Int]$ExitCode = 0
-	
-	[String]$ErrorDescription = $null
-	
-	$Result = New-Object PSObject
-
-	#Convert relative path to absolute path
-	[String]$ReportFileDirectoryPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ReportFileDirectoryPath)
-
-	#Assign value to the variable $IncludeDateTimePartInFileName if is not initialized
-	If ( $IncludeDateTimePartInFileName -and $DateTimePartInFileName -eq "" ) {
-	
-		[String]$DateTimePartInFileName = $(Get-Date -format yyyyMMdd-HHmm)
-		
-	}
-            
-    #Check if report directory exist and try create if not
-		
-	If ( $CreateReportFileDirectory -and !$((Get-Item -Path $ReportFileDirectoryPath -ErrorAction SilentlyContinue) -is [system.io.directoryinfo])) {
-	
-		Try {
-                
-			$ErrorActionPreference = 'Stop'
-				
-			New-Item -Path $ReportFileDirectoryPath -type Directory | Out-Null
-		
-		}
-		Catch {
-		
-			[String]$MessageText = "Provided path {0} doesn't exist and can't be created" -f $ReportFileDirectoryPath
-			
-			If ( $BreakIfError ) {
-		
-				Throw $MessageText
-				
-			}
-			Else {
-			
-				Write-Error -Message $MessageText
-				
-				[Int]$ExitCode = 1
-				
-				[String]$ErrorDescription = $MessageText
-
-			}
-		
-		}
-                
+    )
+    
+    #Declare variable
+    
+    [Int]$ExitCode = 0
+    
+    [String]$ExitCodeDescription = $null
+    
+    $Result = New-Object PSObject
+    
+    #Convert relative path to absolute path
+    [String]$OutputFileDirectoryPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputFileDirectoryPath)
+    
+    #Assign value to the variable $IncludeDateTimePartInFileName if is not initialized
+    If ($IncludeDateTimePartInFileName -and $DateTimePartInFileName -eq "") {
+        
+        [String]$DateTimePartInFileName = $(Get-Date -format yyyyMMdd-HHmm)
+        
     }
-	ElseIf (!$((Get-Item -Path $ReportFileDirectoryPath -ErrorAction SilentlyContinue) -is [system.io.directoryinfo])) {
-	
-		[String]$MessageText = "Provided patch {0} doesn't exist and value for the parameter CreateReportFileDirectory is set to False" -f $ReportFileDirectoryPath
-		
-		If ( $BreakIfError ) {
-		
-			Throw $MessageText
-				
-		}
-		Else {
-			
-			Write-Error -Message $MessageText
-							
-			[Int]$ExitCode = 2
-				
-			[String]$ErrorDescription = $MessageText
-			
-		}
-	
-	}
-	
-	#Try if report directory is writable - temporary file is stored
-	Try {
-	
-		$ErrorActionPreference = 'Stop'
-		
-		[String]$TempFileName = [System.IO.Path]::GetTempFileName() -replace '.*\\', ''
-		
-		[String]$TempFilePath = "{0}{1}" -f $ReportFileDirectoryPath , $TempFileName
-		
-		New-Item -Path $TempFilePath  -type File | Out-Null
-		
-	}
-	Catch {
-		
-		[String]$MessageText = "Provided patch {0} is not writable" -f $ReportFileDirectoryPath
-			
-		If ( $BreakIfError ) {
-		
-			Throw $MessageText
-				
-		}
-		Else {
-			
-			Write-Error -Message $MessageText
-							
-			[Int]$ExitCode = 3
-				
-			[String]$ErrorDescription = $MessageText
-			
-		}
-					
-	}
-		
-	Remove-Item $TempFilePath -ErrorAction SilentlyContinue | Out-Null		
-	
-	
-	#Constructing the file name
-	If ( !($IncludeDateTimePartInFileName) -and ( $ReportFileNameMidPart -ne $null ) ) {
-	
-		[String]$ReportFilePathTemp = "{0}\{1}-{2}.{3}" -f $ReportFileDirectoryPath, $ReportFileNamePrefix, $ReportFileNameMidPart, $ReportFileNameExtension
-	
-	}
-	Elseif ( !($IncludeDateTimePartInFileName) -and ( $ReportFileNameMidPart -eq $null ) ) {
-	
-		[String]$ReportFilePathTemp = "{0}\{1}.{2}" -f $ReportFileDirectoryPath, $ReportFileNamePrefix, $ReportFileNameExtension
-	
-	}
-	ElseIf ( $IncludeDateTimePartInFileName -and ( $ReportFileNameMidPart -ne $null )) {
-	
-		[String]$ReportFilePathTemp = "{0}\{1}-{2}-{3}.{4}" -f $ReportFileDirectoryPath, $ReportFileNamePrefix, $ReportFileNameMidPart, $DateTimePartInFileName, $ReportFileNameExtension
-	
-	}
-	Else {
-		
-		[String]$ReportFilePathTemp = "{0}\{1}-{2}.{3}" -f $ReportFileDirectoryPath, $ReportFileNamePrefix, $DateTimePartInFileName, $ReportFileNameExtension
-	
-	}
-
-	#Replacing doubled chars \\ , -- , ..
-	[String]$ReportFilePath = "{0}{1}" -f $ReportFilePathTemp.substring(0,2) , (($ReportFilePathTemp.substring(2,$ReportFilePathTemp.length-2).replace("\\",'\')).replace("--","-")).replace("..",".")
-	
-	If ( $CheckIfReportFileExist -and (Test-Path -Path $ReportFilePath -PathType Leaf)) {
-	
-		[String]$MessageText = "The file {0} already exist" -f $ReportFilePath
-			
-		If ( $BreakIfError ) {
-		
-			Throw $MessageText
-				
-		}
-		Else {
-			
-			Write-Error -Message $MessageText
-							
-			[Int]$ExitCode = 4
-				
-			[String]$ErrorDescription = $MessageText
-			
-		}	
-	}
-	
-	$Result | Add-Member -MemberType NoteProperty -Name ExitCode -Value
-	
-	$Result | Add-Member -MemberType NoteProperty -Name ReportFilePath -Value $ReportFilePath
-	
-	Return $Result
-
+    
+    #Check if Output directory exist and try create if not
+    If ($CreateOutputFileDirectory -and !$((Get-Item -Path $OutputFileDirectoryPath -ErrorAction SilentlyContinue) -is [system.io.directoryinfo])) {
+        
+        Try {
+            
+            $ErrorActionPreference = 'Stop'
+            
+            New-Item -Path $OutputFileDirectoryPath -type Directory | Out-Null
+            
+        }
+        Catch {
+            
+            [String]$MessageText = "Provided path {0} doesn't exist and can't be created" -f $OutputFileDirectoryPath
+            
+            If ($BreakIfError) {
+                
+                Throw $MessageText
+                
+            }
+            Else {
+                
+                Write-Error -Message $MessageText
+                
+                [Int]$ExitCode = 1
+                
+                [String]$ExitCodeDescription = $MessageText
+                
+            }
+            
+        }
+        
+    }
+    ElseIf (!$((Get-Item -Path $OutputFileDirectoryPath -ErrorAction SilentlyContinue) -is [system.io.directoryinfo])) {
+        
+        [String]$MessageText = "Provided patch {0} doesn't exist and value for the parameter CreateOutputFileDirectory is set to False" -f $OutputFileDirectoryPath
+        
+        If ($BreakIfError) {
+            
+            Throw $MessageText
+            
+        }
+        Else {
+            
+            Write-Error -Message $MessageText
+            
+            [Int]$ExitCode = 2
+            
+            [String]$ExitCodeDescription = $MessageText
+            
+        }
+        
+    }
+    
+    #Try if Output directory is writable - temporary file is stored
+    Try {
+        
+        $ErrorActionPreference = 'Stop'
+        
+        [String]$TempFileName = [System.IO.Path]::GetTempFileName() -replace '.*\\', ''
+        
+        [String]$TempFilePath = "{0}{1}" -f $OutputFileDirectoryPath, $TempFileName
+        
+        New-Item -Path $TempFilePath -type File | Out-Null
+        
+    }
+    Catch {
+        
+        [String]$MessageText = "Provided patch {0} is not writable" -f $OutputFileDirectoryPath
+        
+        If ($BreakIfError) {
+            
+            Throw $MessageText
+            
+        }
+        Else {
+            
+            Write-Error -Message $MessageText
+            
+            [Int]$ExitCode = 3
+            
+            [String]$ExitCodeDescription = $MessageText
+            
+        }
+        
+    }
+    
+    Remove-Item $TempFilePath -ErrorAction SilentlyContinue | Out-Null
+    
+    
+    #Constructing the file name
+    If (!($IncludeDateTimePartInFileName) -and ($OutputFileNameMidPart -ne $null)) {
+        
+        [String]$OutputFilePathTemp = "{0}\{1}-{2}.{3}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameMidPart, $OutputFileNameExtension
+        
+    }
+    Elseif (!($IncludeDateTimePartInFileName) -and ($OutputFileNameMidPart -eq $null)) {
+        
+        [String]$OutputFilePathTemp = "{0}\{1}.{2}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameExtension
+        
+    }
+    ElseIf ($IncludeDateTimePartInFileName -and ($OutputFileNameMidPart -ne $null)) {
+        
+        [String]$OutputFilePathTemp = "{0}\{1}-{2}-{3}.{4}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameMidPart, $DateTimePartInFileName, $OutputFileNameExtension
+        
+    }
+    Else {
+        
+        [String]$OutputFilePathTemp = "{0}\{1}-{2}.{3}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $DateTimePartInFileName, $OutputFileNameExtension
+        
+    }
+    
+    #Replacing doubled chars \\ , -- , ..
+    [String]$OutputFilePath = "{0}{1}" -f $OutputFilePathTemp.substring(0, 2), (($OutputFilePathTemp.substring(2, $OutputFilePathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
+    
+    If ($CheckIfOutputFileExist -and (Test-Path -Path $OutputFilePath -PathType Leaf)) {
+        
+        [String]$MessageText = "The file {0} already exist" -f $OutputFilePath
+        
+        If ($BreakIfError) {
+            
+            Throw $MessageText
+            
+        }
+        Else {
+            
+            Write-Error -Message $MessageText
+            
+            [Int]$ExitCode = 4
+            
+            [String]$ExitCodeDescription = $MessageText
+            
+        }
+    }
+    
+    $Result | Add-Member -MemberType NoteProperty -Name OutputFilePath -Value $OutputFilePath
+    
+    $Result | Add-Member -MemberType NoteProperty -Name ExitCode -Value $ExitCode
+    
+    $Result | Add-Member -MemberType NoteProperty -Name ExitCodeDescription -Value $ExitCodeDescription
+    
+    Return $Result
+    
 }
