@@ -18,7 +18,10 @@ Function New-OutputFileNameFullPath {
     Prefix used for creating output files name
     
     .PARAMETER OutputFileNameMidPart
-    Part of the name which will be used in midle of output iile name
+    Part of the name which will be used in midle of output file name
+    
+    .PARAMETER OutputFileNameSuffixPart
+    Part of the name which will be used at the end of output file name
     
     .PARAMETER IncludeDateTimePartInOutputFileName
     Set to TRUE if report file name should contains part based on date and time - format yyyyMMdd-HHmm is used
@@ -36,7 +39,19 @@ Function New-OutputFileNameFullPath {
     Break function execution if parameters provided for output file creation are not correct or destination file path is not writables
     
     .EXAMPLE
-       
+    
+    $PerServerReportFileMessages = New-OutputFileNameFullPath -OutputFileDirectoryPath 'C:\Reports' -OutputFileNamePrefix 'Messages' `
+                                                              -OutputFileNameMidPart 'COMPUTERNAME' `
+                                                              -IncludeDateTimePartInOutputFileName:$true `
+                                                              -BreakIfError:$true
+    
+    $PerServerReportFileMessages | Format-List
+    
+    OutputFilePath                                           ExitCode ExitCodeDescription
+    --------------                                           -------- -------------------
+    C:\users\wojtek\Messages-COMPUTERNAME-20151021-0012-.txt        0
+    
+    
      
     .LINK
     https://github.com/it-praktyk/New-OutputFileNameFullPath
@@ -53,11 +68,12 @@ Function New-OutputFileNameFullPath {
     0.1.1 - 2015-09-01 - Minor update
     0.2.0 - 2015-09-08 - Corrected, function renamed to New-OutputFileNameFullPath from New-ReportFileNameFullPath
     0.3.0 - 2015-09-13 - implementation for DateTimePartInFileName parameter corrected, help updated, some parameters renamed
+    0.4.0 - 2015-10-20 - additional OutputFileNameSuffix parameter added, help updated, TODO updated
     
     TODO
-    Update help - example section
     Change/extend type of returned object 
     Change/extend behavior if file exist
+    Trim provided parameters, replace not standard chars ? 
 
         
     LICENSE
@@ -77,25 +93,26 @@ Function New-OutputFileNameFullPath {
     
     [cmdletbinding()]
     param (
-        
         [parameter(Mandatory = $false)]
         [String]$OutputFileDirectoryPath = ".\Outputs\",
         [parameter(Mandatory = $false)]
-        [Switch]$CreateOutputFileDirectory = $true,
+        [Bool]$CreateOutputFileDirectory = $true,
         [parameter(Mandatory = $false)]
         [String]$OutputFileNamePrefix = "Output-",
         [parameter(Mandatory = $false)]
-        [String]$OutputFileNameMidPart,
+        [String]$OutputFileNameMidPart = $null,
         [parameter(Mandatory = $false)]
-        [Switch]$IncludeDateTimePartInOutputFileName = $true,
+        [String]$OutputFileNameSuffix = $null,
         [parameter(Mandatory = $false)]
-        [DateTime]$DateTimePartInOutputFileName,
+        [Bool]$IncludeDateTimePartInOutputFileName = $true,
+        [parameter(Mandatory = $false)]
+        [Nullable[DateTime]]$DateTimePartInOutputFileName = $null,
         [parameter(Mandatory = $false)]
         [String]$OutputFileNameExtension = ".txt",
         [parameter(Mandatory = $false)]
-        [Switch]$ErrorIfOutputFileExist = $true,
+        [Bool]$ErrorIfOutputFileExist = $true,
         [parameter(Mandatory = $false)]
-        [Switch]$BreakIfError = $true
+        [Bool]$BreakIfError = $true
         
     )
     
@@ -105,24 +122,23 @@ Function New-OutputFileNameFullPath {
     
     [String]$ExitCodeDescription = $null
     
-    $Result = New-Object PSObject
+    $Result = New-Object -TypeName PSObject
     
     #Convert relative path to absolute path
     [String]$OutputFileDirectoryPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputFileDirectoryPath)
     
     #Assign value to the variable $IncludeDateTimePartInOutputFileName if is not initialized
-    If ($IncludeDateTimePartInOutputFileName -and $DateTimePartInOutputFileName -eq "") {
+    If ($IncludeDateTimePartInOutputFileName -and $DateTimePartInOutputFileName -eq $null) {
         
         [String]$DateTimePartInFileNameString = $(Get-Date -format yyyyMMdd-HHmm)
         
     }
     Else {
         
-        [String]$DateTimePartInFileNameString = $(Get-Date $DateTimePartInOutputFileName -format yyyyMMdd-HHmm)
+        [String]$DateTimePartInFileNameString = $(Get-Date -Date $DateTimePartInOutputFileName -format yyyyMMdd-HHmm)
         
     }
-    
-    
+        
     #Check if Output directory exist and try create if not
     If ($CreateOutputFileDirectory -and !$((Get-Item -Path $OutputFileDirectoryPath -ErrorAction SilentlyContinue) -is [system.io.directoryinfo])) {
         
@@ -209,28 +225,38 @@ Function New-OutputFileNameFullPath {
         
     }
     
-    Remove-Item $TempFilePath -ErrorAction SilentlyContinue | Out-Null
-    
-    
+    Remove-Item -Path $TempFilePath -ErrorAction SilentlyContinue | Out-Null
+        
     #Constructing the file name
-    If (!($IncludeDateTimePartInOutputFileName) -and ($OutputFileNameMidPart -ne $null)) {
+    If (!($IncludeDateTimePartInOutputFileName) -and ($null -ne $OutputFileNameMidPart) ) {
         
-        [String]$OutputFilePathTemp = "{0}\{1}-{2}.{3}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameMidPart, $OutputFileNameExtension
-        
-    }
-    Elseif (!($IncludeDateTimePartInOutputFileName) -and ($OutputFileNameMidPart -eq $null)) {
-        
-        [String]$OutputFilePathTemp = "{0}\{1}.{2}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameExtension
+        [String]$OutputFilePathTemp1 = "{0}\{1}-{2}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameMidPart
         
     }
-    ElseIf ($IncludeDateTimePartInOutputFileName -and ($OutputFileNameMidPart -ne $null)) {
+    Elseif (!($IncludeDateTimePartInOutputFileName) -and ($null -eq $OutputFileNameMidPart )) {
         
-        [String]$OutputFilePathTemp = "{0}\{1}-{2}-{3}.{4}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameMidPart, $DateTimePartInFileNameString, $OutputFileNameExtension
+        [String]$OutputFilePathTemp1 = "{0}\{1}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix
+        
+    }
+    ElseIf ($IncludeDateTimePartInOutputFileName -and ($null -ne $OutputFileNameMidPart)) {
+        
+        [String]$OutputFilePathTemp1 = "{0}\{1}-{2}-{3}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameMidPart, $DateTimePartInFileNameString
         
     }
     Else {
         
-        [String]$OutputFilePathTemp = "{0}\{1}-{2}.{3}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $DateTimePartInFileNameString, $OutputFileNameExtension
+        [String]$OutputFilePathTemp1 = "{0}\{1}-{2}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $DateTimePartInFileNameString
+        
+    }
+    
+    If ($null -ne $OutputFileNameSuffix) {
+        
+        [String]$OutputFilePathTemp = "{0}-{1}.{2}" -f $OutputFilePathTemp1, $OutputFileNameSuffix, $OutputFileNameExtension
+        
+    }
+    Else {
+        
+        [String]$OutputFilePathTemp = "{0}.{1}" -f $OutputFilePathTemp1, $OutputFileNameExtension
         
     }
     
