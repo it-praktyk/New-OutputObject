@@ -40,7 +40,7 @@ Function New-OutputFileNameFullPath {
     
     .EXAMPLE
     
-    $PerServerReportFileMessages = New-OutputFileNameFullPath -OutputFileDirectoryPath 'C:\Reports' -OutputFileNamePrefix 'Messages' `
+    $PerServerReportFileMessages = New-OutputFileNameFullPath -OutputFileDirectoryPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
                                                               -OutputFileNameMidPart 'COMPUTERNAME' `
                                                               -IncludeDateTimePartInOutputFileName:$true `
                                                               -BreakIfError:$true
@@ -69,6 +69,7 @@ Function New-OutputFileNameFullPath {
     0.2.0 - 2015-09-08 - Corrected, function renamed to New-OutputFileNameFullPath from New-ReportFileNameFullPath
     0.3.0 - 2015-09-13 - implementation for DateTimePartInFileName parameter corrected, help updated, some parameters renamed
     0.4.0 - 2015-10-20 - additional OutputFileNameSuffix parameter added, help updated, TODO updated
+    0.4.1 - 2015-10-21 - help corrected
     
     TODO
     Change/extend type of returned object 
