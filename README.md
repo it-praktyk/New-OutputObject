@@ -1,3 +1,266 @@
-# New-OutputFileNameFullPath
-The PowerShell intended for preparing filename for output files like reports or logs based on prefix, middle name part, date, etc. with parameters verification, directory path, etc.
+# New-OutputFile
+## SYNOPSIS
+Function intended for preparing file object for output files like reports or logs
 
+## SYNTAX
+```powershell
+New-OutputFile [[-OutputFileDirectoryPath] <String>] [[-CreateOutputFileDirectory] <Boolean>] [[-OutputFileNamePrefix] <String>] [[-OutputFileNameMidPart] <String>] [[-OutputFileNameSuffix] <String>] [[-IncludeDateTimePartInOutputFileName] <Boolean>] [[-DateTimePartInOutputFileName] <Nullable>] [[-OutputFileNameExtension] <String>] [[-ErrorIfOutputFileExist] <Boolean>] [[-BreakIfError] <Boolean>] [<CommonParameters>]
+```
+
+## DESCRIPTION
+Function intended for preparing filename for output files like reports or logs based on prefix, middle name part, suffix, date, etc. with verification if provided path is writable
+
+
+
+###Returned object contains properties
+
+- OutputFilePath - to use it please check an examples - as a [System.IO.FileInfo]
+
+- ExitCode
+
+- ExitCodeDescription
+
+
+
+### Exit codes and descriptions
+
+- 0 = "Everything is fine :-)"
+
+- 1 = "Provided path &lt;PATH&gt; doesn't exist and can't be created
+
+- 2 = "Provided patch &lt;PATH&gt; doesn't exist and value for the parameter CreateOutputFileDirectory is set to False"
+
+- 3 = "Provided patch &lt;PATH&gt; is not writable"
+
+- 4 = "The file &lt;PATH&gt;\&lt;FILE_NAME&gt; already exist"
+
+## PARAMETERS
+### -OutputFileDirectoryPath &lt;String&gt;
+By default output files are stored in subfolder "outputs" in current path
+```
+Required?                    false
+
+Position?                    1
+
+Default value                .\Outputs\
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+### -CreateOutputFileDirectory &lt;Boolean&gt;
+Set tu TRUE if provided output file directory should be created if is missed
+```
+Required?                    false
+
+Position?                    2
+
+Default value                True
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+### -OutputFileNamePrefix &lt;String&gt;
+Prefix used for creating output files name
+```
+Required?                    false
+
+Position?                    3
+
+Default value                Output-
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+### -OutputFileNameMidPart &lt;String&gt;
+Part of the name which will be used in midle of output file name
+```
+Required?                    false
+
+Position?                    4
+
+Default value
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+### -OutputFileNameSuffix &lt;String&gt;
+
+```
+Required?                    false
+
+Position?                    5
+
+Default value
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+### -IncludeDateTimePartInOutputFileName &lt;Boolean&gt;
+Set to TRUE if report file name should contains part based on date and time - format yyyyMMdd-HHmm is used
+```
+Required?                    false
+
+Position?                    6
+
+Default value                True
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+### -DateTimePartInOutputFileName &lt;Nullable&gt;
+Set to date and time which should be used in output file name, by default current date and time is used
+```
+Required?                    false
+
+Position?                    7
+
+Default value
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+### -OutputFileNameExtension &lt;String&gt;
+Set to extension which need to be used for output file, by default ".txt" is used
+```
+Required?                    false
+
+Position?                    8
+
+Default value                .txt
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+### -ErrorIfOutputFileExist &lt;Boolean&gt;
+Generate error if output file already exist
+```
+Required?                    false
+
+Position?                    9
+
+Default value                True
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+### -BreakIfError &lt;Boolean&gt;
+Break function execution if parameters provided for output file creation are not correct or destination file path is not writables
+```
+Required?                    false
+
+Position?                    10
+
+Default value                True
+
+Accept pipeline input?       false
+
+Accept wildcard characters?  false
+```
+
+## OUTPUTS
+System.Object[]
+
+
+## NOTES
+AUTHOR: Wojciech Sciesinski, wojciech[at]sciesinski[dot]net
+
+KEYWORDS: PowerShell
+
+
+
+VERSIONS HISTORY
+
+- 0.1.0 - 2015-09-01 - Initial release
+
+- 0.1.1 - 2015-09-01 - Minor update
+
+- 0.2.0 - 2015-09-08 - Corrected, function renamed to New-OutputFile from New-ReportFileNameFullPath
+
+- 0.3.0 - 2015-09-13 - implementation for DateTimePartInFileName parameter corrected, help updated, some parameters renamed
+
+- 0.4.0 - 2015-10-20 - additional OutputFileNameSuffix parameter added, help updated, TODO updated
+
+- 0.4.1 - 2015-10-21 - help corrected
+
+- 0.5.0 - 2015-10-22 - Returned OutputFilePath changed to type [System.IO.FileInfo], help updated
+
+- 0.6.0 - 2016-01-04 - The function renamed from New-OutputFileNameFullPath to New-OutputFile, help and TODO updated
+
+
+
+
+
+TODO
+
+- Change/extend behavior if file exist ?
+
+- Trim provided parameters
+
+- Replace not standard chars ?
+
+- Add support to incrementint suffix -like "000124"
+
+- Resolve warning generated by PSScriptAnalyzer "Function 'New-OutputFile' has verb that could change system state.  Therefore, the function has to support 'ShouldProcess'."
+
+
+
+
+
+LICENSE
+
+Copyright (C) 2016 Wojciech Sciesinski
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>
+
+## EXAMPLES
+### EXAMPLE 1
+```powershell
+PS \>$PerServerReportFileMessages = New-OutputFile -OutputFileDirectoryPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' -OutputFileNameMidPart 'COMPUTERNAME' -IncludeDateTimePartInOutputFileName:$true -BreakIfError:$true
+
+PS \> $PerServerReportFileMessages | Format-List
+
+OutputFilePath                                           ExitCode ExitCodeDescription
+
+--------------                                           -------- -------------------
+
+C:\users\wojtek\Messages-COMPUTERNAME-20151021-0012-.txt        0 Everything is fine :-)
+```
+
+### EXAMPLE 2
+```powershell
+PS \>$PerServerReportFileMessages = New-OutputFile -OutputFileDirectoryPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' -OutputFileNameMidPart 'COMPUTERNAME' -IncludeDateTimePartInOutputFileName:$true -OutputFileNameExtension rxc -OutputFileNameSuffix 'suffix' -BreakIfError:$true
+
+PS \> $PerServerReportFileMessages.OutputFilePath | select name,extension,Directory | Format-List
+
+Name      : Messages-COMPUTERNAME-20151022-235607-suffix.rxc
+Extension : .rxc
+Directory : C:\USERS\Wojtek
+
+PS \> ($PerServerReportFileMessages.OutputFilePath).gettype()
+
+IsPublic IsSerial Name                                     BaseType
+
+-------- -------- ----                                     --------
+
+True     True     FileInfo                                 System.IO.FileSystemInfo
+```
