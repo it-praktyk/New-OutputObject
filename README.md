@@ -15,9 +15,7 @@ Function intended for preparing filename for output files like reports or logs b
 ### Returned object contains properties
 
 - OutputFilePath - to use it please check an examples - as a [System.IO.FileInfo]
-
 - ExitCode
-
 - ExitCodeDescription
 
 
@@ -25,27 +23,19 @@ Function intended for preparing filename for output files like reports or logs b
 ### Exit codes and descriptions
 
 - 0 = "Everything is fine :-)"
-
 - 1 = "Provided path &lt;PATH&gt; doesn't exist and can't be created
-
 - 2 = "Provided patch &lt;PATH&gt; doesn't exist and value for the parameter CreateOutputFileDirectory is set to False"
-
 - 3 = "Provided patch &lt;PATH&gt; is not writable"
-
-- 4 = "The file &lt;PATH&gt;\&lt;FILE_NAME&gt; already exist"
+- 4 = "The file &lt;PATH&gt;\\&lt;FILE_NAME&gt; already exist - can't be overwritten"
+- 5 = "The file &lt;PATH&gt;\\&lt;FILE_NAME&gt; already exist - can be overwritten"
 
 ## PARAMETERS
 ### -OutputFileDirectoryPath &lt;String&gt;
 By default output files are stored in subfolder "outputs" in current path
 ```
 Required?                    false
-
-Position?                    1
-
 Default value                .\Outputs\
-
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
@@ -53,13 +43,8 @@ Accept wildcard characters?  false
 Set tu TRUE if provided output file directory should be created if is missed
 ```
 Required?                    false
-
-Position?                    2
-
 Default value                True
-
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
@@ -67,13 +52,8 @@ Accept wildcard characters?  false
 Prefix used for creating output files name
 ```
 Required?                    false
-
-Position?                    3
-
 Default value                Output-
-
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
@@ -81,13 +61,8 @@ Accept wildcard characters?  false
 Part of the name which will be used in midle of output file name
 ```
 Required?                    false
-
-Position?                    4
-
-Default value
-
+Default value                false
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
@@ -95,13 +70,8 @@ Accept wildcard characters?  false
 
 ```
 Required?                    false
-
-Position?                    5
-
-Default value
-
+Default value                false
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
@@ -109,13 +79,8 @@ Accept wildcard characters?  false
 Set to TRUE if report file name should contains part based on date and time - format yyyyMMdd-HHmm is used
 ```
 Required?                    false
-
-Position?                    6
-
 Default value                True
-
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
@@ -123,13 +88,8 @@ Accept wildcard characters?  false
 Set to date and time which should be used in output file name, by default current date and time is used
 ```
 Required?                    false
-
-Position?                    7
-
-Default value
-
+Default value                false
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
@@ -137,27 +97,17 @@ Accept wildcard characters?  false
 Set to extension which need to be used for output file, by default ".txt" is used
 ```
 Required?                    false
-
-Position?                    8
-
 Default value                .txt
-
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
-### -ErrorIfOutputFileExist &lt;Boolean&gt;
+### -NamePartsSeparator &lt;String&gt;
 Generate error if output file already exist
 ```
 Required?                    false
-
-Position?                    9
-
 Default value                True
-
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
@@ -165,13 +115,8 @@ Accept wildcard characters?  false
 Break function execution if parameters provided for output file creation are not correct or destination file path is not writables
 ```
 Required?                    false
-
-Position?                    10
-
 Default value                True
-
 Accept pipeline input?       false
-
 Accept wildcard characters?  false
 ```
 
@@ -182,7 +127,7 @@ System.Object[]
 ## NOTES
 AUTHOR: Wojciech Sciesinski, wojciech[at]sciesinski[dot]net
 
-KEYWORDS: PowerShell
+KEYWORDS: PowerShell, FileSystem
 
 
 
@@ -197,17 +142,14 @@ VERSIONS HISTORY
 - 0.5.0 - 2015-10-22 - Returned OutputFilePath changed to type [System.IO.FileInfo], help updated
 - 0.6.0 - 2016-01-04 - The function renamed from New-OutputFileNameFullPath to New-OutputFile, help and TODO updated
 - 0.7.0 - 2016-06-04 - The license changed to MIT, a code reformatted  
+- 0.8.0 - 2016-06-05 - The parameter ErrorIfOutputFileExist removed, dialog about replacing existing files added  
 
 TODO
 
-- Change/extend behavior if file exist ?
 - Trim provided parameters
+- Check if all chars are allowed in the file path e.g. ''%'  
 - Replace not standard chars ?
-- Add support to incrementint suffix -like "000124"
-- Resolve warning generated by PSScriptAnalyzer "Function 'New-OutputFile' has verb that could change system state.  Therefore, the function has to support 'ShouldProcess'."
-
-
-
+- Add support to incremented suffix -like "000124"
 
 
 LICENSE
