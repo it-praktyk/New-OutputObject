@@ -4,7 +4,7 @@ Function intended for preparing file object for output files like reports or log
 
 ## SYNTAX
 ```powershell
-New-OutputFile [[-OutputFileDirectoryPath] <String>] [[-CreateOutputFileDirectory] <Boolean>] [[-OutputFileNamePrefix] <String>] [[-OutputFileNameMidPart] <String>] [[-OutputFileNameSuffix] <String>] [[-IncludeDateTimePartInOutputFileName] <Boolean>] [[-DateTimePartInOutputFileName] <Nullable>] [[-OutputFileNameExtension] <String>] [[-ErrorIfOutputFileExist] <Boolean>] [[-BreakIfError] <Boolean>] [<CommonParameters>]
+New-OutputFile [[-OutputFileDirectoryPath] <String>] [[-CreateOutputFileDirectory] <Boolean>] [[-OutputFileNamePrefix] <String>] [[-OutputFileNameMidPart] <String>] [[-OutputFileNameSuffix] <String>] [[-IncludeDateTimePartInOutputFileName] <Boolean>] [[-DateTimePartInOutputFileName] <Nullable>] [[-OutputFileNameExtension] <String>] [[-BreakIfError] <Boolean>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

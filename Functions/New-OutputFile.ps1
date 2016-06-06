@@ -87,14 +87,14 @@ Function New-OutputFile {
     System.Object[]
 
     .LINK
-    https://github.com/it-praktyk/New-OutputFile
+    https://github.com/it-praktyk/New-OutputObject
 
     .LINK
     https://www.linkedin.com/in/sciesinskiwojciech
 
     .NOTES
     AUTHOR: Wojciech Sciesinski, wojciech[at]sciesinski[dot]net
-    KEYWORDS: PowerShell
+    KEYWORDS: PowerShell, FileSystem
 
     VERSIONS HISTORY
     - 0.1.0 - 2015-09-01 - Initial release
@@ -107,6 +107,7 @@ Function New-OutputFile {
     - 0.6.0 - 2016-01-04 - The function renamed from New-OutputFileNameFullPath to New-OutputFile, help and TODO updated
     - 0.7.0 - 2016-06-04 - The license changed to MIT, a code reformatted
     - 0.8.0 - 2016-06-05 - The parameter ErrorIfOutputFileExist removed, dialog about replacing existing files added
+    - 0.8.1 - 2016-06-06 - Help updated
 
 
     TODO
