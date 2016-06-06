@@ -29,8 +29,15 @@
     .NOTES
     AUTHOR: Wojciech Sciesinski, wojciech[at]sciesinski[dot]net
     KEYWORDS: PowerShell, FileSystem
+    
+    REMARKS:
+    # Based on the Power Tips
+    # Finding Invalid File and Path Characters
+    # http://powershell.com/cs/blogs/tips/archive/2016/04/20/finding-invalid-file-and-path-characters.aspx
 
     VERSIONS HISTORY
+    - 0.1.0 - 2016-06-06 - Initial release
+    - 0.2.0 - 2016-06-06 - The second draft
 
 #>
     
@@ -44,12 +51,16 @@
         [switch]$SkipCheckCharsInPath,
         [parameter(Mandatory = $false)]
         [switch]$SkipCheckCharsInFileName
-    
+        
     )
     
-    $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars()
     
-    $FileInvalidChars = [System.IO.Path]::GetInvalidFileNameChars()
+    
+    $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars() #36 chars
+    
+    $FileInvalidChars = [System.IO.Path]::GetInvalidFileNameChars() #41 chars
+    
+    $FileOnlyInvalidChars =@(':','*','?','\','/') #5 chars - as a difference
     
     $PathType = ($Path.GetType()).Name
     
@@ -66,6 +77,16 @@
             Return 1
             
         }
+        
+        
+    }
+    
+    ElseIf ($PathType -eq 'String') {
+        
+    }
+    
+    Else {
+        
         
         
     }
