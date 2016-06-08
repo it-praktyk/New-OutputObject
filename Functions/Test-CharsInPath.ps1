@@ -67,10 +67,12 @@
     
     #$FileOnlyInvalidChars = @(':', '*', '?', '\', '/') #5 chars - as a difference
     
-    $IncorectCharFundInFileName = $false
-    
     $IncorectCharFundInPath = $false
     
+    $IncorectCharFundInFileName = $false
+    
+    $NothingToCheck = $true
+
     $PathType = ($Path.GetType()).Name
     
     If (@('DirectoryInfo', 'FileInfo') -contains $PathType) {
@@ -134,7 +136,9 @@
         }
         
         
-        If (-not ($SkipCheckCharsInPath.IsPresent)) {
+        If (-not ($SkipCheckCharsInPath.IsPresent) -and -not [String]::IsNullOrEmpty($DirectoryPath)) {
+            
+            $NothingToCheck = $false
             
             foreach ($Char in $PathInvalidChars) {
                 
@@ -152,8 +156,10 @@
             
         }
         
-        If (-not ($SkipCheckCharsInFileName.IsPresent)) {
+        If (-not ($SkipCheckCharsInFileName.IsPresent) -and -not [String]::IsNullOrEmpty($FileName) ) {
             
+            $NothingToCheck = $false
+                        
             foreach ($Char in $FileNameInvalidChars) {
                                 
                 If ($FileName.ToCharArray() -contains $Char) {
@@ -185,6 +191,12 @@
         Return 4
         
     }
+    elseif ( $NothingToCheck ) {
+        
+        Return 1
+        
+    }
+    #>
     elseif ($IncorectCharFundInPath) {
         
         Return 2
