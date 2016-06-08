@@ -1,10 +1,12 @@
 ﻿Function Test-CharsInPath {
     
 <#	
-
+    
     .SYNOPSIS
+    PowerShell function intended to verify if in the string what is the path to file or folder are incorrect chars.
 
     .DESCRIPTION
+    PowerShell function intended to verify if in the string what is the path to file or folder are incorrect chars.
     
     Exit codes
     
@@ -15,12 +17,37 @@
     - 4 - incorrect chars found in the path part and in the file name part
 
     .PARAMETER Path
+    Specifies the path to an item for what path (location on the disk) need to be checked. 
     
-    .PARAMETER SkipCheckCharsInPath
+    The Path can be an existing file or a folder on a disk provided as a PowerShell object or a string e.g. prepared to be used in file/folder creation.
+
+    .PARAMETER SkipCheckCharsInFolderPart
+    Skip checking in the folder part of path.
     
-    .PARAMETER SkipCheckCharsInFileName
+    .PARAMETER SkipCheckCharsInFileNamePart
+    Skip checking in the file name part of path.
 
     .EXAMPLE
+    
+    [PS] > Test-CharsInPath -Path $(Get-Item C:\Windows\Temp\new.csv') -Verbose
+        
+    VERBOSE: The path provided as a string was devided to, directory part: C:\Windows\Temp ; file name part: new.csv
+    0
+    
+    Testing existing file. Returned code means that all chars are acceptable in the name of folder and file.
+    
+    .EXAMPLE
+    
+    [PS] > Test-CharsInPath -Path "C:\newfolder:2\nowy|.csv" -Verbose
+    
+    VERBOSE: The path provided as a string was devided to, directory part: C:\newfolder:2\ ; file name part: nowy|.csv
+    VERBOSE: The incorrect char | with the UTF code [124] found in FileName part
+    3
+    
+    Testing the string if can be used as a file name. The returned value means that can't do to an unsupported char in the file name.
+    
+    .OUTPUTS
+    Exit code as an integer number. See description section to find the exit codes descriptions.
 
     .LINK
     https://github.com/it-praktyk/New-OutputObject
@@ -41,9 +68,13 @@
     - 0.1.0 - 2016-06-06 - Initial release
     - 0.2.0 - 2016-06-06 - The second draft, Pester tests updated
     - 0.3.0 - 2016-06-07 - The first working version :-)
+    - 0.4.0 - 2016-06-08 - The logic of function corrected, test expanded
+    - 0.5.0 - 2016-06-08 - Checking of Path provided as an PSObjects corrected, SkipCheck* parameters renamed, help updated
     
     TODO
-    - update help
+    - add support for an input from pipeline
+    - add support to return array of incorrect chars and them positions in chars
+    - add support to verifying if non-english chars are used - displaying error/warning, returning other exit code
 
 #>
     
@@ -55,9 +86,9 @@
         [ValidateNotNullOrEmpty()]
         $Path,
         [parameter(Mandatory = $false)]
-        [switch]$SkipCheckCharsInPath,
+        [switch]$SkipCheckCharsInFolderPart,
         [parameter(Mandatory = $false)]
-        [switch]$SkipCheckCharsInFileName
+        [switch]$SkipCheckCharsInFileNamePart
         
     )
     
@@ -72,23 +103,29 @@
     $IncorectCharFundInFileName = $false
     
     $NothingToCheck = $true
-
+    
     $PathType = ($Path.GetType()).Name
     
     If (@('DirectoryInfo', 'FileInfo') -contains $PathType) {
         
-        If ($SkipCheckCharsInPath.IsPresent -and $PathType -eq 'DirectoryInfo') {
+        If (($SkipCheckCharsInFolderPart.IsPresent -and $PathType -eq 'DirectoryInfo') -or ($SkipCheckCharsInFileNamePart.IsPresent -and $PathType -eq 'FileInfo')) {
             
             Return 1
             
         }
-        
-        If ($SkipCheckCharsInFileName.IsPresent -and $PathType -eq 'FileInfo') {
+        ElseIf ($PathType -eq 'DirectoryInfo') {
             
-            Return 1
+            [String]$DirectoryPath = $Path.FullName
             
         }
         
+        elseif ($PathType -eq 'FileInfo') {
+            
+            [String]$DirectoryPath = $Path.DirectoryName
+            
+            [String]$FileName = $Path.Name
+            
+        }
         
     }
     
@@ -106,7 +143,7 @@
             If (@('\', '/') -contains $PathArray[$i]) {
                 
                 [String]$DirectoryPath = [String]$Path.Substring(0, $($PathArray.Length - $i))
-                                
+                
                 break
                 
             }
@@ -125,59 +162,7 @@
         }
         
         
-        [String]$MessageText = "The path provided as a string was devided to, directory part: {0} ; file name part: {1}" -f $DirectoryPath, $FileName
-        
-        Write-Verbose -Message $MessageText
-        
-        If ($SkipCheckCharsInPath.IsPresent -and $SkipCheckCharsInFileName.IsPresent) {
-            
-            Return 1
-            
-        }
-        
-        
-        If (-not ($SkipCheckCharsInPath.IsPresent) -and -not [String]::IsNullOrEmpty($DirectoryPath)) {
-            
-            $NothingToCheck = $false
-            
-            foreach ($Char in $PathInvalidChars) {
-                
-                If ($DirectoryPath.ToCharArray() -contains $Char) {
-                    
-                    $IncorectCharFundInPath = $true
-                    
-                    [String]$MessageText = "The incorrect char {0} with the UTF code {1} found in the Path part" -f $Char, $([int][char]$Char)
-                    
-                    Write-Verbose -Message $MessageText
-                                        
-                }
-                
-            }
-            
-        }
-        
-        If (-not ($SkipCheckCharsInFileName.IsPresent) -and -not [String]::IsNullOrEmpty($FileName) ) {
-            
-            $NothingToCheck = $false
-                        
-            foreach ($Char in $FileNameInvalidChars) {
-                                
-                If ($FileName.ToCharArray() -contains $Char) {
-                    
-                    $IncorectCharFundInFileName = $true
-                    
-                    [String]$MessageText = "The incorrect char {0} with the UTF code {1} found in FileName part" -f $Char, $([int][char]$Char) 
-                    
-                    Write-Verbose -Message $MessageText
-                    
-                }
-                
-            }
-            
-        }
-        
     }
-    
     Else {
         
         [String]$MessageText = "Input object {0} can't be tested" -f ($Path.GetType()).Name
@@ -186,12 +171,65 @@
         
     }
     
+    [String]$MessageText = "The path provided as a string was devided to: directory part: {0} ; file name part: {1} ." -f $DirectoryPath, $FileName
+    
+    Write-Verbose -Message $MessageText
+    
+    If ($SkipCheckCharsInFolderPart.IsPresent -and $SkipCheckCharsInFileNamePart.IsPresent) {
+        
+        Return 1
+        
+    }
+    
+    
+    If (-not ($SkipCheckCharsInFolderPart.IsPresent) -and -not [String]::IsNullOrEmpty($DirectoryPath)) {
+        
+        $NothingToCheck = $false
+        
+        foreach ($Char in $PathInvalidChars) {
+            
+            If ($DirectoryPath.ToCharArray() -contains $Char) {
+                
+                $IncorectCharFundInPath = $true
+                
+                [String]$MessageText = "The incorrect char {0} with the UTF code [{1}] found in the Path part." -f $Char, $([int][char]$Char)
+                
+                Write-Verbose -Message $MessageText
+                
+            }
+            
+        }
+        
+    }
+    
+    If (-not ($SkipCheckCharsInFileNamePart.IsPresent) -and -not [String]::IsNullOrEmpty($FileName)) {
+        
+        $NothingToCheck = $false
+        
+        foreach ($Char in $FileNameInvalidChars) {
+            
+            If ($FileName.ToCharArray() -contains $Char) {
+                
+                $IncorectCharFundInFileName = $true
+                
+                [String]$MessageText = "The incorrect char {0} with the UTF code [{1}] found in FileName part." -f $Char, $([int][char]$Char)
+                
+                Write-Verbose -Message $MessageText
+                
+            }
+            
+        }
+        
+    }
+    
+    
+    
     If ($IncorectCharFundInPath -and $IncorectCharFundInFileName) {
         
         Return 4
         
     }
-    elseif ( $NothingToCheck ) {
+    elseif ($NothingToCheck) {
         
         Return 1
         
