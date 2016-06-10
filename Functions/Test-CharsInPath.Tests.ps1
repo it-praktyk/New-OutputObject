@@ -18,6 +18,10 @@
     - 0.2.0 - 2016-06-06 - The second draft, Pester tests updated
     - 0.3.0 - 2016-06-07 - The first working version :-)
     - 0.4.0 - 2016-06-08 - Test expanded
+    - 0.4.0 - 2016-06-08 - The logic of function corrected, test expanded
+    - 0.5.0 - 2016-06-08 - Checking of Path provided as an PSObjects corrected, SkipCheck* parameters renamed, help updated
+    - 0.5.1 - 2016-06-10 - Named blocks of code added
+    
 
 #>
 

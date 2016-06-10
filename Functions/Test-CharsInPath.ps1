@@ -70,6 +70,7 @@
     - 0.3.0 - 2016-06-07 - The first working version :-)
     - 0.4.0 - 2016-06-08 - The logic of function corrected, test expanded
     - 0.5.0 - 2016-06-08 - Checking of Path provided as an PSObjects corrected, SkipCheck* parameters renamed, help updated
+    - 0.5.1 - 2016-06-10 - Named blocks of code added
     
     TODO
     - add support for an input from pipeline
@@ -92,109 +93,136 @@
         
     )
     
-    $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars() #36 chars
-    
-    $FileNameInvalidChars = [System.IO.Path]::GetInvalidFileNameChars() #41 chars
-    
-    #$FileOnlyInvalidChars = @(':', '*', '?', '\', '/') #5 chars - as a difference
-    
-    $IncorectCharFundInPath = $false
-    
-    $IncorectCharFundInFileName = $false
-    
-    $NothingToCheck = $true
-    
-    $PathType = ($Path.GetType()).Name
-    
-    If (@('DirectoryInfo', 'FileInfo') -contains $PathType) {
+    BEGIN {
         
-        If (($SkipCheckCharsInFolderPart.IsPresent -and $PathType -eq 'DirectoryInfo') -or ($SkipCheckCharsInFileNamePart.IsPresent -and $PathType -eq 'FileInfo')) {
-            
-            Return 1
-            
-        }
-        ElseIf ($PathType -eq 'DirectoryInfo') {
-            
-            [String]$DirectoryPath = $Path.FullName
-            
-        }
+        $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars() #36 chars
         
-        elseif ($PathType -eq 'FileInfo') {
-            
-            [String]$DirectoryPath = $Path.DirectoryName
-            
-            [String]$FileName = $Path.Name
-            
-        }
+        $FileNameInvalidChars = [System.IO.Path]::GetInvalidFileNameChars() #41 chars
+        
+        #$FileOnlyInvalidChars = @(':', '*', '?', '\', '/') #5 chars - as a difference
+        
+        $IncorectCharFundInPath = $false
+        
+        $IncorectCharFundInFileName = $false
+        
+        $NothingToCheck = $true
         
     }
     
-    ElseIf ($PathType -eq 'String') {
+    PROCESS {
         
-        #Convert String to Array of chars
-        $PathArray = $Path.ToCharArray()
+        $PathType = ($Path.GetType()).Name
         
-        $PathLength = $PathArray.Length
-        
-        [array]::Reverse($PathArray)
-        
-        For ($i = 0; $i -lt $PathLength; $i++) {
+        If (@('DirectoryInfo', 'FileInfo') -contains $PathType) {
             
-            If (@('\', '/') -contains $PathArray[$i]) {
+            If (($SkipCheckCharsInFolderPart.IsPresent -and $PathType -eq 'DirectoryInfo') -or ($SkipCheckCharsInFileNamePart.IsPresent -and $PathType -eq 'FileInfo')) {
                 
-                [String]$DirectoryPath = [String]$Path.Substring(0, $($PathArray.Length - $i))
+                Return 1
                 
-                break
+            }
+            ElseIf ($PathType -eq 'DirectoryInfo') {
+                
+                [String]$DirectoryPath = $Path.FullName
+                
+            }
+            
+            elseif ($PathType -eq 'FileInfo') {
+                
+                [String]$DirectoryPath = $Path.DirectoryName
+                
+                [String]$FileName = $Path.Name
                 
             }
             
         }
         
-        If ([String]::IsNullOrEmpty($DirectoryPath)) {
+        ElseIf ($PathType -eq 'String') {
             
-            [String]$FileName = [String]$Path
+            #Convert String to Array of chars
+            $PathArray = $Path.ToCharArray()
+            
+            $PathLength = $PathArray.Length
+            
+            [array]::Reverse($PathArray)
+            
+            For ($i = 0; $i -lt $PathLength; $i++) {
+                
+                If (@('\', '/') -contains $PathArray[$i]) {
+                    
+                    [String]$DirectoryPath = [String]$Path.Substring(0, $($PathArray.Length - $i))
+                    
+                    break
+                    
+                }
+                
+            }
+            
+            If ([String]::IsNullOrEmpty($DirectoryPath)) {
+                
+                [String]$FileName = [String]$Path
+                
+            }
+            Else {
+                
+                [String]$FileName = $Path.Replace($DirectoryPath, "")
+                
+            }
+            
             
         }
         Else {
             
-            [String]$FileName = $Path.Replace($DirectoryPath, "")
+            [String]$MessageText = "Input object {0} can't be tested" -f ($Path.GetType()).Name
+            
+            Throw $MessageText
             
         }
         
+        [String]$MessageText = "The path provided as a string was devided to: directory part: {0} ; file name part: {1} ." -f $DirectoryPath, $FileName
         
-    }
-    Else {
+        Write-Verbose -Message $MessageText
         
-        [String]$MessageText = "Input object {0} can't be tested" -f ($Path.GetType()).Name
-        
-        Throw $MessageText
-        
-    }
-    
-    [String]$MessageText = "The path provided as a string was devided to: directory part: {0} ; file name part: {1} ." -f $DirectoryPath, $FileName
-    
-    Write-Verbose -Message $MessageText
-    
-    If ($SkipCheckCharsInFolderPart.IsPresent -and $SkipCheckCharsInFileNamePart.IsPresent) {
-        
-        Return 1
-        
-    }
-    
-    
-    If (-not ($SkipCheckCharsInFolderPart.IsPresent) -and -not [String]::IsNullOrEmpty($DirectoryPath)) {
-        
-        $NothingToCheck = $false
-        
-        foreach ($Char in $PathInvalidChars) {
+        If ($SkipCheckCharsInFolderPart.IsPresent -and $SkipCheckCharsInFileNamePart.IsPresent) {
             
-            If ($DirectoryPath.ToCharArray() -contains $Char) {
+            Return 1
+            
+        }
+        
+        If (-not ($SkipCheckCharsInFolderPart.IsPresent) -and -not [String]::IsNullOrEmpty($DirectoryPath)) {
+            
+            $NothingToCheck = $false
+            
+            foreach ($Char in $PathInvalidChars) {
                 
-                $IncorectCharFundInPath = $true
+                If ($DirectoryPath.ToCharArray() -contains $Char) {
+                    
+                    $IncorectCharFundInPath = $true
+                    
+                    [String]$MessageText = "The incorrect char {0} with the UTF code [{1}] found in the Path part." -f $Char, $([int][char]$Char)
+                    
+                    Write-Verbose -Message $MessageText
+                    
+                }
                 
-                [String]$MessageText = "The incorrect char {0} with the UTF code [{1}] found in the Path part." -f $Char, $([int][char]$Char)
+            }
+            
+        }
+        
+        If (-not ($SkipCheckCharsInFileNamePart.IsPresent) -and -not [String]::IsNullOrEmpty($FileName)) {
+            
+            $NothingToCheck = $false
+            
+            foreach ($Char in $FileNameInvalidChars) {
                 
-                Write-Verbose -Message $MessageText
+                If ($FileName.ToCharArray() -contains $Char) {
+                    
+                    $IncorectCharFundInFileName = $true
+                    
+                    [String]$MessageText = "The incorrect char {0} with the UTF code [{1}] found in FileName part." -f $Char, $([int][char]$Char)
+                    
+                    Write-Verbose -Message $MessageText
+                    
+                }
                 
             }
             
@@ -202,53 +230,35 @@
         
     }
     
-    If (-not ($SkipCheckCharsInFileNamePart.IsPresent) -and -not [String]::IsNullOrEmpty($FileName)) {
+    END {
         
-        $NothingToCheck = $false
-        
-        foreach ($Char in $FileNameInvalidChars) {
+        If ($IncorectCharFundInPath -and $IncorectCharFundInFileName) {
             
-            If ($FileName.ToCharArray() -contains $Char) {
-                
-                $IncorectCharFundInFileName = $true
-                
-                [String]$MessageText = "The incorrect char {0} with the UTF code [{1}] found in FileName part." -f $Char, $([int][char]$Char)
-                
-                Write-Verbose -Message $MessageText
-                
-            }
+            Return 4
+            
+        }
+        elseif ($NothingToCheck) {
+            
+            Return 1
+            
+        }
+        #>
+        elseif ($IncorectCharFundInPath) {
+            
+            Return 2
             
         }
         
-    }
-    
-    
-    
-    If ($IncorectCharFundInPath -and $IncorectCharFundInFileName) {
-        
-        Return 4
-        
-    }
-    elseif ($NothingToCheck) {
-        
-        Return 1
-        
-    }
-    #>
-    elseif ($IncorectCharFundInPath) {
-        
-        Return 2
-        
-    }
-    
-    elseif ($IncorectCharFundInFileName) {
-        
-        Return 3
-        
-    }
-    Else {
-        
-        Return 0
+        elseif ($IncorectCharFundInFileName) {
+            
+            Return 3
+            
+        }
+        Else {
+            
+            Return 0
+            
+        }
         
     }
     
