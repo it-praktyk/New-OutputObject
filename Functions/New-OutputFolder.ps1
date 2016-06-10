@@ -36,7 +36,7 @@ Function New-OutputFolder {
     Part of the name which will be used at the end of output folder name
 
     .PARAMETER IncludeDateTimePartInOutputFolderName
-    Set to TRUE if report folder name should contains part based on date and time - format yyyyMMdd-HHmm is used
+    Set to TRUE if report folder name should contains part based on date and time - format yyyyMMdd is used
 
     .PARAMETER DateTimePartInOutputFolderName
     Set to date and time which should be used in output folder name, by default current date and time is used
@@ -219,9 +219,9 @@ Function New-OutputFolder {
     Try {
 
         $ErrorActionPreference = 'Stop'
-
-        [String]$TempFolderName = [System.IO.Path]::GetFileNameWithoutExtension() -replace '.*\\', ''
-
+        
+        [String]$TempFolderName = [System.IO.Path]::GetRandomFileName -replace '.*\\', ''
+        
         [String]$TempFolderPath = "{0}{1}" -f $OutputFolderDirectoryPath, $TempFolderName
         
         New-Item -Path $TempFolderPath -type Directory | Out-Null
@@ -245,9 +245,11 @@ Function New-OutputFolder {
             [String]$ExitCodeDescription = $MessageText
 
         }
-
+        
     }
-
+    
+    [System.IO.DirectoryInfo]
+    
     Remove-Item -Path $TempFolderPath -ErrorAction SilentlyContinue | Out-Null
 
     #Constructing the folder name
@@ -268,7 +270,7 @@ Function New-OutputFolder {
     }
     Else {
 
-        [String]$OutputFolderPathTemp1 = "{0}\{1}[3}{2}" -f $OutputFolderDirectoryPath, $OutputFolderNamePrefix, $DateTimePartInFolderNameString, $NamePartsSeparator
+        [String]$OutputFolderPathTemp1 = "{0}\{1}{3}{2}" -f $OutputFolderDirectoryPath, $OutputFolderNamePrefix, $DateTimePartInFolderNameString, $NamePartsSeparator
 
     }
 
@@ -284,7 +286,7 @@ Function New-OutputFolder {
     }
 
     #Replacing doubled chars \\ , -- , .. - except if \\ is on begining - means that path is UNC share
-    [System.IO.FolderInfo]$OutputFolderPath = "{0}{1}" -f $OutputFolderPathTemp.substring(0, 2), (($OutputFolderPathTemp.substring(2, $OutputFolderPathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
+    [System.IO.DirectoryInfo]$OutputFolderPath = "{0}{1}" -f $OutputFolderPathTemp.substring(0, 2), (($OutputFolderPathTemp.substring(2, $OutputFolderPathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
 
     If ($ErrorIfOutputFolderExist -and (Test-Path -Path $OutputFolderPath -PathType Container)) {
         
