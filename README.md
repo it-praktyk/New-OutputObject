@@ -1,11 +1,3 @@
----
-Module Name: New-OutputObject
-Module Guid: c69afd2d-6e61-42e9-a287-a0a12ea265a1
-Download Help Link: {{Please enter FwLink manually}}
-Help Version: 0.9.0
-Locale: en-US
----
-
 # New-OutputObject Module
 ## Description
 The PowerShell module intended for preparing PowerShell objects what help output filesystem objects (files and folders).
