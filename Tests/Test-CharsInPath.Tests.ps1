@@ -15,14 +15,7 @@
   
     VERSIONS HISTORY
     - 0.1.0 - 2016-06-06 - Initial release
-    - 0.2.0 - 2016-06-06 - The second draft, Pester tests updated
-    - 0.3.0 - 2016-06-07 - The first working version :-)
-    - 0.4.0 - 2016-06-08 - Test expanded
-    - 0.4.0 - 2016-06-08 - The logic of function corrected, test expanded
-    - 0.5.0 - 2016-06-08 - Checking of Path provided as an PSObjects corrected, SkipCheck* parameters renamed, help updated
-    - 0.5.1 - 2016-06-10 - Named blocks of code added
     
-
 #>
 
 
@@ -30,7 +23,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 
-. "$here\$sut"
+. "$here\..\Private\$sut"
 
 [Bool]$VerboseFunctionOutput = $false
 
@@ -42,7 +35,7 @@ Describe "Test-CharsInPath" {
         
         $TestDir = New-Item -Path "TestDrive:" -Name "TestDir1" -ItemType Container
         
-        It "Input is a directory, SkipCheckCharsInFolderPart" {
+        It "Input is a di rectory, SkipCheckCharsInFolderPart" {
             
             Test-CharsInPath -path $TestDir -SkipCheckCharsInFolderPart | Should Be 1
             

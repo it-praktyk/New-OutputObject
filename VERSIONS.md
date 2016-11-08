@@ -1,7 +1,7 @@
 # Version history for New-OutputObject Module
 
-- 0.9.0 - 2016-11-07
-
+- 0.9.0 - 2016-11-07 - the first release as a module 
+- 0.9.1 - 2016-11-07 - global tests added
 
 ## Function New-OutputFolder
 
@@ -17,10 +17,11 @@
 - 0.8.0 - 2016-06-05 - The parameter ErrorIfOutputFileExist removed, dialog about replacing existing files added
 - 0.8.1 - 2016-06-06 - Help updated
 - 0.8.2 - 2016-06-10 - Help updated
-- 0.8.3 - 2016-11-07 - Help updated, the function version moved to VERSION.md file 
+- 0.8.3 - 2016-11-07 - Help updated, the function versions history moved to VERSION.md file
+- 0.8.4 - 2016-11-07 - Help updated, the TODO list moved to TODO.md file
 
 ## Function New-OutputFile
 - 0.1.0 - 2016-06-10 - Initial release, based on the New-OutputFolder v. 0.8.1
 - 0.2.0 - 2016-06-10 - The parameter for a folder prefix removed
 - 0.2.1 - 2016-11-07 - Help updated, the function version moved to VERSION.md file 
-
+- 0.2.2 - 2016-11-07 - Help updated, the TODO list moved to TODO.md file, declared OUTPUTS

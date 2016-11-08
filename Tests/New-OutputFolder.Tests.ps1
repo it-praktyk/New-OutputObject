@@ -20,36 +20,56 @@
 
 #>
 
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ModuleName = "New-OutputObject"
 
-$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
+#Provided path asume that your module manifest (a file with the psd1 extension) exists in the parent directory for directory where the current test script is stored
+$RelativePathToModuleManifest = "{0}\..\{1}.psd1" -f $PSScriptRoot, $ModuleName
 
-. "$here\$sut"
+#Remove module if it's currently loaded 
+Get-Module -Name $ModuleName -ErrorAction SilentlyContinue | Remove-Module
+
+Import-Module -FullyQualifiedName $RelativePathToModuleManifest -Force -Scope Global
+
+$FunctionName = "New-OutputFolder"
 
 [Bool]$VerboseFunctionOutput = $true
 
 
 Describe "New-OutputFolder" {
     
-    Context "Test for OutputFolderDirectoryPath" {
+    
+    $LocationAtBegin = Get-Location
+    
+    Set-Location TestDrive:
+    
+    Context "Function $FunctionName - run without parameters" {
         
-        $TestOutputFolderDirectoryPath = (New-Item -Path "TestDrive:\Outputs\" -Type Directory -ErrorAction SilentlyContinue).FullName 
+        Mock -ModuleName $ModuleName -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
         
-        Mock -CommandName Get-Date -MockWith { Get-Date -Date "2016-06-10" -Format yyyyMMdd }
+        $Result = New-OutputFolder
         
-        It "OutputFolderDirectoryPath exist, IncludeDateTimePartInOutputFolderName false" {
+        It "Function $FunctionName - run without parameters - OutputFilePath - an object type" {
             
-            $FinalFunctionOutput = New-OutputFolder -$OutputFolderDirectoryPath $TestOutputFolderDirectoryPath -CreateOutputFolderDirectory $true -IncludeDateTimePartInOutputFolderName $false -verbose:$VerboseFunctionOutput
-            
-            $((($FinalFunctionOutput).OutputFolderPath).Name) | Should Be "Output"
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "OutputFolderDirectoryPath exist, IncludeDateTimePartInOutputFolderName true" {
+        It "Function $FunctionName - run without parameters - OutputFilePath - Name " {
             
-            $FinalFunctionOutput = New-OutputFolder -$OutputFolderDirectoryPath $TestOutputFolderDirectoryPath -CreateOutputFolderDirectory $true -IncludeDateTimePartInOutputFolderName $true -verbose:$VerboseFunctionOutput
+            $Result.OutputFolderPath.Name | Should Be "Output-20161108"
+        }
+        
+        
+        It "Function $FunctionName - run without parameters - exit code" {
             
-            $((($FinalFunctionOutput).OutputFolderPath).Name)  | Should Be "Output-20160610"
+            $Result.ExitCode | Should Be 0
+        }
+        
+        It "Function $FunctionName - run without parameters - exit code description" {
+            
+            $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
         }
         
     }
+    
+    Set-Location $LocationAtBegin
 }

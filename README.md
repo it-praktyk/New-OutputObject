@@ -8,10 +8,12 @@ The module does:
 - checks if the file/folder already exist and display dialog with warning and question about decission
 
 Module version: 0.9.0 - 2016-11-07
+[History of verssion](VERSIONS.md)
+
 
 ## New-OutputObject Cmdlets
 
-### [New-OutputFile](Help\New-OutputFile.md)
+### [New-OutputFile](Help/New-OutputFile.md)
 
 #### SYNOPSIS
 Function intended for preparing a PowerShell object for output files like reports or logs.
@@ -25,7 +27,7 @@ Returned object contains properties
 - ExitCodeDescription
 	
 
-### [New-OutputFolder](Help\New-OutputFolder.md)
+### [New-OutputFolder](Help/New-OutputFolder.md)
 Function intended for preparing a PowerShell object for output/create folders for e.g. reports or logs.
 
 #### SYNOPSIS
@@ -42,3 +44,8 @@ Returned object contains properties
 Copyright (c) 2016 Wojciech Sciesinski  
 This function is licensed under The MIT License (MIT)  
 Full license text: https://opensource.org/licenses/MIT
+
+## TODO
+For ToDo and developments plans please check [TODO.md file](TODO.md).
+
+Your comments - preferable via GitHub issues - and  pull requests will be welcomed. 

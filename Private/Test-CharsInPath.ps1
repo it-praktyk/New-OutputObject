@@ -60,22 +60,16 @@
     KEYWORDS: PowerShell, FileSystem
     
     REMARKS:
-    # Based on the Power Tips
-    # Finding Invalid File and Path Characters
+    # Based on the Power Tips  
+    # Finding Invalid File and Path Characters  
     # http://powershell.com/cs/blogs/tips/archive/2016/04/20/finding-invalid-file-and-path-characters.aspx
 
-    VERSIONS HISTORY
-    - 0.1.0 - 2016-06-06 - Initial release
-    - 0.2.0 - 2016-06-06 - The second draft, Pester tests updated
-    - 0.3.0 - 2016-06-07 - The first working version :-)
-    - 0.4.0 - 2016-06-08 - The logic of function corrected, test expanded
-    - 0.5.0 - 2016-06-08 - Checking of Path provided as an PSObjects corrected, SkipCheck* parameters renamed, help updated
-    - 0.5.1 - 2016-06-10 - Named blocks of code added
+    CURRENT VERSION
+    - 0.5.2 - 2016-11-07
+
+    HISTORY OF VERSIONS  
+    https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
     
-    TODO
-    - add support for an input from pipeline
-    - add support to return array of incorrect chars and them positions in chars
-    - add support to verifying if non-english chars are used - displaying error/warning, returning other exit code
 
 #>
     
