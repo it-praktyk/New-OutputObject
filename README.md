@@ -10,8 +10,8 @@ The module does:
 The module doesn't
 - create file/folder (except that used to check if destination is writable but that files are not retained).
 
-Module version: 0.9.4 - 2016-11-12  
-[History of verssion](VERSIONS.md)
+Module version: 0.9.5 - 2016-11-13  
+[History of versions](VERSIONS.md)
 
 
 ## New-OutputObject Cmdlets

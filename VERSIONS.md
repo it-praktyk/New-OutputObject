@@ -1,8 +1,9 @@
-# Version history for New-OutputObject Module
+# History of versions for New-OutputObject Module
 
 - 0.9.0 - 2016-11-07 - the first release as a module 
 - 0.9.1 - 2016-11-08 - global tests added, basic test for functions added, small corrections in main functions
 - 0.9.2 - 2016-11-11 
+    - New-OutputObject v. 0.1.0
     - New-OutputFile v. 0.9.1
     - New-OutputFolder v. 0.3.0
     - Test-CharsInPath v. 0.5.2
@@ -10,6 +11,7 @@
     - New-OutputFolder.Tests v. 0.4.0
     - Test-CharsInPath.Tests v. 0.5.0
 - 0.9.3 - 2016-11-12
+    - New-OutputObject v. 0.1.0
     - New-OutputFile v. 0.9.2
     - New-OutputFolder v. 0.3.1
     - Test-CharsInPath v. 0.5.2
@@ -17,13 +19,24 @@
     - New-OutputFolder.Tests v. 0.4.0
     - Test-CharsInPath.Tests v. 0.5.0
 - 0.9.4 - 2016-11-12
+    - New-OutputObject v. 0.1.0
     - New-OutputFile v. 0.9.3
     - New-OutputFolder v. 0.3.2
     - Test-CharsInPath v. 0.5.2
-	- Get-OverwriteDecision v. 0.1.0
+    - Get-OverwriteDecision v. 0.1.0
     - New-OutputFile.Tests v. 0.3.0
     - New-OutputFolder.Tests v. 0.5.0
     - Test-CharsInPath.Tests v. 0.5.0
+- 0.9.5 - 2016-11-13
+    - New-OutputObject v. 0.2.0
+	- New-OutputFile v. 0.9.3
+    - New-OutputFolder v. 0.3.2
+    - Test-CharsInPath v. 0.5.2
+    - Get-OverwriteDecision v. 0.1.0
+    - New-OutputFile.Tests v. 0.3.0
+    - New-OutputFolder.Tests v. 0.5.0
+    - Test-CharsInPath.Tests v. 0.5.0
+	
 
 ## Function New-OutputFile
 - 0.1.0 - 2015-09-01 - Initial release
@@ -84,4 +97,3 @@
 
 ## Test-CharsInPath.Tests
 - 0.5.0 - 2016-11-11 - The tests versions history moved to VERSION.md file, help updated
-
