@@ -12,10 +12,13 @@
     .NOTES
     AUTHOR: Wojciech Sciesinski, wojciech[at]sciesinski[dot]net
     KEYWORDS: PowerShell, FileSystem, Pester
-  
-    VERSIONS HISTORY
-    - 0.1.0 - 2016-06-06 - Initial release
-    
+	
+	CURRENT VERSION
+	- 0.5.0 - 2016-11-11
+
+	HISTORY OF VERSIONS  
+	https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+
 #>
 
 

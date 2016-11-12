@@ -1,9 +1,3 @@
----
-external help file: New-OutputObject-help.xml
-online version: https://github.com/it-praktyk/New-OutputObject
-schema: 2.0.0
----
-
 # New-OutputFile
 
 ## SYNOPSIS
@@ -12,18 +6,17 @@ Function intended for preparing a PowerShell object for output files like report
 ## SYNTAX
 
 ```
-New-OutputFile [[-OutputFileDirectoryPath] <String>] [[-CreateOutputFileDirectory] <Boolean>]
- [[-OutputFileNamePrefix] <String>] [[-OutputFileNameMidPart] <String>] [[-OutputFileNameSuffix] <String>]
- [[-IncludeDateTimePartInOutputFileName] <Boolean>] [[-DateTimePartInOutputFileName] <DateTime>]
- [[-OutputFileNameExtension] <String>] [[-NamePartsSeparator] <String>] [[-BreakIfError] <Boolean>]
+New-OutputFile [[-ParentPath] <String>] [[-OutputFileNamePrefix] <String>] [[-OutputFileNameMidPart] <String>]
+ [[-OutputFileNameSuffix] <String>] [[-IncludeDateTimePartInOutputFileName] <Boolean>]
+ [[-DateTimePartInOutputFileName] <DateTime>] [[-OutputFileNameExtension] <String>]
+ [[-NamePartsSeparator] <String>] [-BreakIfError]
 ```
 
 ## DESCRIPTION
 Function intended for preparing a PowerShell custom object what contains e.g.
-file name for output files like reports or log.
-The name is prepared based on prefix, middle name part,
-suffix, date, etc.
-with verification if provided path is available and writable.
+file name for output/create files like reports or log.
+The name is prepared based on prefix, middle name part, suffix, date, etc.
+with verification if provided path exist and is it writable.
 
 Returned object contains properties
 - OutputFilePath - to use it please check examples - as a \[System.IO.FileInfo\]
@@ -32,8 +25,8 @@ Returned object contains properties
 
 Exit codes and descriptions
 0 = "Everything is fine :-)"
-1 = "Provided path \<PATH\> doesn't exist and can't be created
-2 = "Provided patch \<PATH\> doesn't exist and value for the parameter CreateOutputFileDirectory is set to False"
+1 = "Provided path \<PATH\> doesn't exist
+2 = Empty code
 3 = "Provided patch \<PATH\> is not writable"
 4 = "The file \<PATH\>\\\\\<FILE_NAME\> already exist  - can't be overwritten"
 5 = "The file \<PATH\>\\\\\<FILE_NAME\> already exist  - can be overwritten"
@@ -42,12 +35,12 @@ Exit codes and descriptions
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-$PerServerReportFileMessages = New-OutputFile -OutputFileDirectoryPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
+$PerServerReportFileMessages = New-OutputFile -ParentPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
 ```
 
 -OutputFileNameMidPart 'COMPUTERNAME' \`
                                                                 -IncludeDateTimePartInOutputFileName:$true \`
-                                                                -BreakIfError:$true
+                                                                -BreakIfError
 
 PS \\\> $PerServerReportFileMessages | Format-List
 
@@ -57,12 +50,12 @@ C:\users\wojtek\Messages-COMPUTERNAME-20151021-0012-.txt        0 Everything is 
 
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
-$PerServerReportFileMessages = New-OutputFile -OutputFileDirectoryPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
+$PerServerReportFileMessages = New-OutputFile -ParentPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
 ```
 
 -OutputFileNameMidPart 'COMPUTERNAME' -IncludeDateTimePartInOutputFileName:$true
                                                                 -OutputFileNameExtension rxc -OutputFileNameSuffix suffix \`
-                                                                -BreakIfError:$true
+                                                                -BreakIfError
 
 
 PS \\\> $PerServerReportFileMessages.OutputFilePath | select name,extension,Directory | Format-List
@@ -79,8 +72,8 @@ True     True     FileInfo                                 System.IO.FileSystemI
 
 ## PARAMETERS
 
-### -OutputFileDirectoryPath
-By default output files are stored in subfolder "outputs" in current path
+### -ParentPath
+By default output files are stored in current path
 
 ```yaml
 Type: String
@@ -89,22 +82,7 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: .\Outputs\
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CreateOutputFileDirectory
-Set tu TRUE if provided output file directory should be created if is missed
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 2
-Default value: True
+Default value: .
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -118,8 +96,8 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 3
-Default value: Output-
+Position: 2
+Default value: Output
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -133,14 +111,14 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 4
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -OutputFileNameSuffix
-{{Fill OutputFileNameSuffix Description}}
+Part of the name which will be used at the end of output file name
 
 ```yaml
 Type: String
@@ -148,7 +126,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 5
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -163,7 +141,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 6
+Position: 5
 Default value: True
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -178,7 +156,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 7
+Position: 6
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -193,7 +171,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 8
+Position: 7
 Default value: .txt
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -208,7 +186,7 @@ Parameter Sets: (All)
 Aliases: Separator
 
 Required: False
-Position: 9
+Position: 8
 Default value: -
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -218,13 +196,13 @@ Accept wildcard characters: False
 Break function execution if parameters provided for output file creation are not correct or destination file path is not writables
 
 ```yaml
-Type: Boolean
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 10
-Default value: True
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -236,28 +214,22 @@ Accept wildcard characters: False
 ### System.Object[]
 
 ## NOTES
-AUTHOR: Wojciech Sciesinski, wojciech\[at\]sciesinski\[dot\]net
-KEYWORDS: PowerShell, FileSystem
+AUTHOR: Wojciech Sciesinski, wojciech\[at\]sciesinski\[dot\]net  
+KEYWORDS: PowerShell, FileSystem  
 
-CURRENT HISTORY
-- 0.8.3 - 2016-11-07
+CURRENT VERSION
+- 0.9.0 - 2016-11-08
+
+HISTORY OF VERSIONS  
+https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
 
 REMARKS
 - The warning generated by PSScriptAnalyzer "Function 'New-OutputFile' has verb that could change system state.
 Therefore, the function has to support 'ShouldProcess'." is acceptable.
 
-TODO
-- replace long lines with parameters splattings in the examples
-- Trim provided parameters
-- Replace not standard chars ?
-- Check if all chars are allowed in the file path e.g.
-''%'  
-- Add support to incrementint suffix -like "000124"
-
-
-LICENSE
-Copyright (c) 2016 Wojciech Sciesinski
-This function is licensed under The MIT License (MIT)
+LICENSE  
+Copyright (c) 2016 Wojciech Sciesinski  
+This function is licensed under The MIT License (MIT)  
 Full license text: https://opensource.org/licenses/MIT
 
 ## RELATED LINKS

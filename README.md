@@ -7,7 +7,10 @@ The module does:
 - prepares the file/folder name based on the path, prefixes, suffixes, etc.
 - checks if the file/folder already exist and display dialog with warning and question about decission
 
-Module version: 0.9.0 - 2016-11-07
+The module doesn't
+- create file/folder (except that used to check if destination is writable but that files are not retained).
+
+Module version: 0.9.1 - 2016-11-11
 [History of verssion](VERSIONS.md)
 
 
@@ -48,4 +51,4 @@ Full license text: https://opensource.org/licenses/MIT
 ## TODO
 For ToDo and developments plans please check [TODO.md file](TODO.md).
 
-Your comments - preferable via GitHub issues - and  pull requests will be welcomed. 
+Your comments - preferable via GitHub issues - and  pull requests are welcomed. 

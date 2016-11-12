@@ -1,17 +1,23 @@
 <#
 
-.SYNOPSIS
-Pester tests to validate the New-OutputObject module
+	.SYNOPSIS
+	Pester tests to validate the New-OutputObject module
 
-.LINK
-https://github.com/it-praktyk/New-OutputObject
+	.LINK
+	https://github.com/it-praktyk/New-OutputObject
 
-.NOTES
-AUTHOR: Wojciech Sciesinski, wojciech[at]sciesinski[dot]net
-KEYWORDS: PowerShell, Pester, psd1, New-OutputObject
+	.NOTES
+	AUTHOR: Wojciech Sciesinski, wojciech[at]sciesinski[dot]net  
+	KEYWORDS: PowerShell, Pester, psd1, New-OutputObject  
 
-VERSIONS HISTORY
-0.1.0 - 2016-11-07 - The first version of tests
+	.LINK
+	https://www.linkedin.com/in/sciesinskiwojciech
+
+	CURRENT VERSION
+	- 0.1.1 - 2016-11-11
+
+	HISTORY OF VERSIONS  
+	https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
 
 #>
 

@@ -14,17 +14,14 @@ Function New-OutputFile {
 
     Exit codes and descriptions
     0 = "Everything is fine :-)"
-    1 = "Provided path <PATH> doesn't exist and can't be created
-    2 = "Provided patch <PATH> doesn't exist and value for the parameter CreateOutputFileDirectory is set to False"
+    1 = "Provided path <PATH> doesn't exist
+    2 = Empty code
     3 = "Provided patch <PATH> is not writable"
     4 = "The file <PATH>\\<FILE_NAME> already exist  - can't be overwritten"
     5 = "The file <PATH>\\<FILE_NAME> already exist  - can be overwritten"
 
-    .PARAMETER OutputFileDirectoryPath
-    By default output files are stored in subfolder "outputs" in current path
-
-    .PARAMETER CreateOutputFileDirectory
-    Set tu TRUE if provided output file directory should be created if is missed
+    .PARAMETER ParentPath
+    By default output files are stored in the current path
 
     .PARAMETER OutputFileNamePrefix
     Prefix used for creating output files name
@@ -52,10 +49,10 @@ Function New-OutputFile {
 
     .EXAMPLE
 
-    PS \> $PerServerReportFileMessages = New-OutputFile -OutputFileDirectoryPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
+    PS \> $PerServerReportFileMessages = New-OutputFile -ParentPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
                                                                     -OutputFileNameMidPart 'COMPUTERNAME' `
                                                                     -IncludeDateTimePartInOutputFileName:$true `
-                                                                    -BreakIfError:$true
+                                                                    -BreakIfError
 
     PS \> $PerServerReportFileMessages | Format-List
 
@@ -65,10 +62,10 @@ Function New-OutputFile {
 
     .EXAMPLE
 
-    PS \> $PerServerReportFileMessages = New-OutputFile -OutputFileDirectoryPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
+    PS \> $PerServerReportFileMessages = New-OutputFile -ParentPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
                                                                     -OutputFileNameMidPart 'COMPUTERNAME' -IncludeDateTimePartInOutputFileName:$true
                                                                     -OutputFileNameExtension rxc -OutputFileNameSuffix suffix `
-                                                                    -BreakIfError:$true
+                                                                    -BreakIfError
 
 
     PS \> $PerServerReportFileMessages.OutputFilePath | select name,extension,Directory | Format-List
@@ -97,7 +94,7 @@ Function New-OutputFile {
     KEYWORDS: PowerShell, FileSystem  
 
     CURRENT VERSION
-    - 0.8.4 - 2016-11-08
+    - 0.9.1 - 2016-11-11
 
     HISTORY OF VERSIONS  
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -116,11 +113,9 @@ Function New-OutputFile {
     [OutputType([System.Object[]])]
     param (
         [parameter(Mandatory = $false)]
-        [String]$OutputFileDirectoryPath = ".\Outputs\",
+        [String]$ParentPath = ".",
         [parameter(Mandatory = $false)]
-        [Bool]$CreateOutputFileDirectory = $true,
-        [parameter(Mandatory = $false)]
-        [String]$OutputFileNamePrefix = "Output-",
+        [String]$OutputFileNamePrefix = "Output",
         [parameter(Mandatory = $false)]
         [String]$OutputFileNameMidPart = $null,
         [parameter(Mandatory = $false)]
@@ -133,159 +128,116 @@ Function New-OutputFile {
         [String]$OutputFileNameExtension = ".txt",
         [parameter(Mandatory = $false)]
         [alias("Separator")]
-        [String]$NamePartsSeparator="-",
+        [String]$NamePartsSeparator = "-",
         [parameter(Mandatory = $false)]
-        [Bool]$BreakIfError = $true
-
+        [Switch]$BreakIfError
+        
     )
-
+    
     #Declare variable
-
+    
     [Int]$ExitCode = 0
-
+    
     [String]$ExitCodeDescription = "Everything is fine :-)"
-
+    
     $Result = New-Object -TypeName PSObject
-
+    
     #Convert relative path to absolute path
-    [String]$OutputFileDirectoryPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputFileDirectoryPath)
-
+    [String]$ParentPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ParentPath)
+    
     #Assign value to the variable $IncludeDateTimePartInOutputFileName if is not initialized
     If ($IncludeDateTimePartInOutputFileName -and ($null -eq $DateTimePartInOutputFileName)) {
-
+        
         [String]$DateTimePartInFileNameString = $(Get-Date -format 'yyyyMMdd-HHmmss')
-
+        
     }
     Else {
-
+        
         [String]$DateTimePartInFileNameString = $(Get-Date -Date $DateTimePartInOutputFileName -format 'yyyyMMdd-HHmmss')
-
+        
     }
-
-    #Check if Output directory exist and try create if not
-    If ($CreateOutputFileDirectory -and !$((Get-Item -Path $OutputFileDirectoryPath -ErrorAction SilentlyContinue) -is [system.io.directoryinfo])) {
-
+    
+    #Check if Output directory exist 
+    If (-not (Test-Path -Path $ParentPath -PathType Container)) {
+        
+        [Int]$ExitCode = 1
+        
+        $MessageText = "Provided path $ParentPath doesn't exist"
+        
+        [String]$ExitCodeDescription = $MessageText
+        
+    }
+    Else {
+        
+        #Try if Output directory is writable - temporary file is stored
         Try {
-
-            $ErrorActionPreference = 'Stop'
-
-            New-Item -Path $OutputFileDirectoryPath -type Directory | Out-Null
-
+            
+            [String]$TempFileName = [System.IO.Path]::GetTempFileName() -replace '.*\\', ''
+            
+            [String]$TempFilePath = "{0}{1}" -f $ParentPath, $TempFileName
+            
+            New-Item -Path $TempFilePath -type File -ErrorAction Stop
+            
         }
         Catch {
-
-            [String]$MessageText = "Provided path {0} doesn't exist and can't be created" -f $OutputFileDirectoryPath
-
-            If ($BreakIfError) {
-
+            
+            [String]$MessageText = "Provided path {0} is not writable" -f $ParentPath
+            
+            If ($BreakIfError.IsPresent ) {
+                
                 Throw $MessageText
-
+                
             }
             Else {
-
-                Write-Error -Message $MessageText
-
-                [Int]$ExitCode = 1
-
+                
+                [Int]$ExitCode = 3
+                
                 [String]$ExitCodeDescription = $MessageText
-
+                
             }
-
+            
         }
-
+        
+        Remove-Item -Path $TempFilePath -ErrorAction SilentlyContinue | Out-Null
+        
     }
-    ElseIf (!$((Get-Item -Path $OutputFileDirectoryPath -ErrorAction SilentlyContinue) -is [system.io.directoryinfo])) {
-
-        [String]$MessageText = "Provided patch {0} doesn't exist and value for the parameter CreateOutputFileDirectory is set to False" -f $OutputFileDirectoryPath
-
-        If ($BreakIfError) {
-
-            Throw $MessageText
-
-        }
-        Else {
-
-            Write-Error -Message $MessageText
-
-            [Int]$ExitCode = 2
-
-            [String]$ExitCodeDescription = $MessageText
-
-        }
-
-    }
-
-    #Try if Output directory is writable - temporary file is stored
-    Try {
-
-        $ErrorActionPreference = 'Stop'
-
-        [String]$TempFileName = [System.IO.Path]::GetTempFileName() -replace '.*\\', ''
-
-        [String]$TempFilePath = "{0}{1}" -f $OutputFileDirectoryPath, $TempFileName
-
-        New-Item -Path $TempFilePath -type File | Out-Null
-
-    }
-    Catch {
-
-        [String]$MessageText = "Provided patch {0} is not writable" -f $OutputFileDirectoryPath
-
-        If ($BreakIfError) {
-
-            Throw $MessageText
-
-        }
-        Else {
-
-            Write-Error -Message $MessageText
-
-            [Int]$ExitCode = 3
-
-            [String]$ExitCodeDescription = $MessageText
-
-        }
-
-    }
-
-    Remove-Item -Path $TempFilePath -ErrorAction SilentlyContinue | Out-Null
-
+    
     #Constructing the file name
-    If (!($IncludeDateTimePartInOutputFileName) -and !([String]::IsNullOrEmpty($OutputFileNameMidPart)) ) {
-
-        [String]$OutputFilePathTemp1 = "{0}\{1}{3}{2}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameMidPart, $NamePartsSeparator
-
+    If (!($IncludeDateTimePartInOutputFileName) -and !([String]::IsNullOrEmpty($OutputFileNameMidPart))) {
+        
+        [String]$OutputFilePathTemp1 = "{0}\{1}{3}{2}" -f $ParentPath, $OutputFileNamePrefix, $OutputFileNameMidPart, $NamePartsSeparator
+        
     }
-    Elseif (!($IncludeDateTimePartInOutputFileName) -and [String]::IsNullOrEmpty($OutputFileNameMidPart )) {
-
-        [String]$OutputFilePathTemp1 = "{0}\{1}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix
-
+    Elseif (!($IncludeDateTimePartInOutputFileName) -and [String]::IsNullOrEmpty($OutputFileNameMidPart)) {
+        
+        [String]$OutputFilePathTemp1 = "{0}\{1}" -f $ParentPath, $OutputFileNamePrefix
+        
     }
     ElseIf ($IncludeDateTimePartInOutputFileName -and !([String]::IsNullOrEmpty($OutputFileNameMidPart))) {
-
-        [String]$OutputFilePathTemp1 = "{0}\{1}{4}{2}{4}{3}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $OutputFileNameMidPart, $DateTimePartInFileNameString, $NamePartsSeparator
-
+        
+        [String]$OutputFilePathTemp1 = "{0}\{1}{4}{2}{4}{3}" -f $ParentPath, $OutputFileNamePrefix, $OutputFileNameMidPart, $DateTimePartInFileNameString, $NamePartsSeparator
+        
     }
     Else {
-
-        [String]$OutputFilePathTemp1 = "{0}\{1}{3}{2}" -f $OutputFileDirectoryPath, $OutputFileNamePrefix, $DateTimePartInFileNameString, $NamePartsSeparator
-
+        
+        [String]$OutputFilePathTemp1 = "{0}\{1}{3}{2}" -f $ParentPath, $OutputFileNamePrefix, $DateTimePartInFileNameString, $NamePartsSeparator
+        
     }
-
-    If ( [String]::IsNullOrEmpty($OutputFileNameSuffix)) {
-
+    
+    If ([String]::IsNullOrEmpty($OutputFileNameSuffix)) {
+        
         [String]$OutputFilePathTemp = "{0}.{1}" -f $OutputFilePathTemp1, $OutputFileNameExtension
-
+        
     }
     Else {
-
-        [String]$OutputFilePathTemp = "{0}{3}{1}.{2}" -f $OutputFilePathTemp1, $OutputFileNameSuffix, $OutputFileNameExtension,$NamePartsSeparator
-
+        
+        [String]$OutputFilePathTemp = "{0}{3}{1}.{2}" -f $OutputFilePathTemp1, $OutputFileNameSuffix, $OutputFileNameExtension, $NamePartsSeparator
+        
     }
-
+    
     #Replacing doubled chars \\ , -- , .. - except if \\ is on begining - means that path is UNC share
     [System.IO.FileInfo]$OutputFilePath = "{0}{1}" -f $OutputFilePathTemp.substring(0, 2), (($OutputFilePathTemp.substring(2, $OutputFilePathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
-
+    
     If ($ErrorIfOutputFileExist -and (Test-Path -Path $OutputFilePath -PathType Leaf)) {
         
         
@@ -293,7 +245,7 @@ Function New-OutputFile {
         [String]$Title = "Overwrite File"
         
         [String]$MessageText = "The file {0} already exist" -f $OutputFilePath
-                
+        
         $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", `
                           "The file already exists. Overwrite the existing file."
         
@@ -316,7 +268,7 @@ Function New-OutputFile {
         switch ($Answer) {
             
             0 {
-                                
+                
                 [Int]$ExitCode = 4
                 
                 [String]$ExitCodeDescription = $MessageText
@@ -333,20 +285,20 @@ Function New-OutputFile {
             
             2 {
                 
-               Throw $MessageText 
+                Throw $MessageText
                 
             }
             
         }
- 
+        
     }
-
+    
     $Result | Add-Member -MemberType NoteProperty -Name OutputFilePath -Value $OutputFilePath
-
+    
     $Result | Add-Member -MemberType NoteProperty -Name ExitCode -Value $ExitCode
-
+    
     $Result | Add-Member -MemberType NoteProperty -Name ExitCodeDescription -Value $ExitCodeDescription
-
+    
     Return $Result
-
+    
 }
