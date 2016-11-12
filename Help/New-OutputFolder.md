@@ -25,55 +25,87 @@ Returned object contains properties
 - ExitCodeDescription
 
 Exit codes and descriptions
-0 = "Everything is fine :-)"
-1 = "Provided path \<PATH\> doesn't exist
-2 = Empty code
-3 = "Provided patch \<PATH\> is not writable"
-4 = "The folder \<PATH\>\\\\\<FOLDER_NAME\> already exist  - can't be overwritten"
-5 = "The folder \<PATH\>\\\\\<FOLDER_NAME\> already exist  - can be overwritten"
+- 0 = "Everything is fine :-)"
+- 1 = "Provided path \<PATH\> doesn't exist
+- 2 = Empty code
+- 3 = "Provided patch \<PATH\> is not writable"
+- 4 = "The folder \<PATH\>\\<FOLDER_NAME\> already exist  - can't be overwritten"
+- 5 = "The folder \<PATH\>\\<FOLDER_NAME\> already exist  - can be overwritten"
 
 ## EXAMPLES
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-$PerServerReportFolderMessages = New-OutputFolder -ParentPath 'C:\USERS\Wojtek\' -OutputFolderNamePrefix 'Messages' `
+(Get-Item env:COMPUTERNAME).Value
+
+
+WXDX75
+
+PS \> $FolderNeeded= @{
+    ParentPath = 'C:\USERS\UserName\';
+    OutputFolderNamePrefix = 'Messages';
+    OutputFolderNameMidPart = (Get-Item env:COMPUTERNAME).Value
+    IncludeDateTimePartInOutputFolderName = $false;
+    BreakIfError = $true
+}
+
+PS \> $PerServerReportFolderMessages = New-OutputFolder @FolderNeeded
+
+PS \> $PerServerReportFolderMessages | Format-List
+
+OutputFilePath      : C:\users\UserName\Messages-WXDX75
+ExitCode            : 1
+ExitCodeDescription : Everything is fine :-)
+
+PS \> New-Item -Path $PerServerReportFolderMessages.OutputFolderPath -ItemType Directory
+
+Directory: C:\USERS\UserName
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----       21/10/2015     00:12              0 Messages-WXDX75
 ```
 
--OutputFolderNameMidPart 'COMPUTERNAME' \`
-                                                                -IncludeDateTimePartInOutputFolderName:$true \`
-                                                                -BreakIfError
-
-PS \\\> $PerServerReportFolderMessages | Format-List
-
-ParentPath                                           ExitCode ExitCodeDescription
---------------                                           -------- -------------------
-C:\users\wojtek\Messages-COMPUTERNAME-20151021-0012-.txt        0 Everything is fine :-)
+The file created on provided parameters. 
+Under preparation the file name is created, provided part of names are used, and availability of name (if the file exist now) is checked.
 
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
-$PerServerReportFolderMessages = New-OutputFolder -ParentPath 'C:\USERS\Wojtek\' -OutputFolderNamePrefix 'Messages' `
-```
-
--OutputFolderNameMidPart 'COMPUTERNAME' -IncludeDateTimePartInOutputFolderName:$true
-                                                                 -OutputFolderNameSuffix suffix \`
-                                                                -BreakIfError
+$FolderNeeded= @{
 
 
-PS \\\> $PerServerReportFolderMessages.ParentPath | select Name,Directory | Format-List
+ParentPath = 'C:\USERS\UserName\';
+    OutputFolderNamePrefix = 'Messages';
+    OutputFolderNameMidPart = 'COMPUTERNAME';
+    OutputFolderNameSuffix = "failed"
+}
 
-Name      : Messages-COMPUTERNAME-20151022-235607-suffix.rxc
-Directory : C:\USERS\Wojtek
+PS \> $PerServerReportFolderMessages = New-OutputFolder @FolderNeeded
 
-PS \\\> ($PerServerReportFolderMessages.ParentPath).gettype()
+PS \> $PerServerReportFolderMessages.OutputFolderPath | Select-Object -Property Name,Parent,exists | Format-List
+
+Name   : Messages-COMPUTERNAME-20161112-failed
+Parent : UserName
+Exists : False
+
+PS \> ($PerServerReportFolderMessages.OutputFolderPath).gettype()
 
 IsPublic IsSerial Name                                     BaseType
 -------- -------- ----                                     --------
-True     True     FolderInfo                                 System.IO.DirectorySystemInfo
+True     True     DirectoryInfo                            System.IO.FileSystemInfo
+
+PS \> Test-Path ($PerServerReportFolderMessages.OutputFilePath)
+False
+```
+The function return object what contain the property named OutputFilePath what is the object of type System.IO.DirectoryInfo.
+
+Folder is not created.
+Only the object in the memory is prepared.
 
 ## PARAMETERS
 
 ### -ParentPath
-By default output folders are stored in subfolder "outputs" in current path
+By default output folders are stored in the current path
 
 ```yaml
 Type: String
@@ -203,7 +235,7 @@ AUTHOR: Wojciech Sciesinski, wojciech\[at\]sciesinski\[dot\]net
 KEYWORDS: PowerShell, Folder, FileSystem  
 
 CURRENT VERSION
-- 0.2.3 - 2016-11-08
+- 0.3.2 - 2016-11-12
 
 HISTORY OF VERSIONS  
 https://github.com/it-praktyk/New-OutputObject/VERSIONS.md

@@ -5,16 +5,14 @@
 - update the parameter FileList in the New-OutputObject.psd1
 - integrate unit test via AppVeyour
 - publish to PowerShell Gallery
-
+- merge common code from New-Output* function to external/helper functions
 
 ## New-OutputFile
-- replace long lines with parameters splattings in the examples
 - Trim provided parameters
 - Replace not standard chars ?
 - Add support to incrementint suffix -like "000124"
 
 ## New-OutputFolder
-- replace long lines with parameters splattings in the examples
 - Trim provided parameters
 - Replace not standard chars ?
 - Add support to incrementint suffix -like "000124"

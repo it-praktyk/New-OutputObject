@@ -14,7 +14,7 @@
     KEYWORDS: PowerShell, FileSystem, Pester
   
     CURRENT VERSION
-    - 0.4.0 - 2016-11-11
+    - 0.5.0 - 2016-11-12
 
     HISTORY OF VERSIONS  
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -47,14 +47,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder
         
-        It "Function $FunctionName - run without parameters - ParentPath - an object type" {
+        It "Function $FunctionName - run without parameters - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName - run without parameters - ParentPath - Name " {
+        It "Function $FunctionName - run without parameters - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "Output-20161108"
+            $Result.OutputFolderPath.Name | Should Be "Output-20161108"
         }
         
         
@@ -78,14 +78,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder -OutputFolderNamePrefix "AAA"
         
-        It "Function $FunctionName - $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName - $ContextName - ParentPath - Name " {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "AAA-20161108"
+            $Result.OutputFolderPath.Name | Should Be "AAA-20161108"
         }
         
         
@@ -108,14 +108,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder -OutputFolderNameMidPart "BBB"
         
-        It "Function $FunctionName - $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName - $ContextName - ParentPath - Name " {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "Output-BBB-20161108"
+            $Result.OutputFolderPath.Name | Should Be "Output-BBB-20161108"
         }
         
         
@@ -138,14 +138,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder -OutputFolderNameSuffix "CCC"
         
-        It "Function $FunctionName - $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName - $ContextName - ParentPath - Name " {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "Output-20161108-CCC"
+            $Result.OutputFolderPath.Name | Should Be "Output-20161108-CCC"
         }
         
         
@@ -167,14 +167,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder -DateTimePartInOutputFolderName (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MMM-dd hh:mm:ss")
         
-        It "Function $FunctionName - $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName - $ContextName - ParentPath - Name " {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "Output-20161101"
+            $Result.OutputFolderPath.Name | Should Be "Output-20161101"
         }
         
         It "Function $FunctionName - $ContextName - exit code" {
@@ -196,12 +196,12 @@ Describe "New-OutputFolder" {
         
         It "Function $FunctionName - $ContextName - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName - $ContextName - ParentPath - Name " {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "Output"
+            $Result.OutputFolderPath.Name | Should Be "Output"
         }
         
         It "Function $FunctionName - $ContextName - exit code" {
@@ -223,14 +223,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder -NamePartsSeparator "_"
         
-        It "Function $FunctionName - $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName - $ContextName - ParentPath - Name " {
+        It "Function $FunctionName - $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "Output_20161108"
+            $Result.OutputFolderPath.Name | Should Be "Output_20161108"
         }
         
         
@@ -252,14 +252,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder -OutputFolderNamePrefix "AAA" -OutputFolderNameMidPart "BBB" -OutputFolderNameSuffix "CCC" -DateTimePartInOutputFolderName (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MMM-dd hh:mm:ss")
         
-        It "Function $FunctionName -  $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName -  $ContextName - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName -  $ContextName - ParentPath - Name " {
+        It "Function $FunctionName -  $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "AAA-BBB-20161101-CCC"
+            $Result.OutputFolderPath.Name | Should Be "AAA-BBB-20161101-CCC"
         }
         
         It "Function $FunctionName -  $ContextName - exit code" {
@@ -279,14 +279,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder -OutputFolderNamePrefix "AAA" -OutputFolderNameMidPart "BBB" -OutputFolderNameSuffix "CCC" -DateTimePartInOutputFolderName (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MMM-dd hh:mm:ss") -IncludeDateTimePartInOutputFolderName:$false
         
-        It "Function $FunctionName -  $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName -  $ContextName - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName -  $ContextName - ParentPath - Name " {
+        It "Function $FunctionName -  $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "AAA-BBB-CCC"
+            $Result.OutputFolderPath.Name | Should Be "AAA-BBB-CCC"
         }
         
         It "Function $FunctionName -  $ContextName - exit code" {
@@ -310,14 +310,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder -ParentPath $ParentPath
         
-        It "Function $FunctionName -  $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName -  $ContextName - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName -  $ContextName - ParentPath - Name " {
+        It "Function $FunctionName -  $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "Output-20161108"
+            $Result.OutputFolderPath.Name | Should Be "Output-20161108"
         }
         
         It "Function $FunctionName -  $ContextName - exit code" {
@@ -363,14 +363,14 @@ Describe "New-OutputFolder" {
         
         $Result = New-OutputFolder -ParentPath $TestDestinationFolder
         
-        It "Function $FunctionName -  $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName -  $ContextName - OutputFolderPath - an object type" {
             
-            $Result.ParentPath | Should BeOfType System.Io.DirectoryInfo
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
         }
         
-        It "Function $FunctionName -  $ContextName - ParentPath - Name " {
+        It "Function $FunctionName -  $ContextName - OutputFolderPath - Name " {
             
-            $Result.ParentPath.Name | Should Be "Output-20161108"
+            $Result.OutputFolderPath.Name | Should Be "Output-20161108"
         }
         
         It "Function $FunctionName -  $ContextName - exit code" {
@@ -414,11 +414,111 @@ Describe "New-OutputFolder" {
         
         Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108-000002' } -ParameterFilter { $Format }
         
-        It "Function $FunctionName -  $ContextName - ParentPath - an object type" {
+        It "Function $FunctionName -  $ContextName - OutputFolderPath - an object type" {
             { $Result = New-OutputFolder -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
         }
         
     }
+    
+    $ContextName = "run without parameters, destination file exists, decision leave"
+    
+    Context "Function $FunctionName - $ContextName" {
+        
+        [System.String]$TestExistingFolder = "TestDrive:\Output-20161108"
+        
+        New-Item -Path $TestExistingFolder -ItemType Directory
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-OverwriteDecision -MockWith { Return [int]0 }
+        
+        $Result = New-OutputFolder
+        
+        It "Function $FunctionName - $ContextName - OutputFolderPath - an object type" {
+            
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
+        }
+        
+        It "Function $FunctionName - $ContextName - OutputFolderPath - Name " {
+            
+            $Result.OutputFolderPath.Name | Should Be "Output-20161108"
+        }
+        
+        
+        It "Function $FunctionName - $ContextName - exit code" {
+            
+            $Result.ExitCode | Should Be 4
+        }
+        
+        It "Function $FunctionName - $ContextName - exit code description" {
+            
+            [System.String]$RequiredMessage = "The folder {0} already exist  - can't be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFolder")
+            
+            $Result.ExitCodeDescription | Should Be $RequiredMessage
+        }
+        
+    }
+    
+    $ContextName = "run without parameters, destination file exists, decision overwrite"
+    
+    Context "Function $FunctionName - $ContextName" {
+        
+        [System.String]$TestExistingFolder = "TestDrive:\Output-20161108"
+        
+        New-Item -Path $TestExistingFolder -ItemType Directory
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-OverwriteDecision -MockWith { Return [int]1 }
+        
+        $Result = New-OutputFolder
+        
+        It "Function $FunctionName - $ContextName - OutputFolderPath - an object type" {
+            
+            $Result.OutputFolderPath | Should BeOfType System.Io.DirectoryInfo
+        }
+        
+        It "Function $FunctionName - $ContextName - OutputFolderPath - Name " {
+            
+            $Result.OutputFolderPath.Name | Should Be "Output-20161108"
+        }
+        
+        
+        It "Function $FunctionName - $ContextName - exit code" {
+            
+            $Result.ExitCode | Should Be 5
+        }
+        
+        It "Function $FunctionName - $ContextName - exit code description" {
+            
+            [System.String]$RequiredMessage = "The folder {0} already exist  - can be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFolder")
+            
+            $Result.ExitCodeDescription | Should Be $RequiredMessage
+        }
+        
+    }
+    
+    $ContextName = "run without parameters, destination directory exists, decision cancel"
+    
+    Context "Function $FunctionName - $ContextName" {
+        
+        [System.String]$TestExistingFolder = "TestDrive:\Output-20161108"
+        
+        New-Item -Path $TestExistingFolder -ItemType Directory
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-OverwriteDecision -MockWith { Return [int]2 }
+        
+        
+        
+        It "Function $FunctionName - $ContextName - OutputFolderPath - an object type" {
+            { $Result = New-OutputFolder } | Should Throw
+        }
+        
+        
+    }
+    
     
     Set-Location -Path $LocationAtBegin
 }

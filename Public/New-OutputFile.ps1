@@ -13,12 +13,12 @@ Function New-OutputFile {
     - ExitCodeDescription
 
     Exit codes and descriptions
-    0 = "Everything is fine :-)"
-    1 = "Provided path <PATH> doesn't exist
-    2 = Empty code
-    3 = "Provided patch <PATH> is not writable"
-    4 = "The file <PATH>\\<FILE_NAME> already exist  - can't be overwritten"
-    5 = "The file <PATH>\\<FILE_NAME> already exist  - can be overwritten"
+    - 0 = "Everything is fine :-)"
+    - 1 = "Provided path <PATH> doesn't exist
+    - 2 = Empty code
+    - 3 = "Provided patch <PATH> is not writable"
+    - 4 = "The file <PATH>\\<FILE_NAME> already exist  - can't be overwritten"
+    - 5 = "The file <PATH>\\<FILE_NAME> already exist  - can be overwritten"
 
     .PARAMETER ParentPath
     By default output files are stored in the current path
@@ -49,36 +49,67 @@ Function New-OutputFile {
 
     .EXAMPLE
 
-    PS \> $PerServerReportFileMessages = New-OutputFile -ParentPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
-                                                                    -OutputFileNameMidPart 'COMPUTERNAME' `
-                                                                    -IncludeDateTimePartInOutputFileName:$true `
-                                                                    -BreakIfError
+    PS \> (Get-Item env:COMPUTERNAME).Value
+    WXDX75
+    
+    PS \> $FileNeeded = @{
+        ParentPath = 'C:\USERS\UserName\';
+        OutputFileNamePrefix = 'Messages';
+        OutputFileNameMidPart = (Get-Item env:COMPUTERNAME).Value;
+        IncludeDateTimePartInOutputFileName = $true;
+        BreakIfError = $true
+    }
+    
+    PS \> $PerServerReportFileMessages = New-OutputFile @FileNeeded
 
     PS \> $PerServerReportFileMessages | Format-List
 
-    OutputFilePath                                           ExitCode ExitCodeDescription
-    --------------                                           -------- -------------------
-    C:\users\wojtek\Messages-COMPUTERNAME-20151021-0012-.txt        0 Everything is fine :-)
+    OutputFilePath      : C:\users\UserName\Messages-WXDX75-20151021-001205.txt
+    ExitCode            : 1
+    ExitCodeDescription : Everything is fine :-)
+    
+    PS \> New-Item -Path $PerServerReportFileMessages.OutputFilePath -ItemType file
+
+    Directory: C:\USERS\UserName
+
+    Mode                LastWriteTime         Length Name
+    ----                -------------         ------ ----
+    -a----       21/10/2015     00:12              0 Messages-WXDX75-20151021-001205.txt
+    
+    The file created on provided parameters. 
+    Under preparation the file name is created, provided part of names are used, and availability of name (if the file exist now) is checked.
 
     .EXAMPLE
+    
+    $FileNeeded = @{
+        ParentPath = 'C:\USERS\UserName\';
+        OutputFileNamePrefix = 'Messages';
+        OutputFileNameMidPart = 'COMPUTERNAME';
+        IncludeDateTimePartInOutputFileName = $false;
+        OutputFileNameExtension = "csv";
+        OutputFileNameSuffix = "failed"
+    }
+    
+    PS \> $PerServerReportFileMessages = New-OutputFile @FileNeeded
 
-    PS \> $PerServerReportFileMessages = New-OutputFile -ParentPath 'C:\USERS\Wojtek\' -OutputFileNamePrefix 'Messages' `
-                                                                    -OutputFileNameMidPart 'COMPUTERNAME' -IncludeDateTimePartInOutputFileName:$true
-                                                                    -OutputFileNameExtension rxc -OutputFileNameSuffix suffix `
-                                                                    -BreakIfError
+    PS \> $PerServerReportFileMessages.OutputFilePath | Select-Object -Property Name,Extension,Directory | Format-List
 
-
-    PS \> $PerServerReportFileMessages.OutputFilePath | select name,extension,Directory | Format-List
-
-    Name      : Messages-COMPUTERNAME-20151022-235607-suffix.rxc
-    Extension : .rxc
-    Directory : C:\USERS\Wojtek
+    Name      : Messages-COMPUTERNAME-failed.csv
+    Extension : .csv
+    Directory : C:\USERS\UserName
 
     PS \> ($PerServerReportFileMessages.OutputFilePath).gettype()
 
     IsPublic IsSerial Name                                     BaseType
     -------- -------- ----                                     --------
     True     True     FileInfo                                 System.IO.FileSystemInfo
+    
+    PS \> Test-Path ($PerServerReportFileMessages.OutputFilePath)
+    False
+    
+    The funciton return object what contain the property named OutputFilePath what is the object of type System.IO.FileSystemInfo.
+    
+    File is not created. Only the object in the memory is prepared.
 
     .OUTPUTS
     System.Object[]
@@ -91,10 +122,10 @@ Function New-OutputFile {
 
     .NOTES
     AUTHOR: Wojciech Sciesinski, wojciech[at]sciesinski[dot]net  
-    KEYWORDS: PowerShell, FileSystem  
+    KEYWORDS: PowerShell, File, FileSystem  
 
     CURRENT VERSION
-    - 0.9.2 - 2016-11-12
+    - 0.9.3 - 2016-11-12
 
     HISTORY OF VERSIONS  
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -151,7 +182,7 @@ Function New-OutputFile {
         [String]$DateTimePartInFileNameString = $(Get-Date -format 'yyyyMMdd-HHmmss')
         
     }
-    Else {
+    elseif ($IncludeDateTimePartInOutputFileName) {
         
         [String]$DateTimePartInFileNameString = $(Get-Date -Date $DateTimePartInOutputFileName -format 'yyyyMMdd-HHmmss')
         
@@ -169,7 +200,7 @@ Function New-OutputFile {
     }
     Else {
         
-        #Try if Output directory is writable - temporary file is stored
+        #Try if Output directory is writable - a temporary file is created for that
         Try {
             
             [String]$TempFileName = [System.IO.Path]::GetTempFileName() -replace '.*\\', ''
@@ -238,32 +269,11 @@ Function New-OutputFile {
     #Replacing doubled chars \\ , -- , .. - except if \\ is on begining - means that path is UNC share
     [System.IO.FileInfo]$OutputFilePath = "{0}{1}" -f $OutputFilePathTemp.substring(0, 2), (($OutputFilePathTemp.substring(2, $OutputFilePathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
     
+    $OutputFilePath | Get-Member
+    
     If (Test-Path -Path $OutputFilePath -PathType Leaf) {
         
-        
-        #Dialog for decision if Force was not set or Overwrite All not selected previously
-        [String]$Title = "Overwrite File"
-        
-        [String]$MessageText = "The file {0} already exist" -f $OutputFilePath
-        
-        $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", `
-                          "The file already exists. Overwrite the existing file."
-        
-        #$yesall = New-Object System.Management.Automation.Host.ChoiceDescription "&All", `
-        #                     "Overwrite the all existing files."
-        
-        $no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", `
-                         "Retain the existing file."
-        
-        #$noall = New-Object System.Management.Automation.Host.ChoiceDescription "N&o for All", `
-        #                   "Retain the all existing files."
-        
-        $cancel = New-Object System.Management.Automation.Host.ChoiceDescription "&Cancel", `
-                             "Cancel."
-        
-        $options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no, $cancel)
-        
-        $Answer = $host.ui.PromptForChoice($Title, $MessageText, $Options, 0)
+        $Answer = Get-OverwriteDecision -Path $OutputFilePath -ItemType "File"
         
         switch ($Answer) {
             
@@ -271,19 +281,32 @@ Function New-OutputFile {
                 
                 [Int]$ExitCode = 4
                 
+                [System.String]$MessageText = "The file {0} already exist  - can't be overwritten" -f $OutputFilePath.FullName
+                
                 [String]$ExitCodeDescription = $MessageText
                 
             }
             
             1 {
                 
-                [Int]$ExitCode = 4
+                [Int]$ExitCode = 5
+                
+                [System.String]$MessageText = "The file {0} already exist  - can be overwritten" -f $OutputFilePath
                 
                 [String]$ExitCodeDescription = $MessageText
                 
             }
             
             2 {
+                
+                
+                Throw $MessageText
+                
+            }
+            
+            default {
+                
+                [System.String]$MessageText = "Unknown answer"
                 
                 Throw $MessageText
                 

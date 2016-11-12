@@ -13,12 +13,12 @@ Function New-OutputFolder {
     - ExitCodeDescription
 
     Exit codes and descriptions
-    0 = "Everything is fine :-)"
-    1 = "Provided path <PATH> doesn't exist
-    2 = Empty code
-    3 = "Provided patch <PATH> is not writable"
-    4 = "The folder <PATH>\\<FOLDER_NAME> already exist  - can't be overwritten"
-    5 = "The folder <PATH>\\<FOLDER_NAME> already exist  - can be overwritten"
+    - 0 = "Everything is fine :-)"
+    - 1 = "Provided path <PATH> doesn't exist
+    - 2 = Empty code
+    - 3 = "Provided patch <PATH> is not writable"
+    - 4 = "The folder <PATH>\\<FOLDER_NAME> already exist  - can't be overwritten"
+    - 5 = "The folder <PATH>\\<FOLDER_NAME> already exist  - can be overwritten"
 
     .PARAMETER ParentPath
     By default output folders are stored in the current path
@@ -46,35 +46,65 @@ Function New-OutputFolder {
 
     .EXAMPLE
 
-    PS \> $PerServerReportFolderMessages = New-OutputFolder -ParentPath 'C:\USERS\Wojtek\' -OutputFolderNamePrefix 'Messages' `
-                                                                    -OutputFolderNameMidPart 'COMPUTERNAME' `
-                                                                    -IncludeDateTimePartInOutputFolderName:$true `
-                                                                    -BreakIfError
+    PS \> (Get-Item env:COMPUTERNAME).Value
+    WXDX75
+    
+    PS \> $FolderNeeded= @{
+        ParentPath = 'C:\USERS\UserName\';
+        OutputFolderNamePrefix = 'Messages';
+        OutputFolderNameMidPart = (Get-Item env:COMPUTERNAME).Value
+        IncludeDateTimePartInOutputFolderName = $false;
+        BreakIfError = $true
+    }
+    
+    PS \> $PerServerReportFolderMessages = New-OutputFolder @FolderNeeded
 
     PS \> $PerServerReportFolderMessages | Format-List
 
-    ParentPath                                           ExitCode ExitCodeDescription
-    --------------                                           -------- -------------------
-    C:\users\wojtek\Messages-COMPUTERNAME-20151021-0012-.txt        0 Everything is fine :-)
+    OutputFilePath      : C:\users\UserName\Messages-WXDX75
+    ExitCode            : 1
+    ExitCodeDescription : Everything is fine :-)
+    
+    PS \> New-Item -Path $PerServerReportFolderMessages.OutputFolderPath -ItemType Directory
+
+    Directory: C:\USERS\UserName
+
+    Mode                LastWriteTime         Length Name
+    ----                -------------         ------ ----
+    -a----       21/10/2015     00:12              0 Messages-WXDX75
+    
+    The file created on provided parameters. 
+    Under preparation the file name is created, provided part of names are used, and availability of name (if the file exist now) is checked.
 
     .EXAMPLE
+    
+    $FolderNeeded= @{
+        ParentPath = 'C:\USERS\UserName\';
+        OutputFolderNamePrefix = 'Messages';
+        OutputFolderNameMidPart = 'COMPUTERNAME';
+        OutputFolderNameSuffix = "failed"
+    }
+    
+    PS \> $PerServerReportFolderMessages = New-OutputFolder @FolderNeeded
 
-    PS \> $PerServerReportFolderMessages = New-OutputFolder -ParentPath 'C:\USERS\Wojtek\' -OutputFolderNamePrefix 'Messages' `
-                                                                    -OutputFolderNameMidPart 'COMPUTERNAME' -IncludeDateTimePartInOutputFolderName:$true
-                                                                     -OutputFolderNameSuffix suffix `
-                                                                    -BreakIfError
+    PS \> $PerServerReportFolderMessages.OutputFolderPath | Select-Object -Property Name,Parent,exists | Format-List
 
-
-    PS \> $PerServerReportFolderMessages.ParentPath | select Name,Directory | Format-List
-
-    Name      : Messages-COMPUTERNAME-20151022-235607-suffix.rxc
-    Directory : C:\USERS\Wojtek
-
-    PS \> ($PerServerReportFolderMessages.ParentPath).gettype()
+    Name   : Messages-COMPUTERNAME-20161112-failed
+    Parent : UserName
+    Exists : False
+ 
+    PS \> ($PerServerReportFolderMessages.OutputFolderPath).gettype()
 
     IsPublic IsSerial Name                                     BaseType
     -------- -------- ----                                     --------
-    True     True     FolderInfo                                 System.IO.DirectorySystemInfo
+    True     True     DirectoryInfo                            System.IO.FileSystemInfo
+    
+    PS \> Test-Path ($PerServerReportFolderMessages.OutputFilePath)
+    False
+    
+    The function return object what contain the property named OutputFilePath what is the object of type System.IO.DirectoryInfo.
+    
+    Folder is not created. Only the object in the memory is prepared.
 
     .OUTPUTS
     System.Object[]
@@ -90,7 +120,7 @@ Function New-OutputFolder {
     KEYWORDS: PowerShell, Folder, FileSystem  
     
     CURRENT VERSION
-    - 0.3.0 - 2016-11-11
+    - 0.3.2 - 2016-11-12
     
     HISTORY OF VERSIONS  
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -142,12 +172,12 @@ Function New-OutputFolder {
     #Assign value to the variable $IncludeDateTimePartInOutputFolderName if is not initialized
     If ($IncludeDateTimePartInOutputFolderName -and ($null -eq $DateTimePartInOutputFolderName)) {
 
-        [String]$DateTimePartInFolderNameString = $(Get-Date -format yyyyMMdd)
+        [String]$DateTimePartInFolderNameString = $(Get-Date -format 'yyyyMMdd')
 
     }
-    Else {
+    elseif ($IncludeDateTimePartInOutputFolderName) {
 
-        [String]$DateTimePartInFolderNameString = $(Get-Date -Date $DateTimePartInOutputFolderName -format yyyyMMdd)
+        [String]$DateTimePartInFolderNameString = $(Get-Date -Date $DateTimePartInOutputFolderName -format 'yyyyMMdd')
 
     }
     
@@ -163,7 +193,7 @@ Function New-OutputFolder {
     }
     
     
-    #Try if Output directory is writable - temporary folder is stored
+    #Try if Output directory is writable - a temporary folder is created for that
     
     Else {
         
@@ -202,72 +232,51 @@ Function New-OutputFolder {
     #Constructing the folder name
     If (!($IncludeDateTimePartInOutputFolderName) -and !([String]::IsNullOrEmpty($OutputFolderNameMidPart)) ) {
 
-        [String]$ParentPathTemp1 = "{0}\{1}{3}{2}" -f $ParentPath, $OutputFolderNamePrefix, $OutputFolderNameMidPart, $NamePartsSeparator
+        [String]$OutputFolderPathTemp1 = "{0}\{1}{3}{2}" -f $ParentPath, $OutputFolderNamePrefix, $OutputFolderNameMidPart, $NamePartsSeparator
 
     }
     Elseif (!($IncludeDateTimePartInOutputFolderName) -and [String]::IsNullOrEmpty($OutputFolderNameMidPart )) {
 
-        [String]$ParentPathTemp1 = "{0}\{1}" -f $ParentPath, $OutputFolderNamePrefix
+        [String]$OutputFolderPathTemp1 = "{0}\{1}" -f $ParentPath, $OutputFolderNamePrefix
 
     }
     ElseIf ($IncludeDateTimePartInOutputFolderName -and !([String]::IsNullOrEmpty($OutputFolderNameMidPart))) {
 
-        [String]$ParentPathTemp1 = "{0}\{1}{4}{2}{4}{3}" -f $ParentPath, $OutputFolderNamePrefix, $OutputFolderNameMidPart, $DateTimePartInFolderNameString, $NamePartsSeparator
+        [String]$OutputFolderPathTemp1 = "{0}\{1}{4}{2}{4}{3}" -f $ParentPath, $OutputFolderNamePrefix, $OutputFolderNameMidPart, $DateTimePartInFolderNameString, $NamePartsSeparator
 
     }
     Else {
 
-        [String]$ParentPathTemp1 = "{0}\{1}{3}{2}" -f $ParentPath, $OutputFolderNamePrefix, $DateTimePartInFolderNameString, $NamePartsSeparator
+        [String]$OutputFolderPathTemp1 = "{0}\{1}{3}{2}" -f $ParentPath, $OutputFolderNamePrefix, $DateTimePartInFolderNameString, $NamePartsSeparator
         
     }
     
     
     If ( [String]::IsNullOrEmpty($OutputFolderNameSuffix)) {
 
-        [String]$ParentPathTemp = "{0}" -f $ParentPathTemp1
+        [String]$OutputFolderPathTemp = "{0}" -f $OutputFolderPathTemp1
 
     }
     Else {
 
-        [String]$ParentPathTemp = "{0}{2}{1}" -f $ParentPathTemp1, $OutputFolderNameSuffix, $NamePartsSeparator
+        [String]$OutputFolderPathTemp = "{0}{2}{1}" -f $OutputFolderPathTemp1, $OutputFolderNameSuffix, $NamePartsSeparator
 
     }
 
     #Replacing doubled chars \\ , -- , .. - except if \\ is on begining - means that path is UNC share
-    [System.IO.DirectoryInfo]$ParentPath = "{0}{1}" -f $ParentPathTemp.substring(0, 2), (($ParentPathTemp.substring(2, $ParentPathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
+    [System.IO.DirectoryInfo]$OutputFolderPath = "{0}{1}" -f $OutputFolderPathTemp.substring(0, 2), (($OutputFolderPathTemp.substring(2, $OutputFolderPathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
 
-    If (Test-Path -Path $ParentPath -PathType Container) {
+    If (Test-Path -Path $OutputFolderPath -PathType Container) {
         
-        
-        #Dialog for decision if Force was not set or Overwrite All not selected previously
-        [String]$Title = "Overwrite Folder"
-        
-        [String]$MessageText = "The folder {0} already exist" -f $ParentPath
-                
-        $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", `
-                          "The folder already exists. Overwrite the existing folder."
-        
-        #$yesall = New-Object System.Management.Automation.Host.ChoiceDescription "&All", `
-        #                     "Overwrite the all existing folders."
-        
-        $no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", `
-                         "Retain the existing folder."
-        
-        #$noall = New-Object System.Management.Automation.Host.ChoiceDescription "N&o for All", `
-        #                   "Retain the all existing folders."
-        
-        $cancel = New-Object System.Management.Automation.Host.ChoiceDescription "&Cancel", `
-                             "Cancel."
-        
-        $options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no, $cancel)
-        
-        $Answer = $host.ui.PromptForChoice($Title, $MessageText, $Options, 0)
+        $Answer = Get-OverwriteDecision -Path $OutputFolderPath -ItemType "Folder"
         
         switch ($Answer) {
             
             0 {
-                                
+                
                 [Int]$ExitCode = 4
+                
+                [System.String]$MessageText = "The folder {0} already exist  - can't be overwritten" -f $OutputFolderPath.FullName
                 
                 [String]$ExitCodeDescription = $MessageText
                 
@@ -275,7 +284,9 @@ Function New-OutputFolder {
             
             1 {
                 
-                [Int]$ExitCode = 4
+                [Int]$ExitCode = 5
+                
+                [System.String]$MessageText = "The folder {0} already exist  - can be overwritten" -f $OutputFolderPath
                 
                 [String]$ExitCodeDescription = $MessageText
                 
@@ -291,7 +302,7 @@ Function New-OutputFolder {
  
     }
 
-    $Result | Add-Member -MemberType NoteProperty -Name ParentPath -Value $ParentPath
+    $Result | Add-Member -MemberType NoteProperty -Name OutputFolderPath -Value $OutputFolderPath
 
     $Result | Add-Member -MemberType NoteProperty -Name ExitCode -Value $ExitCode
 

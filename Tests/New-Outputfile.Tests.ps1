@@ -441,13 +441,113 @@ Describe "Tests for $FunctionName" {
         Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108-000002' } -ParameterFilter { $Format }
         
         It "Function $FunctionName -  $ContextName - OutputFilePath - an object type" {
-            
             { $Result = New-OutputFile -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
         }
         
     }
     
+    $ContextName = "run without parameters, destination file exists, decision leave"
+    
+    Context "Function $FunctionName - $ContextName" {
+        
+        [System.String]$TestExistingFile = "TestDrive:\Output-20161108-000002.txt"
+        
+        New-Item -Path $TestExistingFile -ItemType File
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108-000002' } -ParameterFilter { $Format }
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-OverwriteDecision -MockWith { Return [int]0 }
+        
+        $Result = New-OutputFile
+        
+        It "Function $FunctionName - $ContextName - OutputFilePath - an object type" {
+            
+            $Result.OutputFilePath | Should BeOfType System.Io.FileInfo
+        }
+        
+        It "Function $FunctionName - $ContextName - OutputFilePath - Name " {
+            
+            $Result.OutputFilePath.Name | Should Be "Output-20161108-000002.txt"
+        }
+        
+        
+        It "Function $FunctionName - $ContextName - exit code" {
+            
+            $Result.ExitCode | Should Be 4
+        }
+        
+        It "Function $FunctionName - $ContextName - exit code description" {
+            
+            [System.String]$RequiredMessage = "The file {0} already exist  - can't be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFile")
+            
+            $Result.ExitCodeDescription | Should Be $RequiredMessage
+        }
+        
+    }
+    
+    $ContextName = "run without parameters, destination file exists, decision overwrite"
+    
+    Context "Function $FunctionName - $ContextName" {
+        
+        [System.String]$TestExistingFile = "TestDrive:\Output-20161108-000002.txt"
+        
+        New-Item -Path $TestExistingFile -ItemType File
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108-000002' } -ParameterFilter { $Format }
+        
+        Mock -ModuleName New-OutputObject -CommandName Get-OverwriteDecision -MockWith { Return [int]1 }
+        
+        $Result = New-OutputFile
+        
+        It "Function $FunctionName - $ContextName - OutputFilePath - an object type" {
+            
+            $Result.OutputFilePath | Should BeOfType System.Io.FileInfo
+        }
+        
+        It "Function $FunctionName - $ContextName - OutputFilePath - Name " {
+            
+            $Result.OutputFilePath.Name | Should Be "Output-20161108-000002.txt"
+        }
+        
+        
+        It "Function $FunctionName - $ContextName - exit code" {
+            
+            $Result.ExitCode | Should Be 5
+        }
+        
+        It "Function $FunctionName - $ContextName - exit code description" {
+            
+            [System.String]$RequiredMessage = "The file {0} already exist  - can be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFile")
+            
+            $Result.ExitCodeDescription | Should Be $RequiredMessage
+        }
+        
+    }
+        
+        $ContextName = "run without parameters, destination file exists, decision cancel"
+        
+        Context "Function $FunctionName - $ContextName" {
+            
+            [System.String]$TestExistingFile = "TestDrive:\Output-20161108-000002.txt"
+            
+            New-Item -Path $TestExistingFile -ItemType File
+            
+            Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108-000002' } -ParameterFilter { $Format }
+            
+            Mock -ModuleName New-OutputObject -CommandName Get-OverwriteDecision -MockWith { Return [int]2 }
+            
+            
+            
+            It "Function $FunctionName - $ContextName - OutputFilePath - an object type" {
+                
+                { $Result = New-OutputFile } | Should Throw
+            }
+            
+            
+        }
+        
+        
+    
     Set-Location -Path $LocationAtBegin
 }
-
 
