@@ -3,13 +3,19 @@
 - 0.9.0 - 2016-11-07 - the first release as a module 
 - 0.9.1 - 2016-11-08 - global tests added, basic test for functions added, small corrections in main functions
 - 0.9.2 - 2016-11-11 
-	- New-OutputFile v. 0.9.1
-	- New-OutputFolder v. 0.3.0
-	- Test-CharsInPath v. 0.5.2
-	- New-OutputFile.Tests v. 0.2.0
-	- New-OutputFolder.Tests v. 0.4.0
-	- Test-CharsInPath.Tests v. 0.5.0
-
+    - New-OutputFile v. 0.9.1
+    - New-OutputFolder v. 0.3.0
+    - Test-CharsInPath v. 0.5.2
+    - New-OutputFile.Tests v. 0.2.0
+    - New-OutputFolder.Tests v. 0.4.0
+    - Test-CharsInPath.Tests v. 0.5.0
+- 0.9.3 - 2016-11-12
+    - New-OutputFile v. 0.9.2
+    - New-OutputFolder v. 0.3.1
+    - Test-CharsInPath v. 0.5.2
+    - New-OutputFile.Tests v. 0.2.0
+    - New-OutputFolder.Tests v. 0.4.0
+    - Test-CharsInPath.Tests v. 0.5.0
 
 ## Function New-OutputFile
 - 0.1.0 - 2015-09-01 - Initial release
@@ -28,6 +34,7 @@
 - 0.8.4 - 2016-11-08 - Help updated, the TODO list moved to TODO.md file
 - 0.9.0 - 2016-11-08 - The parameter CreateOutputFileDirectory removed
 - 0.9.1 - 2016-11-11 - The parameter OutputFileDirectoryPath renamed to ParentFolder, type of the parameter BreakIfError changed, help updated
+- 0.9.2 - 2016-11-12 - behaviour for existing files corrected
 
 ## Function New-OutputFolder
 - 0.1.0 - 2016-06-10 - Initial release, based on the New-OutputFile v. 0.8.1
@@ -35,6 +42,7 @@
 - 0.2.1 - 2016-11-07 - Help updated, the function version moved to VERSION.md file 
 - 0.2.2 - 2016-11-07 - Help updated, the TODO list moved to TODO.md file, declared OUTPUTS
 - 0.3.0 - 2016-11-11 - The parameter OutputFolderDirectoryPath renamed to ParentFolder, type of the parameter BreakIfError changed, help updated, behaviour of function with provided OutputFolderNameSuffix parameter corrected
+- 0.3.1 - 2016-11-12 - behaviour for existing folders corrected
 
 ## Function Test-CharsInPath
 - 0.1.0 - 2016-06-06 - Initial release

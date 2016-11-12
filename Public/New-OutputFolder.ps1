@@ -236,7 +236,7 @@ Function New-OutputFolder {
     #Replacing doubled chars \\ , -- , .. - except if \\ is on begining - means that path is UNC share
     [System.IO.DirectoryInfo]$ParentPath = "{0}{1}" -f $ParentPathTemp.substring(0, 2), (($ParentPathTemp.substring(2, $ParentPathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
 
-    If ($ErrorIfOutputFolderExist -and (Test-Path -Path $ParentPath -PathType Container)) {
+    If (Test-Path -Path $ParentPath -PathType Container) {
         
         
         #Dialog for decision if Force was not set or Overwrite All not selected previously

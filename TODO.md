@@ -1,6 +1,8 @@
 # TODO 
 
 ## New-OutputObject
+- verify cross module versions of functions (used in the VERSION.md file, comment based helps, module manifest, etc.)
+- update the parameter FileList in the New-OutputObject.psd1
 - integrate unit test via AppVeyour
 - publish to PowerShell Gallery
 
