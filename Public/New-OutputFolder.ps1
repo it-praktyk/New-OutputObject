@@ -17,8 +17,8 @@ Function New-OutputFolder {
     - 1 = "Provided path <PATH> doesn't exist
     - 2 = Empty code
     - 3 = "Provided patch <PATH> is not writable"
-    - 4 = "The folder <PATH>\\<FOLDER_NAME> already exist  - can't be overwritten"
-    - 5 = "The folder <PATH>\\<FOLDER_NAME> already exist  - can be overwritten"
+    - 4 = "The folder <PATH>\\<FOLDER_NAME> already exist  - can be overwritten"
+    - 5 = "The folder <PATH>\\<FOLDER_NAME> already exist  - can't be overwritten"
 
     .PARAMETER ParentPath
     By default output folders are stored in the current path
@@ -120,7 +120,7 @@ Function New-OutputFolder {
     KEYWORDS: PowerShell, Folder, FileSystem  
     
     CURRENT VERSION
-    - 0.3.2 - 2016-11-12
+    - 0.3.3 - 2016-11-12
     
     HISTORY OF VERSIONS  
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -276,7 +276,7 @@ Function New-OutputFolder {
                 
                 [Int]$ExitCode = 4
                 
-                [System.String]$MessageText = "The folder {0} already exist  - can't be overwritten" -f $OutputFolderPath.FullName
+                [System.String]$MessageText = "The folder {0} already exist  - can be overwritten" -f $OutputFolderPath.FullName
                 
                 [String]$ExitCodeDescription = $MessageText
                 
@@ -286,7 +286,7 @@ Function New-OutputFolder {
                 
                 [Int]$ExitCode = 5
                 
-                [System.String]$MessageText = "The folder {0} already exist  - can be overwritten" -f $OutputFolderPath
+                [System.String]$MessageText = "The folder {0} already exist  - can't be overwritten" -f $OutputFolderPath
                 
                 [String]$ExitCodeDescription = $MessageText
                 

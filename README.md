@@ -1,16 +1,16 @@
 # New-OutputObject Module
 ## Description
-The PowerShell module intended for preparing PowerShell objects what help output filesystem objects (files and folders).
+The PowerShell module intended for preparing PowerShell objects what the next help output filesystem objects, means: files and folders.
 
 The module does:
 - checks if the provided path is writable
-- prepares the file/folder name based on the path, prefixes, suffixes, etc.
-- checks if the file/folder already exist and display dialog with warning and question about decission
+- prepares the file/folder name based on the path, prefix, suffix, date etc.
+- checks if the file/folder already exist and display dialog with warning and question about overwirte decission
 
 The module doesn't
 - create file/folder (except that used to check if destination is writable but that files are not retained).
 
-Module version: 0.9.5 - 2016-11-13  
+Module version: 0.9.6 - 2016-11-13  
 [History of versions](VERSIONS.md)
 
 
@@ -28,7 +28,7 @@ Returned object contains properties
 - OutputFilePath - to use it please check examples - as a [System.IO.FileInfo]
 - ExitCode
 - ExitCodeDescription
-	
+    
 
 ### [New-OutputFolder](Help/New-OutputFolder.md)
 Function intended for preparing a PowerShell object for output/create folders for e.g. reports or logs.

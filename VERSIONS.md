@@ -36,8 +36,20 @@
     - New-OutputFile.Tests v. 0.3.0
     - New-OutputFolder.Tests v. 0.5.0
     - Test-CharsInPath.Tests v. 0.5.0
-	
+- 0.9.6 - 2016-11-13
+    - New-OutputObject v. 0.2.0
+	- New-OutputFile v. 0.9.4
+    - New-OutputFolder v. 0.3.3
+    - Test-CharsInPath v. 0.5.2
+    - Get-OverwriteDecision v. 0.1.0
+    - New-OutputFile.Tests v. 0.3.1
+    - New-OutputFolder.Tests v. 0.5.1
+    - Test-CharsInPath.Tests v. 0.5.0	
 
+## General
+- 0.9.6 - 2016-11-13 - Demo file added, description in psd1 updated
+    
+    
 ## Function New-OutputFile
 - 0.1.0 - 2015-09-01 - Initial release
 - 0.1.1 - 2015-09-01 - Minor update
@@ -57,6 +69,7 @@
 - 0.9.1 - 2016-11-11 - The parameter OutputFileDirectoryPath renamed to ParentFolder, type of the parameter BreakIfError changed, help updated
 - 0.9.2 - 2016-11-12 - behaviour for existing files corrected
 - 0.9.3 - 2016-11-12 - help updated, comments in code updated, part of a code moved to Get-OverwriteDecision
+- 0.9.4 - 2016-11-13 - unnecessary message has been deleted, behaviour for existing files corrected
 
 ## Function New-OutputFolder
 - 0.1.0 - 2016-06-10 - Initial release, based on the New-OutputFile v. 0.8.1
@@ -66,6 +79,7 @@
 - 0.3.0 - 2016-11-11 - The parameter OutputFolderDirectoryPath renamed to ParentFolder, type of the parameter BreakIfError changed, help updated, behaviour of function with provided OutputFolderNameSuffix parameter corrected
 - 0.3.1 - 2016-11-12 - behaviour for existing folders corrected
 - 0.3.2 - 2016-11-12 - help updated, part of a code moved to Get-OverwriteDecision, section for existing folders corrected
+- 0.3.3 - 2016-11-13 - behaviour for existing folders corrected
 
 ## Function Test-CharsInPath
 - 0.1.0 - 2016-06-06 - Initial release
@@ -87,6 +101,7 @@
 - 0.1.0 - 2016-11-07 - the first version of tests
 - 0.2.0 - 2016-11-11 - tests updated and extended, help updated
 - 0.3.0 - 2016-11-12 - tests for scenarios with existing folders added
+- 0.3.1 - 2016-11-13 - behaviour for existing files corrected
 
 ## New-OutputFolder.Tests
 - 0.1.0 - 2016-06-10 - Initial release, based on the New-OutputFile v. 0.8.1
@@ -94,6 +109,7 @@
 - 0.3.0 - 2016-06-10 - The first tests still failed :-), Mock failed also
 - 0.4.0 - 2016-11-11 - tests updated and extended, help updated
 - 0.5.0 - 2016-11-12 - correction of renamed parameters, tests for scenarios with existing folders added
+- 0.5.1 - 2016-11-13 - behaviour for existing folders corrected
 
 ## Test-CharsInPath.Tests
 - 0.5.0 - 2016-11-11 - The tests versions history moved to VERSION.md file, help updated

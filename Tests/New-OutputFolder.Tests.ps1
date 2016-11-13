@@ -14,7 +14,7 @@
     KEYWORDS: PowerShell, FileSystem, Pester
   
     CURRENT VERSION
-    - 0.5.0 - 2016-11-12
+    - 0.5.1 - 2016-11-13
 
     HISTORY OF VERSIONS  
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -420,7 +420,7 @@ Describe "New-OutputFolder" {
         
     }
     
-    $ContextName = "run without parameters, destination file exists, decision leave"
+    $ContextName = "run without parameters, destination file exists, decision overwrite"
     
     Context "Function $FunctionName - $ContextName" {
         
@@ -452,14 +452,14 @@ Describe "New-OutputFolder" {
         
         It "Function $FunctionName - $ContextName - exit code description" {
             
-            [System.String]$RequiredMessage = "The folder {0} already exist  - can't be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFolder")
+            [System.String]$RequiredMessage = "The folder {0} already exist  - can be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFolder")
             
             $Result.ExitCodeDescription | Should Be $RequiredMessage
         }
         
     }
     
-    $ContextName = "run without parameters, destination file exists, decision overwrite"
+    $ContextName = "run without parameters, destination file exists, decision leave"
     
     Context "Function $FunctionName - $ContextName" {
         
@@ -491,7 +491,7 @@ Describe "New-OutputFolder" {
         
         It "Function $FunctionName - $ContextName - exit code description" {
             
-            [System.String]$RequiredMessage = "The folder {0} already exist  - can be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFolder")
+            [System.String]$RequiredMessage = "The folder {0} already exist  - can't be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFolder")
             
             $Result.ExitCodeDescription | Should Be $RequiredMessage
         }

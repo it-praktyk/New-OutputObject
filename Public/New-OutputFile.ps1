@@ -17,8 +17,8 @@ Function New-OutputFile {
     - 1 = "Provided path <PATH> doesn't exist
     - 2 = Empty code
     - 3 = "Provided patch <PATH> is not writable"
-    - 4 = "The file <PATH>\\<FILE_NAME> already exist  - can't be overwritten"
-    - 5 = "The file <PATH>\\<FILE_NAME> already exist  - can be overwritten"
+    - 4 = "The file <PATH>\\<FILE_NAME> already exist  - can be overwritten"
+    - 5 = "The file <PATH>\\<FILE_NAME> already exist  - can't be overwritten"
 
     .PARAMETER ParentPath
     By default output files are stored in the current path
@@ -125,7 +125,7 @@ Function New-OutputFile {
     KEYWORDS: PowerShell, File, FileSystem  
 
     CURRENT VERSION
-    - 0.9.3 - 2016-11-12
+    - 0.9.4 - 2016-11-13
 
     HISTORY OF VERSIONS  
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -269,7 +269,6 @@ Function New-OutputFile {
     #Replacing doubled chars \\ , -- , .. - except if \\ is on begining - means that path is UNC share
     [System.IO.FileInfo]$OutputFilePath = "{0}{1}" -f $OutputFilePathTemp.substring(0, 2), (($OutputFilePathTemp.substring(2, $OutputFilePathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
     
-    $OutputFilePath | Get-Member
     
     If (Test-Path -Path $OutputFilePath -PathType Leaf) {
         
@@ -281,7 +280,7 @@ Function New-OutputFile {
                 
                 [Int]$ExitCode = 4
                 
-                [System.String]$MessageText = "The file {0} already exist  - can't be overwritten" -f $OutputFilePath.FullName
+                [System.String]$MessageText = "The file {0} already exist  - can be overwritten" -f $OutputFilePath.FullName
                 
                 [String]$ExitCodeDescription = $MessageText
                 
@@ -291,7 +290,7 @@ Function New-OutputFile {
                 
                 [Int]$ExitCode = 5
                 
-                [System.String]$MessageText = "The file {0} already exist  - can be overwritten" -f $OutputFilePath
+                [System.String]$MessageText = "The file {0} already exist  - can't be overwritten" -f $OutputFilePath
                 
                 [String]$ExitCodeDescription = $MessageText
                 

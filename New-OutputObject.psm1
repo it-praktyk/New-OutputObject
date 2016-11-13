@@ -1,8 +1,8 @@
-<#	
+<#  
     
     .SYNOPSIS
-	The PowerShell module New-OutputObject function
-	
+    The PowerShell module New-OutputObject function
+    
     .LINK
     https://github.com/it-praktyk/New-OutputObject
 

@@ -446,7 +446,7 @@ Describe "Tests for $FunctionName" {
         
     }
     
-    $ContextName = "run without parameters, destination file exists, decision leave"
+    $ContextName = "run without parameters, destination file exists, decision overwrite"
     
     Context "Function $FunctionName - $ContextName" {
         
@@ -478,14 +478,14 @@ Describe "Tests for $FunctionName" {
         
         It "Function $FunctionName - $ContextName - exit code description" {
             
-            [System.String]$RequiredMessage = "The file {0} already exist  - can't be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFile")
+            [System.String]$RequiredMessage = "The file {0} already exist  - can be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFile")
             
             $Result.ExitCodeDescription | Should Be $RequiredMessage
         }
         
     }
     
-    $ContextName = "run without parameters, destination file exists, decision overwrite"
+    $ContextName = "run without parameters, destination file exists, decision leave"
     
     Context "Function $FunctionName - $ContextName" {
         
@@ -517,7 +517,7 @@ Describe "Tests for $FunctionName" {
         
         It "Function $FunctionName - $ContextName - exit code description" {
             
-            [System.String]$RequiredMessage = "The file {0} already exist  - can be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFile")
+            [System.String]$RequiredMessage = "The file {0} already exist  - can't be overwritten" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingFile")
             
             $Result.ExitCodeDescription | Should Be $RequiredMessage
         }
