@@ -1,16 +1,17 @@
 # New-OutputObject Module
+
 ## Description
 The PowerShell module intended for preparing PowerShell objects what the next help output filesystem objects, means: files and folders.
 
 The module does:
 - checks if the provided path is writable
 - prepares the file/folder name based on the path, prefix, suffix, date etc.
-- checks if the file/folder already exist and display dialog with warning and question about overwirte decission
+- checks if the file/folder already exist and display dialog with a warning and a question about overwrite decission
 
 The module doesn't
 - create file/folder (except that used to check if destination is writable but that files are not retained).
 
-Module version: 0.9.6 - 2016-11-13  
+Module version: 0.9.7 - 2017-05-02
 [History of versions](VERSIONS.md)
 
 
@@ -25,13 +26,16 @@ Function intended for preparing a PowerShell object for output files like report
 Function intended for preparing a PowerShell custom object what contains e.g. file name for output/create files like reports or log. The name is prepared based on prefix, middle name part, suffix, date, etc. with verification if provided path exist and is it writable.
 
 Returned object contains properties
-- OutputFilePath - to use it please check examples - as a [System.IO.FileInfo]
-- ExitCode
-- ExitCodeDescription
-    
+
+|--|--|--|
+|Property name|Property type|Remarks|
+|OutputObjectPath|[System.IO.FileInfo]|For an ExitCode=2 OutputObjectPath is equal null|
+|OutputFilePath|[System.IO.FileInfo|alias of OutputFilePath|
+|ExitCode|[Int]||
+|ExitCodeDescription|[String]||
+
 
 ### [New-OutputFolder](Help/New-OutputFolder.md)
-Function intended for preparing a PowerShell object for output/create folders for e.g. reports or logs.
 
 #### SYNOPSIS
 Function intended for preparing a PowerShell object for output/create folders for e.g. reports or logs.
@@ -39,9 +43,11 @@ Function intended for preparing a PowerShell object for output/create folders fo
 #### DESCRIPTION
 Function intended for preparing a PowerShell custom object what contains e.g.folder name for output/create folders. The name is prepared based on prefix, middle name part, suffix, date, etc. with verification if provided path exist and is it writable.
 Returned object contains properties
-- OutputFolderPath - to use it please check an examples - as a [System.IO.FolderInfo]
-- ExitCode
-- ExitCodeDescription
+|Property name|Property type|Remarks|
+|OutputObjectPath|[System.IO.FolderInfo]|For an ExitCode=2 OutputObjectPath is equal null|
+|OutputFilePath|[System.IO.FolderInfo|alias of OutputFolderPath|
+|ExitCode|[Int]||
+|ExitCodeDescription|[String]||
 
 ## LICENSE
 Copyright (c) 2016 Wojciech Sciesinski  
@@ -51,4 +57,4 @@ Full license text: https://opensource.org/licenses/MIT
 ## TODO
 For ToDo and developments plans please check [TODO.md file](TODO.md).
 
-Your comments - preferable via GitHub issues - and  pull requests are welcomed. 
+Your comments - preferable via GitHub issues - and  pull requests are welcomed.
