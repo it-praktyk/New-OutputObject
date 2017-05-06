@@ -1,3 +1,9 @@
+---
+external help file: New-OutputObject-help.xml
+online version: https://github.com/it-praktyk/New-OutputObject
+schema: 2.0.0
+---
+
 # New-OutputFolder
 
 ## SYNOPSIS
@@ -10,7 +16,7 @@ reports or logs.
 New-OutputFolder [[-ParentPath] <String>] [[-OutputFolderNamePrefix] <String>]
  [[-OutputFolderNameMidPart] <String>] [[-OutputFolderNameSuffix] <String>]
  [[-IncludeDateTimePartInOutputFolderName] <Boolean>] [[-DateTimePartInOutputFolderName] <DateTime>]
- [[-NamePartsSeparator] <String>] [-BreakIfError]
+ [[-DateTimePartFormat] <String>] [[-NamePartsSeparator] <String>] [-BreakIfError]
 ```
 
 ## DESCRIPTION
@@ -26,18 +32,17 @@ Returned object contains properties
 
 Exit codes and descriptions
 - 0 = "Everything is fine :-)"
-- 1 = "Provided path \<PATH\> doesn't exist
-- 2 = Empty code
+- 1 = "Provided parent path \<PATH\> doesn't exist"
+- 2 = "The result name contains unacceptable chars"
 - 3 = "Provided patch \<PATH\> is not writable"
-- 4 = "The folder \<PATH\>\\<FOLDER_NAME\> already exist  - can't be overwritten"
-- 5 = "The folder \<PATH\>\\<FOLDER_NAME\> already exist  - can be overwritten"
+- 4 = "The folder \<PATH\>\<FOLDER_NAME\> already exist  - can be overwritten"
+- 5 = "The folder \<PATH\>\<FOLDER_NAME\> already exist  - can't be overwritten"
 
 ## EXAMPLES
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
 (Get-Item env:COMPUTERNAME).Value
-
 
 WXDX75
 
@@ -54,7 +59,7 @@ PS \> $PerServerReportFolderMessages = New-OutputFolder @FolderNeeded
 PS \> $PerServerReportFolderMessages | Format-List
 
 OutputFilePath      : C:\users\UserName\Messages-WXDX75
-ExitCode            : 1
+ExitCode            : 0
 ExitCodeDescription : Everything is fine :-)
 
 PS \> New-Item -Path $PerServerReportFolderMessages.OutputFolderPath -ItemType Directory
@@ -65,14 +70,12 @@ Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
 -a----       21/10/2015     00:12              0 Messages-WXDX75
 ```
-
-The file created on provided parameters. 
+The file created on provided parameters.
 Under preparation the file name is created, provided part of names are used, and availability of name (if the file exist now) is checked.
 
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
 $FolderNeeded= @{
-
 
 ParentPath = 'C:\USERS\UserName\';
     OutputFolderNamePrefix = 'Messages';
@@ -96,8 +99,9 @@ True     True     DirectoryInfo                            System.IO.FileSystemI
 
 PS \> Test-Path ($PerServerReportFolderMessages.OutputFilePath)
 False
-```
+
 The function return object what contain the property named OutputFilePath what is the object of type System.IO.DirectoryInfo.
+```
 
 Folder is not created.
 Only the object in the memory is prepared.
@@ -105,7 +109,10 @@ Only the object in the memory is prepared.
 ## PARAMETERS
 
 ### -ParentPath
-By default output folders are stored in the current path
+The folder path what will be used as the parent path for the new created object.
+When non existing path will be provided the error code will be returned.
+
+By default output files are stored in the current path.
 
 ```yaml
 Type: String
@@ -194,6 +201,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DateTimePartFormat
+Format string used to format date and time in output folder name.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 7
+Default value: YyyyMMdd
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -NamePartsSeparator
 A char used to separate parts in the name, by default "-" is used
 
@@ -203,7 +225,7 @@ Parameter Sets: (All)
 Aliases: Separator
 
 Required: False
-Position: 7
+Position: 8
 Default value: -
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -232,10 +254,10 @@ Accept wildcard characters: False
 
 ## NOTES
 AUTHOR: Wojciech Sciesinski, wojciech\[at\]sciesinski\[dot\]net  
-KEYWORDS: PowerShell, Folder, FileSystem  
+KEYWORDS: PowerShell, Folder, FileSystem
 
 CURRENT VERSION
-- 0.3.2 - 2016-11-12
+- 0.9.8 - 2017-05-06
 
 HISTORY OF VERSIONS  
 https://github.com/it-praktyk/New-OutputObject/VERSIONS.md

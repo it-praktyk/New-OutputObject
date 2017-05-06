@@ -1,8 +1,8 @@
-<#  
-    
+<#
+
     .SYNOPSIS
     The PowerShell module New-OutputObject function
-    
+
     .LINK
     https://github.com/it-praktyk/New-OutputObject
 
@@ -12,13 +12,13 @@
     .NOTES
     AUTHOR: Wojciech Sciesinski, wojciech[at]sciesinski[dot]net
     KEYWORDS: PowerShell, FileSystem, File, Folder
-    
+
     CURRENT VERSION
     - 0.2.2 - 2016-11-13
 
-    HISTORY OF VERSIONS  
+    HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
-    
+
 #>
 
 
