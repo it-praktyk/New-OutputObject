@@ -4,7 +4,7 @@ online version: https://github.com/it-praktyk/New-OutputObject
 schema: 2.0.0
 ---
 
-# New-OutputFile
+# New-OutputObject
 
 ## SYNOPSIS
 Function intended for preparing a PowerShell object for output files like reports or logs.
@@ -12,10 +12,11 @@ Function intended for preparing a PowerShell object for output files like report
 ## SYNTAX
 
 ```
-New-OutputFile [[-ParentPath] <String>] [[-OutputFileNamePrefix] <String>] [[-OutputFileNameMidPart] <String>]
- [[-OutputFileNameSuffix] <String>] [[-IncludeDateTimePartInOutputFileName] <Boolean>]
- [[-DateTimePartInOutputFileName] <DateTime>] [[-DateTimePartFormat] <String>]
- [[-OutputFileNameExtension] <String>] [[-NamePartsSeparator] <String>] [-BreakIfError]
+New-OutputObject [-ObjectType] <String> [[-ParentPath] <String>] [[-OutputObjectNamePrefix] <String>]
+ [[-OutputObjectNameMidPart] <String>] [[-OutputObjectNameSuffix] <String>]
+ [[-IncludeDateTimePartInOutputObjectName] <Boolean>] [[-DateTimePartInOutputObjectName] <DateTime>]
+ [[-DateTimePartFormat] <String>] [[-OutputFileNameExtension] <String>] [[-NamePartsSeparator] <String>]
+ [-BreakIfError]
 ```
 
 ## DESCRIPTION
@@ -25,17 +26,17 @@ The name is prepared based on prefix, middle name part, suffix, date, etc.
 with verification if provided path exist and is it writable.
 
 Returned object contains properties
-- OutputFilePath - to use it please check examples - as a \[System.IO.FileInfo\]
+- OutputObjectPath - to use it please check examples - as a \[System.IO.FileInfo\]
 - ExitCode
 - ExitCodeDescription
 
 Exit codes and descriptions
 - 0 = "Everything is fine :-)"
 - 1 = "Provided parent path \<PATH\> doesn't exist"
-- 2 = "The result name contains unacceptable chars"
+- 2 = "The name not created due to unaccepatable chars"
 - 3 = "Provided patch \<PATH\> is not writable"
-- 4 = "The file \<PATH\>\<FILE_NAME\> already exist  - can be overwritten"
-- 5 = "The file \<PATH\>\<FILE_NAME\> already exist  - can't be overwritten"
+- 4 = "The file\folder \<PATH\>\\\<FILE_OR_FOLDER_NAME\> already exist  - can be overwritten"
+- 5 = "The file\folder \<PATH\>\\\<FILE_OR_FOLDER_NAME\> already exist  - can't be overwritten"
 
 ## EXAMPLES
 
@@ -43,26 +44,30 @@ Exit codes and descriptions
 ```
 (Get-Item env:COMPUTERNAME).Value
 
-
 WXDX75
 
 PS \> $FileNeeded = @{
+
     ParentPath = 'C:\USERS\UserName\';
-    OutputFileNamePrefix = 'Messages';
-    OutputFileNameMidPart = (Get-Item env:COMPUTERNAME).Value;
-    IncludeDateTimePartInOutputFileName = $true;
+    OutputObjectNamePrefix = 'Messages';
+    OutputObjectNameMidPart = (Get-Item env:COMPUTERNAME).Value;
+    IncludeDateTimePartInOutputObjectName = $true;
+    IncludeDateTimePartInOutputObjectName = $true;
+
     BreakIfError = $true
 }
 
 PS \> $PerServerReportFileMessages = New-OutputFile @FileNeeded
 
+
 PS \> $PerServerReportFileMessages | Format-List
 
-OutputFilePath      : C:\users\UserName\Messages-WXDX75-20151021-001205.txt
+
+OutputObjectPath      : C:\users\UserName\Messages-WXDX75-20151021-001205.txt
 ExitCode            : 0
 ExitCodeDescription : Everything is fine :-)
 
-PS \> New-Item -Path $PerServerReportFileMessages.OutputFilePath -ItemType file
+PS \> New-Item -Path $PerServerReportFileMessages.OutputObjectPath -ItemType file
 
 Directory: C:\USERS\UserName
 
@@ -79,37 +84,56 @@ Under preparation the file name is created, provided part of names are used, and
 $FileNeeded = @{
 
 ParentPath = 'C:\USERS\UserName\';
-    OutputFileNamePrefix = 'Messages';
-    OutputFileNameMidPart = 'COMPUTERNAME';
-    IncludeDateTimePartInOutputFileName = $false;
+    OutputObjectNamePrefix = 'Messages';
+    OutputObjectNameMidPart = 'COMPUTERNAME';
+    IncludeDateTimePartInOutputObjectName = $false;
     OutputFileNameExtension = "csv";
-    OutputFileNameSuffix = "failed"
+    OutputObjectNameSuffix = "failed"
 }
 
 PS \> $PerServerReportFileMessages = New-OutputFile @FileNeeded
 
-PS \> $PerServerReportFileMessages.OutputFilePath | Select-Object -Property Name,Extension,Directory | Format-List
+
+PS \> $PerServerReportFileMessages.OutputObjectPath | Select-Object -Property Name,Extension,Directory | Format-List
 
 Name      : Messages-COMPUTERNAME-failed.csv
 Extension : .csv
 Directory : C:\USERS\UserName
 
-PS \> ($PerServerReportFileMessages.OutputFilePath).gettype()
+
+
+PS \> ($PerServerReportFileMessages.OutputObjectPath).gettype()
 
 IsPublic IsSerial Name                                     BaseType
 -------- -------- ----                                     --------
 True     True     FileInfo                                 System.IO.FileSystemInfo
 
-PS \> Test-Path ($PerServerReportFileMessages.OutputFilePath)
-False
-```
+PS \> Test-Path ($PerServerReportFileMessages.OutputObjectPath)
 
-The funciton return object what contain the property named OutputFilePath what is the object of type System.IO.FileSystemInfo.
+False
+
+The funciton return object what contain the property named OutputObjectPath what is the object of type System.IO.FileSystemInfo.
+```
 
 File is not created.
 Only the object in the memory is prepared.
 
 ## PARAMETERS
+
+### -ObjectType
+Type of object to prepare - file or folder
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: ItemType
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -ParentPath
 The folder path what will be used as the parent path for the new created object.
@@ -123,13 +147,13 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 1
+Position: 2
 Default value: .
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -OutputFileNamePrefix
+### -OutputObjectNamePrefix
 Prefix used for creating output files name
 
 ```yaml
@@ -138,29 +162,14 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 2
+Position: 3
 Default value: Output
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -OutputFileNameMidPart
+### -OutputObjectNameMidPart
 Part of the name which will be used in midle of output file name
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -OutputFileNameSuffix
-Part of the name which will be used at the end of output file name
 
 ```yaml
 Type: String
@@ -174,7 +183,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncludeDateTimePartInOutputFileName
+### -OutputObjectNameSuffix
+Part of the name which will be used at the end of output file name
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IncludeDateTimePartInOutputObjectName
 Set to TRUE if report file name should contains part based on date and time - format yyyyMMdd-HHmm is used
 
 ```yaml
@@ -183,13 +207,13 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 5
+Position: 6
 Default value: True
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DateTimePartInOutputFileName
+### -DateTimePartInOutputObjectName
 Set to date and time which should be used in output file name, by default current date and time is used
 
 ```yaml
@@ -198,14 +222,14 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 6
+Position: 7
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -DateTimePartFormat
-Format string used to format date and time in output file name.
+Format string used to format date and time in output object name.
 
 ```yaml
 Type: String
@@ -213,8 +237,8 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 7
-Default value: YyyyMMdd-HHmmss
+Position: 8
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -228,8 +252,8 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 8
-Default value: .txt
+Position: 9
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -243,7 +267,7 @@ Parameter Sets: (All)
 Aliases: Separator
 
 Required: False
-Position: 9
+Position: 10
 Default value: -
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -272,7 +296,7 @@ Accept wildcard characters: False
 
 ## NOTES
 AUTHOR: Wojciech Sciesinski, wojciech\[at\]sciesinski\[dot\]net  
-KEYWORDS: PowerShell, File, FileSystem
+KEYWORDS: PowerShell, File, Folder, FileSystem
 
 CURRENT VERSION
 - 0.9.8 - 2017-05-06
