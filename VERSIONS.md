@@ -3,77 +3,100 @@
 - 0.9.0 - 2016-11-07 - the first release as a module
 - 0.9.1 - 2016-11-08 - global tests added, basic test for functions added, small corrections in main functions
 - 0.9.2 - 2016-11-11
-    - New-OutputObject v. 0.1.0
-    - New-OutputFile v. 0.9.1
-    - New-OutputFolder v. 0.3.0
-    - Test-CharsInPath v. 0.5.2
-    - New-OutputFile.Tests v. 0.2.0
-    - New-OutputFolder.Tests v. 0.4.0
-    - Test-CharsInPath.Tests v. 0.5.0
+  - New-OutputObject v. 0.1.0
+  - New-OutputFile v. 0.9.1
+  - New-OutputFolder v. 0.3.0
+  - Test-CharsInPath v. 0.5.2
+  - New-OutputFile.Tests v. 0.2.0
+  - New-OutputFolder.Tests v. 0.4.0
+  - Test-CharsInPath.Tests v. 0.5.0
 - 0.9.3 - 2016-11-12
-    - New-OutputObject v. 0.1.0
-    - New-OutputFile v. 0.9.2
-    - New-OutputFolder v. 0.3.1
-    - Test-CharsInPath v. 0.5.2
-    - New-OutputFile.Tests v. 0.2.0
-    - New-OutputFolder.Tests v. 0.4.0
-    - Test-CharsInPath.Tests v. 0.5.0
+  - New-OutputObject v. 0.1.0
+  - New-OutputFile v. 0.9.2
+  - New-OutputFolder v. 0.3.1
+  - Test-CharsInPath v. 0.5.2
+  - New-OutputFile.Tests v. 0.2.0
+  - New-OutputFolder.Tests v. 0.4.0
+  - Test-CharsInPath.Tests v. 0.5.0
 - 0.9.4 - 2016-11-12
-    - New-OutputObject v. 0.1.0
-    - New-OutputFile v. 0.9.3
-    - New-OutputFolder v. 0.3.2
-    - Test-CharsInPath v. 0.5.2
-    - Get-OverwriteDecision v. 0.1.0
-    - New-OutputFile.Tests v. 0.3.0
-    - New-OutputFolder.Tests v. 0.5.0
-    - Test-CharsInPath.Tests v. 0.5.0
+  - New-OutputObject v. 0.1.0
+  - New-OutputFile v. 0.9.3
+  - New-OutputFolder v. 0.3.2
+  - Test-CharsInPath v. 0.5.2
+  - Get-OverwriteDecision v. 0.1.0
+  - New-OutputFile.Tests v. 0.3.0
+  - New-OutputFolder.Tests v. 0.5.0
+  - Test-CharsInPath.Tests v. 0.5.0
 - 0.9.5 - 2016-11-13
-    - New-OutputObject v. 0.2.0
-	- New-OutputFile v. 0.9.3
-    - New-OutputFolder v. 0.3.2
-    - Test-CharsInPath v. 0.5.2
-    - Get-OverwriteDecision v. 0.1.0
-    - New-OutputFile.Tests v. 0.3.0
-    - New-OutputFolder.Tests v. 0.5.0
-    - Test-CharsInPath.Tests v. 0.5.0
+  - New-OutputObject v. 0.2.0
+  - New-OutputFile v. 0.9.3
+  - New-OutputFolder v. 0.3.2
+  - Test-CharsInPath v. 0.5.2
+  - Get-OverwriteDecision v. 0.1.0
+  - New-OutputFile.Tests v. 0.3.0
+  - New-OutputFolder.Tests v. 0.5.0
+  - Test-CharsInPath.Tests v. 0.5.0
 - 0.9.6 - 2016-11-13
-    - New-OutputObject v. 0.2.0
-	- New-OutputFile v. 0.9.4
-    - New-OutputFolder v. 0.3.3
-    - Test-CharsInPath v. 0.5.2
-    - Get-OverwriteDecision v. 0.1.0
-    - New-OutputFile.Tests v. 0.3.1
-    - New-OutputFolder.Tests v. 0.5.1
-    - Test-CharsInPath.Tests v. 0.5.0
- - 0.9.7 - 2017-05-02
-    - New-OutputObject v. 0.9.7
-	- New-OutputFile v. 0.9.7
-    - New-OutputFolder v. 0.9.7
-    - Test-CharsInPath v. 0.5.3
-    - Get-OverwriteDecision v. 0.1.1
-    - New-OutputObject-Module-Specific.Tests v. 0.9.7
-    - New-OutputObject.Tests v. 0.9.7
-    - Test-CharsInPath.Tests v. 0.5.3
+  - New-OutputObject v. 0.2.0
+  - New-OutputFile v. 0.9.4
+  - New-OutputFolder v. 0.3.3
+  - Test-CharsInPath v. 0.5.2
+  - Get-OverwriteDecision v. 0.1.0
+  - New-OutputFile.Tests v. 0.3.1
+  - New-OutputFolder.Tests v. 0.5.1
+  - Test-CharsInPath.Tests v. 0.5.0
+- 0.9.7 - 2017-05-02
+  - New-OutputObject v. 0.9.7
+  - New-OutputFile v. 0.9.7
+  - New-OutputFolder v. 0.9.7
+  - Test-CharsInPath v. 0.5.3
+  - Get-OverwriteDecision v. 0.1.1
+  - New-OutputObject-Module-Specific.Tests v. 0.9.7
+  - New-OutputObject.Tests v. 0.9.7
+  - Test-CharsInPath.Tests v. 0.5.3
+
+- 0.9.8 - 2017-05-06
+  - New-OutputObject v. 0.9.8
+  - New-OutputFile v. 0.9.8
+  - New-OutputFolder v. 0.9.8
+  - Test-CharsInPath v. 0.5.3
+  - Get-OverwriteDecision v. 0.1.1
+  - New-OutputObject-Module-Specific.Tests v. 0.9.8
+  - New-OutputObject.Tests v. 0.9.7
+  - Test-CharsInPath.Tests v. 0.5.3
 
 ## General
+
 - 0.9.6 - 2016-11-13
-    - Demo file added, description in psd1 updated
+  - Demo file added, description in psd1 updated
 - 0.9.7 - 2017-05-02
-    - General logic moved to the function New-OutputObject
-    - Functions New-OutputFile, New-OutputFolder transformed as wrappers for New-OutputObject
-    - Version numbers of main functions alligned to the module version
-    - Code reformatted (trailings spaces removed, tabs)
-    - Pester tests to general validation of the New-OutputObject module - e.g. help, PSScriptAnalyzer results, style rules - moved from New-OutputObject.Tests to New-OutputObject-Module-Specific.Tests
-    - The version number of module-wide tests (New-OutputObject-Module-Specific.Tests.ps1) alligned to the module version
-    - Tests for New-OutputFile.Tests and New-OutputFolder.Tests merged in New-OutputObject.Tests
+  - General logic moved to the function New-OutputObject
+  - Functions New-OutputFile, New-OutputFolder transformed as wrappers for New-OutputObject
+  - Version numbers of main functions alligned to the module version
+  - Code reformatted (trailings spaces removed, tabs)
+  - Pester tests to general validation of the New-OutputObject module - e.g. help, PSScriptAnalyzer results, style rules - moved from New-OutputObject.Tests to New-OutputObject-Module-Specific.Tests
+  - The version number of module-wide tests (New-OutputObject-Module-Specific.Tests.ps1) alligned to the module version
+  - Tests for New-OutputFile.Tests and New-OutputFolder.Tests merged in New-OutputObject.Tests
+
+- 0.9.8 - 2017-05-06
+  - TODO updated
+  - unneeded code in the New-OutputObject removed
+  - description for ExitCode = 1 little changed
+  - message about ignoring extension for folders corrected
 
 ## Function New-OutputObject
+
 - 0.9.7 - 2017.05.02
-    - All logic moved from New-OutputFile and New-OutputFolder
-    - Checks for unsupported chars added - exit code 2 used for that
-    - Returned object extended
+  - All logic moved from New-OutputFile and New-OutputFolder
+  - Checks for unsupported chars added - exit code 2 used for that
+  - Returned object extended
+- 0.9.8 - 2017-05-06
+  - veryfing case what never occurs for user overwrited decission removed
+  - description for ExitCode = 1 little changed
+  - message about ignoring extension for folders corrected
 
 ## Function New-OutputFile
+
 - 0.1.0 - 2015-09-01 - Initial release
 - 0.1.1 - 2015-09-01 - Minor update
 - 0.2.0 - 2015-09-08 - Corrected, function renamed to New-OutputFile from New-ReportFileNameFullPath
@@ -94,8 +117,10 @@
 - 0.9.3 - 2016-11-12 - help updated, comments in code updated, part of a code moved to Get-OverwriteDecision
 - 0.9.4 - 2016-11-13 - unnecessary message has been deleted, behaviour for existing files corrected
 - 0.9.7 - 2017.05.02 - The function transformed to a wrapper for the function New-OutputObject
+- 0.9.8 - 2017.05.06 - Help updated due to change of description for the ExcitCode = 1, default value for the parameter DateTimePartFormat declared
 
 ## Function New-OutputFolder
+
 - 0.1.0 - 2016-06-10 - Initial release, based on the New-OutputFile v. 0.8.1
 - 0.2.0 - 2016-06-10 - The parameter for a folder prefix removed
 - 0.2.1 - 2016-11-07 - Help updated, the function version moved to VERSION.md file
@@ -105,8 +130,10 @@
 - 0.3.2 - 2016-11-12 - help updated, part of a code moved to Get-OverwriteDecision, section for existing folders corrected
 - 0.3.3 - 2016-11-13 - behaviour for existing folders corrected
 - 0.9.7 - 2017.05.02 - The function transformed to a wrapper for the function New-OutputObject
+- 0.9.8 - 2017.05.06 - Help updated due to change of description for the ExcitCode = 1, default value for the parameter DateTimePartFormat declared
 
 ## Function Test-CharsInPath
+
 - 0.1.0 - 2016-06-06 - Initial release
 - 0.2.0 - 2016-06-06 - The second draft, Pester tests updated
 - 0.3.0 - 2016-06-07 - The first working version :-)
@@ -117,22 +144,26 @@
 - 0.5.3 - 2017.05.02 - Code reformatted
 
 ## Function Get-OverwriteDecision
+
 - 0.1.0 - 2016-11-12 - Initial version
 - 0.1.1 - 2017.05.02 - Code reformatted
 
 ## New-OutputObject-Module-Specific.Tests
+
 - 0.1.0 - 2016-11-07 - The first version of tests
 - 0.1.1 - 2016-11-11 - The tests versions history moved to VERSION.md file, help updated
 - 0.9.7 - 2017.05.02
-    - Pester tests to general validation of the New-OutputObject module - e.g. help, PSScriptAnalyzer results, style rules - moved from New-OutputObject.Tests to New-OutputObject-Module-Specific.Tests
-    - Tests for style rules - based on style rules for the Pester module itself - added
+  - Pester tests to general validation of the New-OutputObject module - e.g. help, PSScriptAnalyzer results, style rules - moved from New-OutputObject.Tests to New-OutputObject-Module-Specific.Tests
+  - Tests for style rules - based on style rules for the Pester module itself - added
 
 ## New-OutputObject.Tests
+
 - 0.9.7 - 2017.05.02
-    - Tests for New-OutputFile.Tests and New-OutputFolder.Tests merged
-    - Scope of tests extended and mostly rewritten
+  - Tests for New-OutputFile.Tests and New-OutputFolder.Tests merged
+  - Scope of tests extended and mostly rewritten
+- 0.9.8 - 2017.05.06 - Help updated due to change of description for the ExcitCode = 1
 
 ## Test-CharsInPath.Tests
+
 - 0.5.0 - 2016-11-11 - The tests versions history moved to VERSION.md file, help updated
 - 0.5.1 - 2017.05.02 - Code reformatted
-
