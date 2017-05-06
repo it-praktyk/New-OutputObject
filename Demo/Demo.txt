@@ -4,7 +4,7 @@ Import-Module -Name New-OutputObject -Verbose
 #Display provided cmdlets
 Get-Command -Module New-OutputObject
 #Prepare object - type: file
-$OutputFile = (New-OutputFile).OutputFilePath 
+$OutputFile = (New-OutputFile).OutputFilePath
 #Display properties of object
 $OutputFile | Format-List
 #Prepare object - type: folder
