@@ -14,7 +14,7 @@ Function New-OutputFolder {
 
     Exit codes and descriptions
     - 0 = "Everything is fine :-)"
-    - 1 = "Provided path <PATH> doesn't exist
+    - 1 = "Provided parent path <PATH> doesn't exist"
     - 2 = "The result name contains unacceptable chars"
     - 3 = "Provided patch <PATH> is not writable"
     - 4 = "The folder <PATH>\\<FOLDER_NAME> already exist  - can be overwritten"
@@ -126,7 +126,7 @@ Function New-OutputFolder {
     KEYWORDS: PowerShell, Folder, FileSystem
 
     CURRENT VERSION
-    - 0.9.7 - 2017-05-02
+    - 0.9.8 - 2017-05-06
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -157,7 +157,7 @@ Function New-OutputFolder {
         [parameter(Mandatory = $false)]
         [Nullable[DateTime]]$DateTimePartInOutputFolderName = $null,
         [Parameter(Mandatory = $false)]
-        [String]$DateTimePartFormat,
+        [String]$DateTimePartFormat="yyyyMMdd",
         [parameter(Mandatory = $false)]
         [alias("Separator")]
         [String]$NamePartsSeparator="-",

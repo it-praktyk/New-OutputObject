@@ -10,7 +10,7 @@
     KEYWORDS: PowerShell, Pester, psd1, New-OutputObject, New-OutputObject
 
     CURRENT VERSION
-    - 0.9.7 - 2017-05-02
+    - 0.9.8 - 2017-05-06
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -763,7 +763,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName -  $ContextName - exit code description" {
 
-                [System.String]$RequiredMessage = "Provided path {0} doesn't exist" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$ParentPath")
+                [System.String]$RequiredMessage = "Provided parent path {0} doesn't exist" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$ParentPath")
 
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
             }

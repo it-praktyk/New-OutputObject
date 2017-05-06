@@ -14,11 +14,11 @@ Function New-OutputObject {
 
     Exit codes and descriptions
     - 0 = "Everything is fine :-)"
-    - 1 = "Provided path <PATH> doesn't exist"
+    - 1 = "Provided parent path <PATH> doesn't exist"
     - 2 = "The name not created due to unaccepatable chars"
     - 3 = "Provided patch <PATH> is not writable"
-    - 4 = "The file <PATH>\\<FILE_OR_FOLDER_NAME> already exist  - can be overwritten"
-    - 5 = "The file <PATH>\\<FILE_OR_FOLDER_NAME> already exist  - can't be overwritten"
+    - 4 = "The file\folder <PATH>\\<FILE_OR_FOLDER_NAME> already exist  - can be overwritten"
+    - 5 = "The file\folder <PATH>\\<FILE_OR_FOLDER_NAME> already exist  - can't be overwritten"
 
     .PARAMETER ObjectType
     Type of object to prepare - file or folder
@@ -144,7 +144,7 @@ Function New-OutputObject {
     KEYWORDS: PowerShell, File, Folder, FileSystem
 
     CURRENT VERSION
-    - 0.9.7 - 2017-05-02
+    - 0.9.8 - 2017-05-06
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -281,7 +281,7 @@ Function New-OutputObject {
 
         if (-not [String]::IsNullOrEmpty($OutputFileNameExtension)) {
 
-            [String]$MessageText = 'The value for assigned to the OutputFileNameExtension for a folder OutputType is ignored.'
+            [String]$MessageText = 'The value assigned to the parameter OutputFileNameExtension for a folder OutputType is ignored.'
 
             Write-Warning -Message $MessageText
 
@@ -309,7 +309,7 @@ Function New-OutputObject {
 
         [Int]$ExitCode = 1
 
-        [String]$MessageText = "Provided path {0} doesn't exist" -f $ParentPath
+        [String]$MessageText = "Provided parent path {0} doesn't exist" -f $ParentPath
 
         [String]$ExitCodeDescription = $MessageText
 
@@ -462,14 +462,6 @@ Function New-OutputObject {
 
                 2 {
 
-
-                    Throw $MessageText
-
-                }
-
-                default {
-
-                    [String]$MessageText = "Unknown answer"
 
                     Throw $MessageText
 

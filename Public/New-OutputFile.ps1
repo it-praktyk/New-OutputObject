@@ -14,7 +14,7 @@ Function New-OutputFile {
 
     Exit codes and descriptions
     - 0 = "Everything is fine :-)"
-    - 1 = "Provided path <PATH> doesn't exist"
+    - 1 = "Provided parent path <PATH> doesn't exist"
     - 2 = "The result name contains unacceptable chars"
     - 3 = "Provided patch <PATH> is not writable"
     - 4 = "The file <PATH>\\<FILE_NAME> already exist  - can be overwritten"
@@ -131,7 +131,7 @@ Function New-OutputFile {
     KEYWORDS: PowerShell, File, FileSystem
 
     CURRENT VERSION
-    - 0.9.7 - 2017-05-02
+    - 0.9.8 - 2017-05-06
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -163,7 +163,7 @@ Function New-OutputFile {
         [parameter(Mandatory = $false)]
         [Nullable[DateTime]]$DateTimePartInOutputFileName = $null,
         [Parameter(Mandatory = $false)]
-        [String]$DateTimePartFormat,
+        [String]$DateTimePartFormat = "yyyyMMdd-HHmmss",
         [parameter(Mandatory = $false)]
         [String]$OutputFileNameExtension = ".txt",
         [parameter(Mandatory = $false)]
