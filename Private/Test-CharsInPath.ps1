@@ -65,7 +65,7 @@
     # http://powershell.com/cs/blogs/tips/archive/2016/04/20/finding-invalid-file-and-path-characters.aspx
 
     CURRENT VERSION
-    - 0.5.3 - 2016-11-07
+    - 0.5.4 - 2016-11-07
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -132,11 +132,15 @@
 
         ElseIf ($PathType -eq 'String') {
 
+            [String]$DirectoryPath = ""
+
             #Convert String to Array of chars
             $PathArray = $Path.ToCharArray()
 
             $PathLength = $PathArray.Length
 
+            #It should be removed in a future and for loop changed to $i--
+            #Reverse PathArray to speedup of finding the folder indicator chars '\' or '/'
             [array]::Reverse($PathArray)
 
             For ($i = 0; $i -lt $PathLength; $i++) {
@@ -172,7 +176,7 @@
 
         }
 
-        [String]$MessageText = "The path provided as a string was devided to: directory part: {0} ; file name part: {1} ." -f $DirectoryPath, $FileName
+        [String]$MessageText = "The path provided as a string was divided to: directory part: {0} ; file name part: {1} ." -f $DirectoryPath, $FileName
 
         Write-Verbose -Message $MessageText
 
@@ -236,7 +240,7 @@
             Return 1
 
         }
-        #>
+
         elseif ($IncorectCharFundInPath) {
 
             Return 2
