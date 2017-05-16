@@ -38,7 +38,7 @@ Functions from the New-OutputObject don't
 
 Your comments - preferable via GitHub issues - and  pull requests are welcomed.
 
-The current module version: 0.9.8 - 2017-05-06.  
+The current module version: 0.9.9 - 2017-05-16.  
 The history of versions you can find [here](VERSIONS.md).
 
 The module you can download directly from GitHub or  from the [PowerShellGallery](https://www.powershellgallery.com/packages/New-OutputObject/).

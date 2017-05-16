@@ -14,7 +14,7 @@
     https://www.linkedin.com/in/sciesinskiwojciech
 
     CURRENT VERSION
-    - 0.9.7 - 2017.05.02
+    - 0.9.8 - 2017.05.02
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -24,7 +24,6 @@
 
 $ModuleName = "New-OutputObject"
 
-#Provided path asume that your module manifest (a file with the psd1 extension) exists in the parent directory for directory where test script is stored
 $RelativePathToModuleRoot = "{0}\.." -f $PSScriptRoot
 $RelativePathToModuleManifest = "{0}\{1}.psd1" -f $RelativePathToModuleRoot, $ModuleName
 
@@ -119,7 +118,7 @@ $Scripts = Get-ChildItem "$here\..\" -Filter "*.ps1" -Recurse | Where-Object {$_
 
 $Modules = Get-ChildItem "$here\..\" -Filter "*.psm1" -Recurse
 
-$Excluderules = @("PSShouldProcess","PSUseShouldProcessForStateChangingFunctions")
+$Excluderules = @()
 
 $Rules = Get-ScriptAnalyzerRule | Where-Object -FilterScript { $_.RuleName -notin $Excluderules }
 

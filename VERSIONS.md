@@ -3,67 +3,78 @@
 - 0.9.0 - 2016-11-07 - the first release as a module
 - 0.9.1 - 2016-11-08 - global tests added, basic test for functions added, small corrections in main functions
 - 0.9.2 - 2016-11-11
-  - New-OutputObject v. 0.1.0
-  - New-OutputFile v. 0.9.1
-  - New-OutputFolder v. 0.3.0
-  - Test-CharsInPath v. 0.5.2
-  - New-OutputFile.Tests v. 0.2.0
-  - New-OutputFolder.Tests v. 0.4.0
-  - Test-CharsInPath.Tests v. 0.5.0
+  - New-OutputObject                        v. 0.1.0
+  - New-OutputFile                          v. 0.9.1
+  - New-OutputFolder                        v. 0.3.0
+  - Test-CharsInPath                        v. 0.5.2
+  - New-OutputFile.Tests                    v. 0.2.0
+  - New-OutputFolder.Tests                  v. 0.4.0
+  - Test-CharsInPath.Tests                  v. 0.5.0
 - 0.9.3 - 2016-11-12
-  - New-OutputObject v. 0.1.0
-  - New-OutputFile v. 0.9.2
-  - New-OutputFolder v. 0.3.1
-  - Test-CharsInPath v. 0.5.2
-  - New-OutputFile.Tests v. 0.2.0
-  - New-OutputFolder.Tests v. 0.4.0
-  - Test-CharsInPath.Tests v. 0.5.0
+  - New-OutputObject                        v. 0.1.0
+  - New-OutputFile                          v. 0.9.2
+  - New-OutputFolder                        v. 0.3.1
+  - Test-CharsInPath                        v. 0.5.2
+  - New-OutputFile.Tests                    v. 0.2.0
+  - New-OutputFolder.Tests                  v. 0.4.0
+  - Test-CharsInPath.Tests                  v. 0.5.0
 - 0.9.4 - 2016-11-12
-  - New-OutputObject v. 0.1.0
-  - New-OutputFile v. 0.9.3
-  - New-OutputFolder v. 0.3.2
-  - Test-CharsInPath v. 0.5.2
-  - Get-OverwriteDecision v. 0.1.0
-  - New-OutputFile.Tests v. 0.3.0
-  - New-OutputFolder.Tests v. 0.5.0
-  - Test-CharsInPath.Tests v. 0.5.0
+  - New-OutputObject                        v. 0.1.0
+  - New-OutputFile                          v. 0.9.3
+  - New-OutputFolder                        v. 0.3.2
+  - Test-CharsInPath                        v. 0.5.2
+  - Get-OverwriteDecision                   v. 0.1.0
+  - New-OutputFile.Tests                    v. 0.3.0
+  - New-OutputFolder.Tests                  v. 0.5.0
+  - Test-CharsInPath.Tests                  v. 0.5.0
 - 0.9.5 - 2016-11-13
-  - New-OutputObject v. 0.2.0
-  - New-OutputFile v. 0.9.3
-  - New-OutputFolder v. 0.3.2
-  - Test-CharsInPath v. 0.5.2
-  - Get-OverwriteDecision v. 0.1.0
-  - New-OutputFile.Tests v. 0.3.0
-  - New-OutputFolder.Tests v. 0.5.0
-  - Test-CharsInPath.Tests v. 0.5.0
+  - New-OutputObject                        v. 0.2.0
+  - New-OutputFile                          v. 0.9.3
+  - New-OutputFolder                        v. 0.3.2
+  - Test-CharsInPath                        v. 0.5.2
+  - Get-OverwriteDecision                   v. 0.1.0
+  - New-OutputFile.Tests                    v. 0.3.0
+  - New-OutputFolder.Tests                  v. 0.5.0
+  - Test-CharsInPath.Tests                  v. 0.5.0
 - 0.9.6 - 2016-11-13
-  - New-OutputObject v. 0.2.0
-  - New-OutputFile v. 0.9.4
-  - New-OutputFolder v. 0.3.3
-  - Test-CharsInPath v. 0.5.2
-  - Get-OverwriteDecision v. 0.1.0
-  - New-OutputFile.Tests v. 0.3.1
-  - New-OutputFolder.Tests v. 0.5.1
-  - Test-CharsInPath.Tests v. 0.5.0
+  - New-OutputObject                        v. 0.2.0
+  - New-OutputFile                          v. 0.9.4
+  - New-OutputFolder                        v. 0.3.3
+  - Test-CharsInPath                        v. 0.5.2
+  - Get-OverwriteDecision                   v. 0.1.0
+  - New-OutputFile.Tests                    v. 0.3.1
+  - New-OutputFolder.Tests                  v. 0.5.1
+  - Test-CharsInPath.Tests                  v. 0.5.0
 - 0.9.7 - 2017-05-02
-  - New-OutputObject v. 0.9.7
-  - New-OutputFile v. 0.9.7
-  - New-OutputFolder v. 0.9.7
-  - Test-CharsInPath v. 0.5.3
-  - Get-OverwriteDecision v. 0.1.1
-  - New-OutputObject-Module-Specific.Tests v. 0.9.7
-  - New-OutputObject.Tests v. 0.9.7
-  - Test-CharsInPath.Tests v. 0.5.3
+  - New-OutputObject                        v. 0.9.7
+  - New-OutputFile                          v. 0.9.7
+  - New-OutputFolder                        v. 0.9.7
+  - Test-CharsInPath                        v. 0.5.3
+  - Get-OverwriteDecision                   v. 0.1.1
+  - New-OutputObject-Module-Specific.Tests  v. 0.9.7
+  - New-OutputObject.Tests                  v. 0.9.7
+  - Test-CharsInPath.Tests                  v. 0.5.3
 
 - 0.9.8 - 2017-05-06
-  - New-OutputObject v. 0.9.8
-  - New-OutputFile v. 0.9.8
-  - New-OutputFolder v. 0.9.8
-  - Test-CharsInPath v. 0.5.3
-  - Get-OverwriteDecision v. 0.1.1
-  - New-OutputObject-Module-Specific.Tests v. 0.9.8
-  - New-OutputObject.Tests v. 0.9.7
-  - Test-CharsInPath.Tests v. 0.5.3
+  - New-OutputObject                        v. 0.9.8
+  - New-OutputFile                          v. 0.9.8
+  - New-OutputFolder                        v. 0.9.8
+  - Test-CharsInPath                        v. 0.5.3
+  - Get-OverwriteDecision                   v. 0.1.1
+  - New-OutputObject-Module-Specific.Tests  v. 0.9.8
+  - New-OutputObject.Tests                  v. 0.9.7
+  - Test-CharsInPath.Tests                  v. 0.5.3
+
+- 0.9.9 - 2017.05-15
+  - New-OutputObject                        v. 0.9.9
+  - New-OutputFile                          v. 0.9.9
+  - New-OutputFolder                        v. 0.9.9
+  - Test-CharsInPath                        v. 0.5.4
+  - Get-OverwriteDecision                   v. 0.1.1
+  - New-OutputObject-Module-Specific.Tests  v. 0.9.8
+  - New-OutputObject.Tests                  v. 0.9.7
+  - Test-CharsInPath.Tests                  v. 0.5.3
+
 
 ## General
 
@@ -84,9 +95,14 @@
   - description for ExitCode = 1 little changed
   - message about ignoring extension for folders corrected
 
+- 0.9.9 - 2017-05-15
+  - Test-CharsInPath - functions work correctly even if StrictMode is on - fix #2
+  - skiping inadequate PScriptAnalyzer rule (PSUseShouldProcessForStateChangingFunctions) implemented better
+
+
 ## Function New-OutputObject
 
-- 0.9.7 - 2017.05.02
+- 0.9.7 - 2017-05-02
   - All logic moved from New-OutputFile and New-OutputFolder
   - Checks for unsupported chars added - exit code 2 used for that
   - Returned object extended
@@ -94,6 +110,7 @@
   - veryfing case what never occurs for user overwrited decission removed
   - description for ExitCode = 1 little changed
   - message about ignoring extension for folders corrected
+- 0.9.9 - 2017-05-16 - skiping inadequate PScriptAnalyzer rule implemented better
 
 ## Function New-OutputFile
 
@@ -116,8 +133,9 @@
 - 0.9.2 - 2016-11-12 - behaviour for existing files corrected
 - 0.9.3 - 2016-11-12 - help updated, comments in code updated, part of a code moved to Get-OverwriteDecision
 - 0.9.4 - 2016-11-13 - unnecessary message has been deleted, behaviour for existing files corrected
-- 0.9.7 - 2017.05.02 - The function transformed to a wrapper for the function New-OutputObject
-- 0.9.8 - 2017.05.06 - Help updated due to change of description for the ExcitCode = 1, default value for the parameter DateTimePartFormat declared
+- 0.9.7 - 2017-05-02 - The function transformed to a wrapper for the function New-OutputObject
+- 0.9.8 - 2017-05-06 - Help updated due to change of description for the ExcitCode = 1, default value for the parameter DateTimePartFormat declared
+- 0.9.9 - 2017-05-16 - skiping inadequate PScriptAnalyzer rule implemented better
 
 ## Function New-OutputFolder
 
@@ -129,8 +147,9 @@
 - 0.3.1 - 2016-11-12 - behaviour for existing folders corrected
 - 0.3.2 - 2016-11-12 - help updated, part of a code moved to Get-OverwriteDecision, section for existing folders corrected
 - 0.3.3 - 2016-11-13 - behaviour for existing folders corrected
-- 0.9.7 - 2017.05.02 - The function transformed to a wrapper for the function New-OutputObject
-- 0.9.8 - 2017.05.06 - Help updated due to change of description for the ExcitCode = 1, default value for the parameter DateTimePartFormat declared
+- 0.9.7 - 2017-05-02 - The function transformed to a wrapper for the function New-OutputObject
+- 0.9.8 - 2017-05-06 - Help updated due to change of description for the ExcitCode = 1, default value for the parameter DateTimePartFormat declared
+- 0.9.9 - 2017-05-16 - An unused parameter removed - fix #2, skiping inadequate PScriptAnalyzer rule implemented better
 
 ## Function Test-CharsInPath
 
@@ -141,29 +160,31 @@
 - 0.5.0 - 2016-06-08 - Checking of Path provided as an PSObjects corrected, SkipCheck* parameters renamed, help updated
 - 0.5.1 - 2016-06-10 - Named blocks of code added
 - 0.5.2 - 2016-11-08 - Help updated, the TODO list moved to TODO.md file, history of version moved to VERSION.md file
-- 0.5.3 - 2017.05.02 - Code reformatted
+- 0.5.3 - 2017-05-02 - Code reformatted
+- 0.5.4 - 2017-05-16 - works when Set-StrictMode is on - fix #2
 
 ## Function Get-OverwriteDecision
 
 - 0.1.0 - 2016-11-12 - Initial version
-- 0.1.1 - 2017.05.02 - Code reformatted
+- 0.1.1 - 2017-05-02 - Code reformatted
 
 ## New-OutputObject-Module-Specific.Tests
 
 - 0.1.0 - 2016-11-07 - The first version of tests
 - 0.1.1 - 2016-11-11 - The tests versions history moved to VERSION.md file, help updated
-- 0.9.7 - 2017.05.02
+- 0.9.7 - 2017-05-02
   - Pester tests to general validation of the New-OutputObject module - e.g. help, PSScriptAnalyzer results, style rules - moved from New-OutputObject.Tests to New-OutputObject-Module-Specific.Tests
   - Tests for style rules - based on style rules for the Pester module itself - added
+- 0.9.8 - 2017-05-16 - skiping some PScriptAnalyzer rules moved to functions
 
 ## New-OutputObject.Tests
 
-- 0.9.7 - 2017.05.02
+- 0.9.7 - 2017-05-02
   - Tests for New-OutputFile.Tests and New-OutputFolder.Tests merged
   - Scope of tests extended and mostly rewritten
-- 0.9.8 - 2017.05.06 - Help updated due to change of description for the ExcitCode = 1
+- 0.9.8 - 2017-05-06 - Help updated due to change of description for the ExcitCode = 1
 
 ## Test-CharsInPath.Tests
 
 - 0.5.0 - 2016-11-11 - The tests versions history moved to VERSION.md file, help updated
-- 0.5.1 - 2017.05.02 - Code reformatted
+- 0.5.1 - 2017-05-02 - Code reformatted
