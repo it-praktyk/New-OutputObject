@@ -60,12 +60,16 @@
     KEYWORDS: PowerShell, FileSystem
 
     REMARKS:
-    # Based on the Power Tips
+    # For Windows - based on the Power Tips
     # Finding Invalid File and Path Characters
-    # http://powershell.com/cs/blogs/tips/archive/2016/04/20/finding-invalid-file-and-path-characters.aspx
+    # http://community.idera.com/powershell/powertips/b/tips/posts/finding-invalid-file-and-path-characters
+    # For PowerShell Core
+    # https://docs.microsoft.com/en-us/dotnet/api/system.io.path.getinvalidpathchars?view=netcore-2.0
+    # https://www.dwheeler.com/essays/fixing-unix-linux-filenames.html
+    # [char]0 = NULL
 
     CURRENT VERSION
-    - 0.5.4 - 2016-11-07
+    - 0.6.0 - 2017-07-01
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -89,17 +93,30 @@
 
     BEGIN {
 
-        $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars() #36 chars
+        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
 
-        $FileNameInvalidChars = [System.IO.Path]::GetInvalidFileNameChars() #41 chars
 
-        #$FileOnlyInvalidChars = @(':', '*', '?', '\', '/') #5 chars - as a difference
+            $PathInvalidChars = [char]0
+
+            $FileNameInvalidChars = @([char]0, '/')
+
+        }
+        Else {
+
+            $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars() #36 chars
+
+            $FileNameInvalidChars = [System.IO.Path]::GetInvalidFileNameChars() #41 chars
+
+            #$FileOnlyInvalidChars = @(':', '*', '?', '\', '/') #5 chars - as a difference
+
+        }
 
         $IncorectCharFundInPath = $false
 
         $IncorectCharFundInFileName = $false
 
         $NothingToCheck = $true
+
 
     }
 

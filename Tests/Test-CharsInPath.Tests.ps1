@@ -54,21 +54,44 @@ Describe "Test-CharsInPath" {
 
     Context "Input is a string" {
 
-        [String]$CorrectPathString = 'C:\Windows\Temp\Add-GroupsMember.ps1'
+        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
 
-        [String]$InCorrectPathString = 'C:\Win>dows\Te%mp\Add-ADGroupMember.ps1'
+            [String]$CorrectPathString = 'C:\Windows\Temp\Add-GroupsMember.ps1'
 
-        [String]$InCorrectFileNameString = 'C:\Windows\Temp\Ard-ADGrou|p<Member.ps1'
+            [String]$InCorrectPathString = "C:\Win$([char]0)dows\Temp\Add-ADGroupMember.ps1"
 
-        [String]$IncorrectFullPathString = 'C:\Win>dows\Temp\Ard-ADGrou|p<Member.ps1'
+            [String]$InCorrectFileNameString = "C:\Windows\Temp\Add-ADGrou$([char]0)<Member.ps1"
 
-        [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc>al\'
+            [String]$IncorrectFullPathString = "C:\Win$([char]0)dows\Temp\Add-ADGroup$([char]0)Member.ps1"
 
-        [String]$CorrectDirectoryOnly = 'C:\AppData\Local\'
+            [String]$IncorrectDirectoryOnly = "C:\AppData\Loc$([char]0)al\"
 
-        [String]$IncorrectFileNameOnly = 'Test-File-201606*08-1315.txt'
+            [String]$CorrectDirectoryOnly = 'C:\AppData\Local\'
 
-        [String]$CorrectFileNameOnly = 'Test-File-20160608-1315.txt'
+            [String]$IncorrectFileNameOnly = "Test-File-201606$([char]0)08-1315.txt"
+
+            [String]$CorrectFileNameOnly = 'Test-File-20160608-1315.txt'
+
+        }
+        Else {
+
+            [String]$CorrectPathString = 'C:\Windows\Temp\Add-GroupsMember.ps1'
+
+            [String]$InCorrectPathString = 'C:\Win>dows\Te%mp\Add-ADGroupMember.ps1'
+
+            [String]$InCorrectFileNameString = 'C:\Windows\Temp\Add-ADGrou|p<Member.ps1'
+
+            [String]$IncorrectFullPathString = 'C:\Win>dows\Temp\Add-ADGrou|p<Member.ps1'
+
+            [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc>al\'
+
+            [String]$CorrectDirectoryOnly = 'C:\AppData\Local\'
+
+            [String]$IncorrectFileNameOnly = 'Test-File-201606*08-1315.txt'
+
+            [String]$CorrectFileNameOnly = 'Test-File-20160608-1315.txt'
+
+        }
 
         It "Input is string, CorrectPathString" {
 
