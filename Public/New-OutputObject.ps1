@@ -5,7 +5,8 @@ Function New-OutputObject {
     Function intended for preparing a PowerShell object for output files like reports or logs.
 
     .DESCRIPTION
-    Function intended for preparing a PowerShell custom object what contains e.g. file name for output/create files like reports or log. The name is prepared based on prefix, middle name part, suffix, date, etc. with verification if provided path exist and is it writable.
+    Function intended for preparing a PowerShell custom object what contains e.g. file name for output/create files like reports or log.
+    The name is prepared based on prefix, middle name part, suffix, date, etc. with verification if provided path exist and is it writable.
 
     Returned object contains properties
     - OutputObjectPath - to use it please check examples - as a [System.IO.FileInfo]
@@ -144,10 +145,10 @@ Function New-OutputObject {
     KEYWORDS: PowerShell, File, Folder, FileSystem
 
     CURRENT VERSION
-    - 0.9.9 - 2017-05-16
+    - 0.9.10 - 2017-07-15
 
     HISTORY OF VERSIONS
-    https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+    https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
 
     LICENSE
     Copyright (c) 2016 Wojciech Sciesinski
@@ -192,17 +193,45 @@ Function New-OutputObject {
 
     [Int]$ExitCode = 0
 
+    $ExitCodesDescriptions = @{ 0= 'Everything is fine :-)';
+                                1 = "Provided parent path {0} doesn't exist"; # $ParentPath
+                                2 = 'The name not created due to unaccepatable chars';
+                                3 = "Provided path {0} is not writable"; # $ParentPath
+                                4 = "The {0} {1} already exist  - can be overwritten" # $ItemTypeLowerCase, $OutputObjectPath.FullName
+                                5 = "The {0} {1} already exist  - can't be overwritten" # $ItemTypeLowerCase, $OutputObjectPath
+    }
+
     [String]$ExitCodeDescription = 'Everything is fine :-)'
 
+    $FinalNameParts = [ordered]@{NamePrefix=$OutputObjectNamePrefix;
+                                NameMidPart=$OutputObjectNameMidPart;
+                                DateTimePartInName='';
+                                NameSuffix=$OutputObjectNameSuffix;
+                                FileNameExtension=''
+    }
+
     $Result = New-Object -TypeName PSObject
+
+    If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux -or $IsOSX)) {
+
+        $PathSeparator = '/'
+
+    }
+    Else {
+
+        $PathSeparator = '\'
+
+    }
 
     If ($ObjectType -eq 'File') {
 
         $PathType = 'Leaf'
 
-        $ItemTypeLower = 'file'
+        $ItemTypeLowerCase = 'file'
 
         $ItemTypeCapitalized = 'File'
+
+        $SkipInFinalName = @()
 
         If ([String]::IsNullOrEmpty($DateTimePartFormat)) {
 
@@ -211,23 +240,24 @@ Function New-OutputObject {
         }
         Else {
 
-            $TestCharsResult = Test-CharsInPath -Path $DateTimePartFormat -SkipCheckCharsInFolderPart
+            $TestCharsResult = Test-CharsInPath -Path $DateTimePartFormat -SkipCheckCharsInFolderPart -SkipDividingForParts
 
-            If ( $BreakIfError.IsPresent -and $TestCharsResult -eq 3 ) {
+            If ( $TestCharsResult -eq 3) {
 
-                $FileNameInvalidChars = [System.IO.Path]::GetInvalidFileNameChars() #41 chars
+                 If ( $BreakIfError.IsPresent ) {
 
-                $MessageText = "Provided {0} value for DateTimePartFormat contains char what is not allowed in a file name. Unallowed chars are: {0}" -f $FileNameInvalidChars
+                    $MessageText = "Provided value for DateTimePartFormat contains char what is not allowed in a file name."
 
-                Throw $MessageText
+                    Throw $MessageText
 
-            }
+                }
+                Else {
 
-            Elseif ( $TestCharsResult -eq 3) {
+                    [Int]$ExitCode = 2
 
-                [Int]$ExitCode = 2
+                    [String]$ExitCodeDescription = $ExitCodesDescriptions[$ExitCode]
 
-                [String]$ExitCodeDescription = "The name not created due to unaccepatable chars"
+                }
 
             }
 
@@ -237,6 +267,13 @@ Function New-OutputObject {
 
             $OutputFileNameExtension = '.txt'
 
+            $FinalNameParts['FileNameExtension'] = '.txt'
+
+        }
+        Else {
+
+            $FinalNameParts['FileNameExtension'] = ".{0}" -f $OutputFileNameExtension
+
         }
 
     }
@@ -244,9 +281,11 @@ Function New-OutputObject {
 
         $PathType = 'Container'
 
-        $ItemTypeLower = 'folder'
+        $ItemTypeLowerCase = 'folder'
 
         $ItemTypeCapitalized = 'Folder'
+
+        $SkipInFinalName = @('FileNameExtension')
 
         If ([String]::IsNullOrEmpty($DateTimePartFormat)) {
 
@@ -255,22 +294,48 @@ Function New-OutputObject {
         }
         Else {
 
-            $TestCharsResult = Test-CharsInPath -Path $DateTimePartFormat -SkipCheckCharsInFileNamePart
+            $TestCharsResult = Test-CharsInPath -Path $DateTimePartFormat -SkipCheckCharsInFileNamePart -SkipDividingForParts
 
-            If ( $BreakIfError.IsPresent -and $TestCharsResult -eq 2 ) {
+            If ( $DateTimePartFormat.Contains($PathSeparator) ) {
 
-                $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars() #36 chars
-
-                $MessageText = "Provided value for DateTimePartFormat contains char what is not allowed in a folder name. Unallowed chars are: {0}" -f $PathInvalidChars
-
-                Throw $MessageText
+                $TestCharsResult = 5
 
             }
-            Elseif ( $TestCharsResult -eq 2) {
 
-                [Int]$ExitCode = 2
+            If ( $TestCharsResult -eq 2 ) {
 
-                [String]$ExitCodeDescription = "The name not created due to unaccepatable chars"
+                If ( $BreakIfError.IsPresent ) {
+
+                    $MessageText = "Provided value for DateTimePartFormat contains char what is not allowed in a folder name."
+
+                    Throw $MessageText
+
+                }
+                Else {
+
+                    [Int]$ExitCode = 2
+
+                    [String]$ExitCodeDescription = $ExitCodesDescriptions[$ExitCode]
+
+                }
+
+            }
+            ElseIf ( $TestCharsResult -eq 5 ) {
+
+                If ( $BreakIfError.IsPresent ) {
+
+                    $MessageText = "Provided value for DateTimePartFormat contains a char what is a path separator char."
+
+                    Throw $MessageText
+
+                }
+                Else {
+
+                    [Int]$ExitCode = 2
+
+                    [String]$ExitCodeDescription = $ExitCodesDescriptions[$ExitCode]
+
+                }
 
             }
 
@@ -294,10 +359,14 @@ Function New-OutputObject {
 
         [String]$DateTimePartInObjectNameString = $(Get-Date -format $DateTimePartFormat)
 
+        $FinalNameParts['DateTimePartInName'] = $DateTimePartInObjectNameString
+
     }
     elseif ($IncludeDateTimePartInOutputObjectName) {
 
         [String]$DateTimePartInObjectNameString = $(Get-Date -Date $DateTimePartInOutputObjectName -format $DateTimePartFormat)
+
+        $FinalNameParts['DateTimePartInName'] = $DateTimePartInObjectNameString
 
     }
 
@@ -306,30 +375,30 @@ Function New-OutputObject {
 
         [Int]$ExitCode = 1
 
-        [String]$MessageText = "Provided parent path {0} doesn't exist" -f $ParentPath
+        [String]$MessageText = $ExitCodesDescriptions[$ExitCode] -f $ParentPath
 
         [String]$ExitCodeDescription = $MessageText
 
     }
 
-
     #Try if Output directory is writable - a temporary object is created for that
-
     Else {
 
         #Try if Output directory is writable - a temporary file is created for that
         Try {
 
-            [String]$TempObjectName = [System.IO.Path]::GetTempFileName() -replace '.*\\', ''
+            [String]$TempObjectName = [System.IO.Path]::GetRandomFileName() -replace '.*\\', ''
 
-            [String]$TempObjectPath = "{0}{1}" -f $ParentPath, $TempObjectName
+            [String]$TempObjectPath = Join-Path -Path $ParentPath -ChildPath $TempObjectName
 
             New-Item -Path $TempObjectPath -type File -ErrorAction Stop | Out-Null
 
         }
         Catch {
 
-            [String]$MessageText = "Provided path {0} is not writable" -f $ParentPath
+            [Int]$ExitCode = 3
+
+            [String]$MessageText = $ExitCodesDescriptions[$ExitCode] -f $ParentPath
 
             If ($BreakIfError.IsPresent) {
 
@@ -337,8 +406,6 @@ Function New-OutputObject {
 
             }
             Else {
-
-                [Int]$ExitCode = 3
 
                 [String]$ExitCodeDescription = $MessageText
 
@@ -350,55 +417,31 @@ Function New-OutputObject {
 
     }
 
-    #Constructing the object name
-    If (!($IncludeDateTimePartInOutputObjectName) -and !([String]::IsNullOrEmpty($OutputObjectNameMidPart))) {
+    $PartsToJoin =@("$ParentPath$PathSeparator")
 
-        [String]$OutputObjectPathTemp1 = "{0}\{1}{3}{2}" -f $ParentPath, $OutputObjectNamePrefix, $OutputObjectNameMidPart, $NamePartsSeparator
+    ForEach ( $NamePart in $FinalNameParts.Keys) {
 
-    }
-    Elseif (!($IncludeDateTimePartInOutputObjectName) -and [String]::IsNullOrEmpty($OutputObjectNameMidPart)) {
+        If ( $SkipInFinalName -notcontains $NamePart -and (-not [String]::IsNullOrEmpty( $FinalNameParts[$NamePart]))) {
 
-        [String]$OutputObjectPathTemp1 = "{0}\{1}" -f $ParentPath, $OutputObjectNamePrefix
-
-    }
-    ElseIf ($IncludeDateTimePartInOutputObjectName -and !([String]::IsNullOrEmpty($OutputObjectNameMidPart))) {
-
-        [String]$OutputObjectPathTemp1 = "{0}\{1}{4}{2}{4}{3}" -f $ParentPath, $OutputObjectNamePrefix, $OutputObjectNameMidPart, $DateTimePartInObjectNameString, $NamePartsSeparator
-
-    }
-    Else {
-
-        [String]$OutputObjectPathTemp1 = "{0}\{1}{3}{2}" -f $ParentPath, $OutputObjectNamePrefix, $DateTimePartInObjectNameString, $NamePartsSeparator
-
-    }
-
-
-    If ($ObjectType -eq 'File' -and (-not [String]::IsNullOrEmpty($OutputFileNameExtension))) {
-
-        If ([String]::IsNullOrEmpty($OutputObjectNameSuffix)) {
-
-            [String]$OutputObjectPathTemp = "{0}.{1}" -f $OutputObjectPathTemp1, $OutputFileNameExtension
-
-        }
-        Else {
-
-            [String]$OutputObjectPathTemp = "{0}{3}{1}.{2}" -f $OutputObjectPathTemp1, $OutputObjectNameSuffix, $OutputFileNameExtension, $NamePartsSeparator
+            $PartsToJoin += $FinalNameParts[$NamePart]
 
         }
 
     }
-    Else {
 
-        If ([String]::IsNullOrEmpty($OutputObjectNameSuffix)) {
+    [String]$FinalName =  [string]::Join("$NamePartsSeparator",$PartsToJoin)
 
-            [String]$OutputObjectPathTemp = "{0}" -f $OutputObjectPathTemp1
+    $SequencesToReplace = @{'//' = '/';
+                            '\\' = '\';
+                            '..' = '.';
+                            "$NamePartsSeparator." = '.';
+                            "$NamePartsSeparator$NamePartsSeparator" = $NamePartsSeparator;
+                            "$PathSeparator$NamePartsSeparator" = $PathSeparator
+    }
 
-        }
-        Else {
+    ForEach ( $SequenceKey in $SequencesToReplace.keys ) {
 
-            [String]$OutputObjectPathTemp = "{0}{2}{1}" -f $OutputObjectPathTemp1, $OutputObjectNameSuffix, $NamePartsSeparator
-
-        }
+        $FinalName = "{0}{1}" -f $FinalName.Substring(0,2), (($FinalName.substring(2, $FinalName.length - 2)).Replace($SequenceKey, $SequencesToReplace[$SequenceKey]))
 
     }
 
@@ -420,14 +463,12 @@ Function New-OutputObject {
 
         If ($ObjectType -eq 'File') {
 
-            #Replacing doubled chars \\ , -- , .. - except if \\ is on begining - means that path is UNC share
-            [System.IO.FileInfo]$OutputObjectPath = "{0}{1}" -f $OutputObjectPathTemp.substring(0, 2), (($OutputObjectPathTemp.substring(2, $OutputObjectPathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
+            [System.IO.FileInfo]$OutputObjectPath = $FinalName
 
         }
         Else {
 
-            #Replacing doubled chars \\ , -- , .. - except if \\ is on begining - means that path is UNC share
-            [System.IO.DirectoryInfo]$OutputObjectPath = "{0}{1}" -f $OutputObjectPathTemp.substring(0, 2), (($OutputObjectPathTemp.substring(2, $OutputObjectPathTemp.length - 2).replace("\\", '\')).replace("--", "-")).replace("..", ".")
+            [System.IO.DirectoryInfo]$OutputObjectPath = $FinalName
 
         }
 
@@ -441,7 +482,7 @@ Function New-OutputObject {
 
                     [Int]$ExitCode = 4
 
-                    [String]$MessageText = "The {0} {1} already exist  - can be overwritten" -f $ItemTypeLower, $OutputObjectPath.FullName
+                    [String]$MessageText = $ExitCodesDescriptions[$ExitCode] -f $ItemTypeLowerCase, $OutputObjectPath.FullName
 
                     [String]$ExitCodeDescription = $MessageText
 
@@ -451,7 +492,7 @@ Function New-OutputObject {
 
                     [Int]$ExitCode = 5
 
-                    [String]$MessageText = "The {0} {1} already exist  - can't be overwritten" -f $ItemTypeLower, $OutputObjectPath
+                    [String]$MessageText = "The {0} {1} already exist  - can't be overwritten" -f $ItemTypeLowerCase, $OutputObjectPath
 
                     [String]$ExitCodeDescription = $MessageText
 
@@ -459,6 +500,7 @@ Function New-OutputObject {
 
                 2 {
 
+                    [String]$MessageText = "The {0} {1} already exist  - operation canceled by user" -f $ItemTypeLowerCase, $OutputObjectPath
 
                     Throw $MessageText
 

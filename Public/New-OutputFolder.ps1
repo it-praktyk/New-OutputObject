@@ -126,10 +126,10 @@ Function New-OutputFolder {
     KEYWORDS: PowerShell, Folder, FileSystem
 
     CURRENT VERSION
-    - 0.9.9 - 2017-05-16
+    - 0.9.10 - 2017-07-23
 
     HISTORY OF VERSIONS
-    https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+    https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
 
     LICENSE
     Copyright (c) 2016 Wojciech Sciesinski
