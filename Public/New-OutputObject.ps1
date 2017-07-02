@@ -204,8 +204,8 @@ Function New-OutputObject {
 
     $FinalNameParts = [ordered]@{NamePrefix=$OutputObjectNamePrefix;
                                 NameMidPart=$OutputObjectNameMidPart;
-                                NameSuffix=$OutputObjectNameSuffix;
                                 DateTimePartInName='';
+                                NameSuffix=$OutputObjectNameSuffix;
                                 FileNameExtension=''
     }
 
@@ -230,7 +230,7 @@ Function New-OutputObject {
 
         $ItemTypeCapitalized = 'File'
 
-        $SkipInFinalName = @('FileNameExtension')
+        $SkipInFinalName = @()
 
         If ([String]::IsNullOrEmpty($DateTimePartFormat)) {
 
@@ -274,7 +274,7 @@ Function New-OutputObject {
         }
         Else {
 
-            $FinalNameParts['FileNameExtension'] = "." -f $OutputFileNameExtension
+            $FinalNameParts['FileNameExtension'] = ".{0}" -f $OutputFileNameExtension
 
         }
 
@@ -398,11 +398,11 @@ Function New-OutputObject {
 
     }
 
-    $PartsToJoin =@($ParentPath$PathSeparator)
+    $PartsToJoin =@("$ParentPath$PathSeparator")
 
     ForEach ( $NamePart in $FinalNameParts.Keys) {
 
-        If ( $SkipInFinalName -notcontains $NamePart -and (-not [String]::IsNullOrEmpty( $NamePart))) {
+        If ( $SkipInFinalName -notcontains $NamePart -and (-not [String]::IsNullOrEmpty( $FinalNameParts[$NamePart]))) {
 
             $PartsToJoin += $FinalNameParts[$NamePart]
 
@@ -474,7 +474,11 @@ Function New-OutputObject {
 
     ForEach ( $SequenceKey in $SequencesToReplace.keys ) {
 
+        Write-Verbose -Message "Before replace: $FinalName"
+
         $FinalName = "{0}{1}" -f $FinalName.Substring(0,2), (($FinalName.substring(2, $FinalName.length - 2)).Replace($SequenceKey, $SequencesToReplace[$SequenceKey]))
+
+        Write-Verbose -Message "After replace: $FinalName"
 
     }
 
