@@ -95,10 +95,22 @@
 
         If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
 
-
+            #[char]0 = NULL
             $PathInvalidChars = [char]0
 
             $FileNameInvalidChars = @([char]0, '/')
+
+            $PathSeparators = @('/')
+
+        }
+        Elseif ( $PSVersionTable.PSEdition -EQ 'Core' -and $IsOSX) {
+
+            #[char]58 = ':'
+            $PathInvalidChars = [char]58
+
+            $FileNameInvalidChars = [char]58
+
+            $PathSeparators = @('/')
 
         }
         Else {
@@ -108,6 +120,8 @@
             $FileNameInvalidChars = [System.IO.Path]::GetInvalidFileNameChars() #41 chars
 
             #$FileOnlyInvalidChars = @(':', '*', '?', '\', '/') #5 chars - as a difference
+
+            $PathSeparators = @('/','\')
 
         }
 
@@ -156,15 +170,11 @@
 
             $PathLength = $PathArray.Length
 
-            #It should be removed in a future and for loop changed to $i--
-            #Reverse PathArray to speedup of finding the folder indicator chars '\' or '/'
-            [array]::Reverse($PathArray)
+            For ($i = ($PathLength-1); $i -ge 0; $i--) {
 
-            For ($i = 0; $i -lt $PathLength; $i++) {
+                If ($PathSeparators -contains $PathArray[$i]) {
 
-                If (@('\', '/') -contains $PathArray[$i]) {
-
-                    [String]$DirectoryPath = [String]$Path.Substring(0, $($PathArray.Length - $i))
+                    [String]$DirectoryPath = [String]$Path.Substring(0, $i +1)
 
                     break
 

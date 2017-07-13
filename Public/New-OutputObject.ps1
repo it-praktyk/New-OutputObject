@@ -211,7 +211,7 @@ Function New-OutputObject {
 
     $Result = New-Object -TypeName PSObject
 
-    If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
+    If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux -or $IsOSX)) {
 
         $PathSeparator = '/'
 
@@ -368,9 +368,9 @@ Function New-OutputObject {
         #Try if Output directory is writable - a temporary file is created for that
         Try {
 
-            [String]$TempObjectName = [System.IO.Path]::GetTempFileName() -replace '.*\\', ''
+            [String]$TempObjectName = [System.IO.Path]::GetRandomFileName() -replace '.*\\', ''
 
-            [String]$TempObjectPath = "{0}{1}" -f $ParentPath, $TempObjectName
+            [String]$TempObjectPath = Join-Path -Path $ParentPath -ChildPath $TempObjectName
 
             New-Item -Path $TempObjectPath -type File -ErrorAction Stop | Out-Null
 
@@ -474,11 +474,7 @@ Function New-OutputObject {
 
     ForEach ( $SequenceKey in $SequencesToReplace.keys ) {
 
-        Write-Verbose -Message "Before replace: $FinalName"
-
         $FinalName = "{0}{1}" -f $FinalName.Substring(0,2), (($FinalName.substring(2, $FinalName.length - 2)).Replace($SequenceKey, $SequencesToReplace[$SequenceKey]))
-
-        Write-Verbose -Message "After replace: $FinalName"
 
     }
 

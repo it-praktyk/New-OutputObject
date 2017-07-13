@@ -14,7 +14,7 @@
     KEYWORDS: PowerShell, FileSystem, Pester
 
     CURRENT VERSION
-    - 0.5.0 - 2016-11-11
+    - 0.6.0 - 2017-07-03
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -38,7 +38,7 @@ Describe "Test-CharsInPath" {
 
         $TestDir = New-Item -Path "TestDrive:" -Name "TestDir1" -ItemType Container
 
-        It "Input is a di rectory, SkipCheckCharsInFolderPart" {
+        It "Input is a directory, SkipCheckCharsInFolderPart" {
 
             Test-CharsInPath -path $TestDir -SkipCheckCharsInFolderPart | Should Be 1
 
@@ -56,19 +56,42 @@ Describe "Test-CharsInPath" {
 
         If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
 
-            [String]$CorrectPathString = 'C:\Windows\Temp\Add-GroupsMember.ps1'
+            #[char]58 = NULL
 
-            [String]$InCorrectPathString = "C:\Win$([char]0)dows\Temp\Add-ADGroupMember.ps1"
+            [String]$CorrectPathString = '/Temp/Add-GroupsMember.ps1'
 
-            [String]$InCorrectFileNameString = "C:\Windows\Temp\Add-ADGrou$([char]0)<Member.ps1"
+            [String]$InCorrectPathString = "/home/user/sett$([char]0)ings/Temp/Add-ADGroupMember.ps1"
 
-            [String]$IncorrectFullPathString = "C:\Win$([char]0)dows\Temp\Add-ADGroup$([char]0)Member.ps1"
+            [String]$InCorrectFileNameString = "/home/user/Temp/Add-ADGrou$([char]0)Member.ps1"
 
-            [String]$IncorrectDirectoryOnly = "C:\AppData\Loc$([char]0)al\"
+            [String]$IncorrectFullPathString = "/usr/sha$([char]0)re/somewhere/Add-ADGroup$([char]0)Member.ps1"
 
-            [String]$CorrectDirectoryOnly = 'C:\AppData\Local\'
+            [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]0)al/"
+
+            [String]$CorrectDirectoryOnly = '/etc/sysconfig/'
 
             [String]$IncorrectFileNameOnly = "Test-File-201606$([char]0)08-1315.txt"
+
+            [String]$CorrectFileNameOnly = 'Test-File-20160608-1315.txt'
+
+        }
+        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
+
+            #[char]58 = ':'
+
+            [String]$CorrectPathString = '/Temp/Add-GroupsMember.ps1'
+
+            [String]$InCorrectPathString = "/home/user/sett$([char]58)ings/Temp/Add-ADGroupMember.ps1"
+
+            [String]$InCorrectFileNameString = "/home/user/Temp/Add-ADGrou$([char]58)Member.ps1"
+
+            [String]$IncorrectFullPathString = "/usr/sha$([char]58)re/somewhere/Add-ADGroup$([char]58)Member.ps1"
+
+            [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]58)al/"
+
+            [String]$CorrectDirectoryOnly = '/etc/sysconfig/'
+
+            [String]$IncorrectFileNameOnly = "Test-File-201606$([char]58)08-1315.txt"
 
             [String]$CorrectFileNameOnly = 'Test-File-20160608-1315.txt'
 
@@ -181,6 +204,14 @@ Describe "Test-CharsInPath" {
         It "Input is Int32" {
 
             [Int]$PathToTest = 23
+
+            { Test-CharsInPath -Path $PathToTest -verbose:$VerboseFunctionOutput } | should Throw
+
+        }
+
+        It "Input is System.Diagnostics.Process" {
+
+            $PathToTest = Get-Process | Select-Object -First 1
 
             { Test-CharsInPath -Path $PathToTest -verbose:$VerboseFunctionOutput } | should Throw
 

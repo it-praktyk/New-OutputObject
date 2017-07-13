@@ -43,7 +43,24 @@ foreach ($ObjectType in $ObjectTypes) {
 
         [System.String]$DateTimeFormatToMock = 'yyyyMMdd-HHmmss'
 
-        [String]$IncorrectFileNameOnly = 'Test-File-201606*08-1315.txt'
+        
+
+        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
+
+            [String]$IncorrectFileNameOnly = "Test-File-201606$([char]0)08-1315.txt"
+            
+
+        }
+        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
+
+            [String]$IncorrectFileNameOnly = "Test-File-201606$([char]58)08-1315.txt"
+
+        }
+        Else {
+
+            [String]$IncorrectFileNameOnly = 'Test-File-201606*08-1315.txt'
+
+        }
 
     }
     Else {
@@ -52,9 +69,25 @@ foreach ($ObjectType in $ObjectTypes) {
 
         $ExpectedObjectType = 'System.Io.DirectoryInfo'
 
-        [System.String]$DateTimeObjectToMock = 'yyyyMMdd'
+        [System.String]$DateTimeObjectToMock = 'yyyyMMdd'        
 
-        [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc>al\'
+
+        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
+
+            [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]0)al/"
+            
+
+        }
+        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
+
+            [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]58)al/"
+
+        }
+        Else {
+
+            [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc>al\'
+
+        }
 
     }
 
