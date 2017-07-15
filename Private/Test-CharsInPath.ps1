@@ -69,7 +69,7 @@
     # [char]0 = NULL
 
     CURRENT VERSION
-    - 0.6.0 - 2017-07-01
+    - 0.6.0 - 2017-07-15
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -87,7 +87,9 @@
         [parameter(Mandatory = $false)]
         [switch]$SkipCheckCharsInFolderPart,
         [parameter(Mandatory = $false)]
-        [switch]$SkipCheckCharsInFileNamePart
+        [switch]$SkipCheckCharsInFileNamePart,
+        [parameter(Mandatory = $false)]
+        [switch]$SkipDividingForParts
 
     )
 
@@ -113,6 +115,7 @@
             $PathSeparators = @('/')
 
         }
+        #Windows
         Else {
 
             $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars() #36 chars
@@ -131,10 +134,13 @@
 
         $NothingToCheck = $true
 
-
     }
 
     PROCESS {
+
+        [String]$DirectoryPath = ""
+
+        [String]$FileName = ""
 
         $PathType = ($Path.GetType()).Name
 
@@ -163,36 +169,47 @@
 
         ElseIf ($PathType -eq 'String') {
 
-            [String]$DirectoryPath = ""
+            If ( $SkipDividingForParts.IsPresent -and $SkipCheckCharsInFolderPart.IsPresent ) {
 
-            #Convert String to Array of chars
-            $PathArray = $Path.ToCharArray()
-
-            $PathLength = $PathArray.Length
-
-            For ($i = ($PathLength-1); $i -ge 0; $i--) {
-
-                If ($PathSeparators -contains $PathArray[$i]) {
-
-                    [String]$DirectoryPath = [String]$Path.Substring(0, $i +1)
-
-                    break
-
-                }
+                $FileName = $Path
 
             }
+            ElseIf ( $SkipDividingForParts.IsPresent -and $SkipCheckCharsInFileNamePart.IsPresent  ) {
 
-            If ([String]::IsNullOrEmpty($DirectoryPath)) {
-
-                [String]$FileName = [String]$Path
+                $DirectoryPath = $Path
 
             }
             Else {
 
-                [String]$FileName = $Path.Replace($DirectoryPath, "")
+                #Convert String to Array of chars
+                $PathArray = $Path.ToCharArray()
+
+                $PathLength = $PathArray.Length
+
+                For ($i = ($PathLength-1); $i -ge 0; $i--) {
+
+                    If ($PathSeparators -contains $PathArray[$i]) {
+
+                        [String]$DirectoryPath = [String]$Path.Substring(0, $i +1)
+
+                        break
+
+                    }
+
+                }
+
+                If ([String]::IsNullOrEmpty($DirectoryPath)) {
+
+                    [String]$FileName = [String]$Path
+
+                }
+                Else {
+
+                    [String]$FileName = $Path.Replace($DirectoryPath, "")
+
+                }
 
             }
-
 
         }
         Else {

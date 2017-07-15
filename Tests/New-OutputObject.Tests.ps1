@@ -10,7 +10,7 @@
     KEYWORDS: PowerShell, Pester, psd1, New-OutputObject, New-OutputObject
 
     CURRENT VERSION
-    - 0.9.8 - 2017-05-06
+    - 0.9.9 - 2017-07-15
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
@@ -19,7 +19,7 @@
 
 $ModuleName = "New-OutputObject"
 
-$VerboseInternal = $true
+$VerboseInternal = $false
 
 #Provided path asume that your module manifest (a file with the psd1 extension) exists in the parent directory for directory where the current test script is stored
 $RelativePathToModuleManifest = "{0}\..\{1}.psd1" -f $PSScriptRoot, $ModuleName
@@ -43,22 +43,26 @@ foreach ($ObjectType in $ObjectTypes) {
 
         [System.String]$DateTimeFormatToMock = 'yyyyMMdd-HHmmss'
 
-        
-
         If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
 
             [String]$IncorrectFileNameOnly = "Test-File-201606$([char]0)08-1315.txt"
-            
+
+            [String]$IncorrectDateTimeFormat = "yyyy/MM/dd-HH:mm:ss"
 
         }
         ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
 
             [String]$IncorrectFileNameOnly = "Test-File-201606$([char]58)08-1315.txt"
 
+            [String]$IncorrectDateTimeFormat = "yyyyMMdd-HH:mm:ss"
+
+
         }
         Else {
 
             [String]$IncorrectFileNameOnly = 'Test-File-201606*08-1315.txt'
+
+            [String]$IncorrectDateTimeFormat = "yyyyMMdd-HH:mm:ss"
 
         }
 
@@ -69,23 +73,27 @@ foreach ($ObjectType in $ObjectTypes) {
 
         $ExpectedObjectType = 'System.Io.DirectoryInfo'
 
-        [System.String]$DateTimeObjectToMock = 'yyyyMMdd'        
-
+        [System.String]$DateTimeObjectToMock = 'yyyyMMdd'
 
         If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
 
             [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]0)al/"
-            
+
+            [String]$IncorrectDateTimeFormat = "yyyy/MM/dd-HH:mm:ss"
 
         }
         ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
 
             [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]58)al/"
 
+            [String]$IncorrectDateTimeFormat = "yyyy-MM-dd-HH:mm:ss"
+
         }
         Else {
 
             [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc>al\'
+
+            [String]$IncorrectDateTimeFormat = "yyyy-MM-dd-HH:mm:ss"
 
         }
 
@@ -135,7 +143,6 @@ foreach ($ObjectType in $ObjectTypes) {
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
             }
-
 
             It "Function $FunctionName - $ContextName - exit code" {
 
@@ -223,6 +230,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "Output-BBB-20161108"
@@ -261,6 +269,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
             }
+
         }
 
         $ContextName = "run with OutputObjectNameSuffix"
@@ -315,6 +324,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
             }
+
         }
 
 
@@ -405,8 +415,6 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal @params
 
-
-
             }
 
             $params = @{
@@ -416,7 +424,6 @@ foreach ($ObjectType in $ObjectTypes) {
                 DateTimePartInOutputObjectName = (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MM-dd hh:mm:ss")
 
                 IncludeDateTimePartInOutputObjectName = $false
-
 
             }
 
@@ -650,6 +657,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
             }
+
         }
 
         $ContextName = "run with all name parts, without DateTimePart"
@@ -802,6 +810,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
             }
+
         }
 
         $ContextName = "run with existing, non writable destination folder."
@@ -822,29 +831,37 @@ foreach ($ObjectType in $ObjectTypes) {
 
             }
 
-            $TestDestinationFolder = "TestDrive:\ExistingNotWritable\"
+            [String]$TestDestinationFolder = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("TestDrive:\ExistingNotWritable\")
 
             New-Item -Path $TestDestinationFolder -ItemType Directory | Out-Null
 
-            $ChangedACL = $OriginalAcl = Get-Acl -Path $TestDestinationFolder
+            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
 
-            $colRights = [System.Security.AccessControl.FileSystemRights]"AppendData,WriteData"
+                & chmod 0550 $TestDestinationFolder
 
-            $InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::None
+            }
+            #Windows
+            Else {
 
-            $PropagationFlag = [System.Security.AccessControl.PropagationFlags]::InheritOnly
+                $ChangedACL = $OriginalAcl = Get-Acl -Path $TestDestinationFolder
 
-            $objType = [System.Security.AccessControl.AccessControlType]::Deny
+                $colRights = [System.Security.AccessControl.FileSystemRights]"AppendData,WriteData"
 
-            $objUser = New-Object System.Security.Principal.NTAccount($(whoami))
+                $InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::None
 
-            $objACE = New-Object System.Security.AccessControl.FileSystemAccessRule ($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType)
+                $PropagationFlag = [System.Security.AccessControl.PropagationFlags]::InheritOnly
 
-            $ChangedACL.AddAccessRule($objACE)
+                $objType = [System.Security.AccessControl.AccessControlType]::Deny
 
-            Set-ACL -Path $TestDestinationFolder $ChangedACL
+                $objUser = New-Object System.Security.Principal.NTAccount($(whoami))
 
+                $objACE = New-Object System.Security.AccessControl.FileSystemAccessRule ($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType)
 
+                $ChangedACL.AddAccessRule($objACE)
+
+                Set-ACL -Path $TestDestinationFolder $ChangedACL
+
+            }
 
             If ($ObjectType -eq 'File') {
 
@@ -856,7 +873,6 @@ foreach ($ObjectType in $ObjectTypes) {
                 $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder
 
             }
-
 
             $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -ParentPath $TestDestinationFolder
 
@@ -889,33 +905,57 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
             }
+
+            #Restore ACLs to cleanly remove TestDrive
+            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
+
+                & chmod 0770 $TestDestinationFolder
+
+            }
+
+            Else {
+
+                Set-ACL -Path $TestDestinationFolder $OriginalAcl
+
+            }
+
         }
 
         $ContextName = "run with existing, non writable destination folder, break on error"
 
         Context "Function $FunctionName - $ContextName" {
 
-            $TestDestinationFolder = "TestDrive:\ExistingNotWritable\"
+            [String]$TestDestinationFolder = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("TestDrive:\ExistingNotWritable\")
 
             New-Item -Path $TestDestinationFolder -ItemType Container | Out-Null
 
-            $ChangedACL = $OriginalAcl = Get-Acl -Path $TestDestinationFolder
+            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
 
-            $colRights = [System.Security.AccessControl.FileSystemRights]"AppendData,WriteData"
+                & chmod 0550 $TestDestinationFolder
 
-            $InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::None
+            }
 
-            $PropagationFlag = [System.Security.AccessControl.PropagationFlags]::InheritOnly
+            Else {
 
-            $objType = [System.Security.AccessControl.AccessControlType]::Deny
+                $ChangedACL = $OriginalAcl = Get-Acl -Path $TestDestinationFolder
 
-            $objUser = New-Object System.Security.Principal.NTAccount($(whoami))
+                $colRights = [System.Security.AccessControl.FileSystemRights]"AppendData,WriteData"
 
-            $objACE = New-Object System.Security.AccessControl.FileSystemAccessRule ($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType)
+                $InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::None
 
-            $ChangedACL.AddAccessRule($objACE)
+                $PropagationFlag = [System.Security.AccessControl.PropagationFlags]::InheritOnly
 
-            Set-ACL -Path $TestDestinationFolder $ChangedACL
+                $objType = [System.Security.AccessControl.AccessControlType]::Deny
+
+                $objUser = New-Object System.Security.Principal.NTAccount($(whoami))
+
+                $objACE = New-Object System.Security.AccessControl.FileSystemAccessRule ($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType)
+
+                $ChangedACL.AddAccessRule($objACE)
+
+                Set-ACL -Path $TestDestinationFolder $ChangedACL
+
+            }
 
             If ($ObjectType -eq 'File') {
 
@@ -926,7 +966,6 @@ foreach ($ObjectType in $ObjectTypes) {
 
                     { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
                 }
-
 
             }
             Else {
@@ -941,7 +980,18 @@ foreach ($ObjectType in $ObjectTypes) {
 
             }
 
+            #Restore ACLs to cleanly remove TestDrive
+            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
 
+                & chmod 0770 $TestDestinationFolder
+
+            }
+
+            Else {
+
+                Set-ACL -Path $TestDestinationFolder $OriginalAcl
+
+            }
 
         }
 
@@ -970,7 +1020,6 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 [System.String]$TestExistingObject = "TestDrive:\Output-20161108"
             }
-
 
             New-Item -Path $TestExistingObject -ItemType $OutputTypeToCreate
 
@@ -1002,7 +1051,6 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
             }
-
 
             It "Function $FunctionName - $ContextName - exit code" {
 
@@ -1046,6 +1094,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $OutputTypeToCreate = 'directory'
 
                 [System.String]$TestExistingObject = "TestDrive:\Output-20161108"
+
             }
 
 
@@ -1079,7 +1128,6 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
             }
-
 
             It "Function $FunctionName - $ContextName - exit code" {
 
@@ -1124,8 +1172,6 @@ foreach ($ObjectType in $ObjectTypes) {
                 [System.String]$TestExistingObject = "TestDrive:\Output-20161108"
             }
 
-
-
             New-Item -Path $TestExistingObject -ItemType $OutputTypeToCreate
 
             Mock -ModuleName New-OutputObject -CommandName Get-OverwriteDecision -MockWith { Return [int]2 }
@@ -1139,6 +1185,7 @@ foreach ($ObjectType in $ObjectTypes) {
                     { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal } | Should Throw
 
                 }
+
             }
             Else {
 
@@ -1172,29 +1219,30 @@ foreach ($ObjectType in $ObjectTypes) {
 
             }
 
-
             If ($ObjectType -eq 'File') {
 
                 It "Function $FunctionName - $ContextName" {
-                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat "yyyyMMdd-HH:mm:ss" -BreakIfError } | Should Throw
 
-                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -DateTimePartFormat "yyyyMMdd-HH:mm:ss" -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
+
+                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
 
                 }
+
             }
             Else {
 
                 It "Function $FunctionName - $ContextName" {
 
-                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat "yyyyMMdd-HH>mm/ss" -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
 
-                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -DateTimePartFormat "yyyyMMdd-HH>mm/ss" -BreakIfError } | Should Throw
+                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
 
                 }
+
             }
 
         }
-
 
         $ContextName = "run without parameters, incorrect chars in DateTimePartFormat, not BreakIfError"
 
@@ -1202,17 +1250,16 @@ foreach ($ObjectType in $ObjectTypes) {
 
             If ($ObjectType -eq 'File') {
 
-                $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat "yyyyMMdd-HH:mm:ss"
+                $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat
 
-                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -DateTimePartFormat "yyyyMMdd-HH:mm:ss"
-
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat
 
             }
             Else {
 
-                $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat "yyyyMMdd-HH>mm/ss"
+                $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat
 
-                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -DateTimePartFormat "yyyyMMdd-HH>mm/ss"
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat
 
             }
 
@@ -1221,6 +1268,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 2
 
                 $ResultProxyFunction.ExitCode | Should Be 2
+
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
@@ -1230,6 +1278,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+
             }
 
 

@@ -120,6 +120,8 @@ $Modules = Get-ChildItem "$here\..\" -Filter "*.psm1" -Recurse
 
 $Excluderules = @()
 
+Import-Module -Name PSScriptAnalyzer -ErrorAction Stop
+
 $Rules = Get-ScriptAnalyzerRule | Where-Object -FilterScript { $_.RuleName -notin $Excluderules }
 
 
