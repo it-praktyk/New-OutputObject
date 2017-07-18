@@ -5,7 +5,8 @@ Function New-OutputObject {
     Function intended for preparing a PowerShell object for output files like reports or logs.
 
     .DESCRIPTION
-    Function intended for preparing a PowerShell custom object what contains e.g. file name for output/create files like reports or log. The name is prepared based on prefix, middle name part, suffix, date, etc. with verification if provided path exist and is it writable.
+    Function intended for preparing a PowerShell custom object what contains e.g. file name for output/create files like reports or log.
+    The name is prepared based on prefix, middle name part, suffix, date, etc. with verification if provided path exist and is it writable.
 
     Returned object contains properties
     - OutputObjectPath - to use it please check examples - as a [System.IO.FileInfo]
@@ -241,17 +242,17 @@ Function New-OutputObject {
 
             $TestCharsResult = Test-CharsInPath -Path $DateTimePartFormat -SkipCheckCharsInFolderPart -SkipDividingForParts
 
+            Write-Warning $TestCharsResult
+
             If ( $TestCharsResult -eq 3) {
 
                  If ( $BreakIfError.IsPresent ) {
 
-                    $FileNameInvalidChars = [System.IO.Path]::GetInvalidFileNameChars() #41 chars
-
-                    $MessageText = "Provided {0} value for DateTimePartFormat contains char what is not allowed in a file name. Unallowed chars are: {0}" -f $FileNameInvalidChars
+                    $MessageText = "Provided value for DateTimePartFormat contains char what is not allowed in a file name."
 
                     Throw $MessageText
-                }
 
+                }
                 Else {
 
                     [Int]$ExitCode = 2
@@ -307,9 +308,7 @@ Function New-OutputObject {
 
                 If ( $BreakIfError.IsPresent ) {
 
-                    $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars() #36 chars
-
-                    $MessageText = "Provided value for DateTimePartFormat contains char what is not allowed in a folder name. Unallowed chars are: {0}" -f $PathInvalidChars
+                    $MessageText = "Provided value for DateTimePartFormat contains char what is not allowed in a folder name."
 
                     Throw $MessageText
 
@@ -326,8 +325,6 @@ Function New-OutputObject {
             ElseIf ( $TestCharsResult -eq 5 ) {
 
                 If ( $BreakIfError.IsPresent ) {
-
-                    $PathInvalidChars = [System.IO.Path]::GetInvalidPathChars() #36 chars
 
                     $MessageText = "Provided value for DateTimePartFormat contains a char what is a path separator char."
 
@@ -504,6 +501,8 @@ Function New-OutputObject {
                 }
 
                 2 {
+
+                    [String]$MessageText = "The {0} {1} already exist  - operation canceled by user" -f $ItemTypeLowerCase, $OutputObjectPath
 
                     Throw $MessageText
 

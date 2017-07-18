@@ -93,7 +93,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
             [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc>al\'
 
-            [String]$IncorrectDateTimeFormat = "yyyy-MM-dd-HH:mm:ss"
+            [String]$IncorrectDateTimeFormat = "yyyy-MM-dd-HH>mm:ss"
 
         }
 
@@ -1199,8 +1199,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
         }
 
-
-        $ContextName = "run without parameters, incorrect chars in DateTimePartFormat, BreakIfError"
+        $ContextName = "run with incorrect chars in DateTimePartFormat, BreakIfError"
 
         Context "Function $FunctionName - $ContextName" {
 
@@ -1244,7 +1243,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
         }
 
-        $ContextName = "run without parameters, incorrect chars in DateTimePartFormat, not BreakIfError"
+        $ContextName = "run with incorrect chars in DateTimePartFormat, not BreakIfError"
 
         Context "Function $FunctionName - $ContextName" {
 
