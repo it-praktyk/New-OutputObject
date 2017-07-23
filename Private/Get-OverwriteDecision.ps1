@@ -50,10 +50,10 @@
     KEYWORDS: PowerShell, Dialog
 
     CURRENT VERSION
-    - 0.1.1 - 2017-05-02 - Initial version
+    - 0.1.2 - 2017-07-23
 
     HISTORY OF VERSIONS
-    https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+    https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
 
 
 #>

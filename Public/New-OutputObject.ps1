@@ -148,7 +148,7 @@ Function New-OutputObject {
     - 0.9.10 - 2017-07-15
 
     HISTORY OF VERSIONS
-    https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+    https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
 
     LICENSE
     Copyright (c) 2016 Wojciech Sciesinski
@@ -241,8 +241,6 @@ Function New-OutputObject {
         Else {
 
             $TestCharsResult = Test-CharsInPath -Path $DateTimePartFormat -SkipCheckCharsInFolderPart -SkipDividingForParts
-
-            Write-Warning $TestCharsResult
 
             If ( $TestCharsResult -eq 3) {
 

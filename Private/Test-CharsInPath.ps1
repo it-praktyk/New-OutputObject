@@ -27,6 +27,11 @@
     .PARAMETER SkipCheckCharsInFileNamePart
     Skip checking in the file name part of path.
 
+    .PARAMETER SkipDividingForParts
+    Skip dividing provided path to a directory and a file name.
+
+    Used usually in conjuction with SkipCheckCharsInFolderPart or SkipCheckCharsInFileNamePart.
+
     .EXAMPLE
 
     [PS] > Test-CharsInPath -Path $(Get-Item C:\Windows\Temp\new.csv') -Verbose
@@ -69,10 +74,10 @@
     # [char]0 = NULL
 
     CURRENT VERSION
-    - 0.6.0 - 2017-07-15
+    - 0.6.1 - 2017-07-23
 
     HISTORY OF VERSIONS
-    https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+    https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
 
 
 #>

@@ -1,10 +1,10 @@
 # TODO
 
-Alligned to the version 0.9.8 - 2017-05-06
+Alligned to the version 0.9.10 - 2017-07-23
 
 ## New-OutputObject a module wide
 
-- convert VERSIONS.md to JAML or JSON format
+- convert CHANGELOG.md to JAML or JSON format
 - verify cross module versions of functions (used in the VERSION.md file, comment based helps, module manifest, etc.)
 - add CI for the project
 
@@ -27,12 +27,7 @@ Alligned to the version 0.9.8 - 2017-05-06
 
 ## Test-CharsInPath
 
-- replace a for loop what split path to directory/file to decreasing counter
 - add support for an input from pipeline
 - add support to return array of incorrect chars and them positions in string
 - add support to verifying if non-english chars are used - displaying error/warning, returning other exit code
 - add support for Turkish tests (?)  - http://mikefrobbins.com/2015/10/22/using-pester-to-test-powershell-code-with-other-cultures/
-
-## Test-CharsInPath.Tests
-
-- rewrite test using -testcases (?)

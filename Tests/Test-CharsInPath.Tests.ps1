@@ -14,10 +14,10 @@
     KEYWORDS: PowerShell, FileSystem, Pester
 
     CURRENT VERSION
-    - 0.6.0 - 2017-07-03
+    - 0.6.1 - 2017-07-23
 
     HISTORY OF VERSIONS
-    https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+    https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
 
 #>
 
@@ -96,6 +96,30 @@ Describe "Test-CharsInPath" {
             [String]$CorrectFileNameOnly = 'Test-File-20160608-1315.txt'
 
         }
+        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsWindows )  {
+
+            #The differences between 'normal' PowerShell (based on PSEdition: Desktop, PSVersion 5.1.15063.483) and
+            #PowerShell Core (based on PSEdition: Core, PSVersion: 6.0.0-beta) are
+            #chars UTF8 34, 60, 62 for [System.IO.Path]::GetInvalidPathChars()
+
+            [String]$CorrectPathString = 'C:\Windows\Temp\Add-GroupsMember.ps1'
+
+            [String]$InCorrectPathString = 'C:\Win>dows\Te%mp\Add-ADGroupMember.ps1'
+
+            [String]$InCorrectFileNameString = 'C:\Windows\Temp\Add-ADGrou|p<Member.ps1'
+
+            [String]$IncorrectFullPathString = 'C:\Win>dows\Temp\Add-ADGrou|p<Member.ps1'
+
+            [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc|al\'
+
+            [String]$CorrectDirectoryOnly = 'C:\AppData\Local\'
+
+            [String]$IncorrectFileNameOnly = 'Test-File-201606*08-1315.txt'
+
+            [String]$CorrectFileNameOnly = 'Test-File-20160608-1315.txt'
+
+        }
+        #Windows
         Else {
 
             [String]$CorrectPathString = 'C:\Windows\Temp\Add-GroupsMember.ps1'
@@ -152,7 +176,6 @@ Describe "Test-CharsInPath" {
 
         }
 
-
         It "Input is string, SkipCheckCharsInFileNamePart, InCorrectFileNameString" {
 
             Test-CharsInPath -Path $InCorrectFileNameString -SkipCheckCharsInFileNamePart -verbose:$VerboseFunctionOutput | should be 0
@@ -195,8 +218,6 @@ Describe "Test-CharsInPath" {
 
         }
 
-
-
     }
 
     Context "Input is other than string or System.IO.X" {
@@ -220,4 +241,3 @@ Describe "Test-CharsInPath" {
     }
 
 }
-
