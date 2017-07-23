@@ -17,7 +17,7 @@
     - 0.2.2 - 2016-11-13
 
     HISTORY OF VERSIONS
-    https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+    https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
 
 #>
 

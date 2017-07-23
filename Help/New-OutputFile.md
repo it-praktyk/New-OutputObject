@@ -278,7 +278,7 @@ CURRENT VERSION
 - 0.9.8 - 2017-05-06
 
 HISTORY OF VERSIONS  
-https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
 
 LICENSE
 Copyright (c) 2016 Wojciech Sciesinski  

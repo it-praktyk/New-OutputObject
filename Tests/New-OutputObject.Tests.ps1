@@ -10,14 +10,16 @@
     KEYWORDS: PowerShell, Pester, psd1, New-OutputObject, New-OutputObject
 
     CURRENT VERSION
-    - 0.9.8 - 2017-05-06
+    - 0.9.10 - 2017-07-23
 
     HISTORY OF VERSIONS
-    https://github.com/it-praktyk/New-OutputObject/VERSIONS.md
+    https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
 
 #>
 
 $ModuleName = "New-OutputObject"
+
+$VerboseInternal = $false
 
 #Provided path asume that your module manifest (a file with the psd1 extension) exists in the parent directory for directory where the current test script is stored
 $RelativePathToModuleManifest = "{0}\..\{1}.psd1" -f $PSScriptRoot, $ModuleName
@@ -41,7 +43,27 @@ foreach ($ObjectType in $ObjectTypes) {
 
         [System.String]$DateTimeFormatToMock = 'yyyyMMdd-HHmmss'
 
-        [String]$IncorrectFileNameOnly = 'Test-File-201606*08-1315.txt'
+        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
+
+            [String]$IncorrectFileNameOnly = "Test-File-201606$([char]0)08-1315.txt"
+
+            [String]$IncorrectDateTimeFormat = "yyyy/MM/dd-HH:mm:ss"
+
+        }
+        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
+
+            [String]$IncorrectFileNameOnly = "Test-File-201606$([char]58)08-1315.txt"
+
+            [String]$IncorrectDateTimeFormat = "yyyyMMdd-HH:mm:ss"
+
+        }
+        Else {
+
+            [String]$IncorrectFileNameOnly = 'Test-File-201606*08-1315.txt'
+
+            [String]$IncorrectDateTimeFormat = "yyyyMMdd-HH:mm:ss"
+
+        }
 
     }
     Else {
@@ -52,7 +74,38 @@ foreach ($ObjectType in $ObjectTypes) {
 
         [System.String]$DateTimeObjectToMock = 'yyyyMMdd'
 
-        [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc>al\'
+        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
+
+            [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]0)al/"
+
+            [String]$IncorrectDateTimeFormat = "yyyy/MM/dd-HH:mm:ss"
+
+        }
+        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
+
+            [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]58)al/"
+
+            [String]$IncorrectDateTimeFormat = "yyyy-MM-dd-HH:mm:ss"
+
+        }
+        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsWindows) {
+
+            #The differences between 'normal' PowerShell (based on PSEdition: Desktop, PSVersion 5.1.15063.483) and
+            #PowerShell Core (based on PSEdition: Core, PSVersion: 6.0.0-beta) are
+            #chars UTF8 34, 60,62 for [System.IO.Path]::GetInvalidPathChars()
+
+            [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc|al\'
+
+            [String]$IncorrectDateTimeFormat = "yyyy-MM-dd-HH|mm:ss"
+
+        }
+        Else {
+
+            [String]$IncorrectDirectoryOnly = 'C:\AppData\Loc>al\'
+
+            [String]$IncorrectDateTimeFormat = "yyyy-MM-dd-HH>mm:ss"
+
+        }
 
     }
 
@@ -72,19 +125,20 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "Output-20161108-000002.txt"
 
-                $ResultProxyFunction = New-OutputFile
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "Output-20161108"
 
-                $ResultProxyFunction = New-OutputFolder
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal
 
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
@@ -100,7 +154,6 @@ foreach ($ObjectType in $ObjectTypes) {
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
             }
-
 
             It "Function $FunctionName - $ContextName - exit code" {
 
@@ -128,7 +181,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "AAA-20161108-000002.txt"
 
-                $ResultProxyFunction = New-OutputFile -OutputFileNamePrefix "AAA"
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -OutputFileNamePrefix "AAA"
 
             }
             Else {
@@ -136,11 +189,11 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "AAA-20161108"
 
-                $ResultProxyFunction = New-OutputFolder -OutputFolderNamePrefix  "AAA"
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -OutputFolderNamePrefix  "AAA"
 
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType -OutputObjectNamePrefix "AAA"
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -OutputObjectNamePrefix "AAA"
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
@@ -184,19 +237,20 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "Output-BBB-20161108-000002.txt"
 
-                $ResultProxyFunction = New-OutputFile -OutputFileNameMidPart "BBB"
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -OutputFileNameMidPart "BBB"
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "Output-BBB-20161108"
 
-                $ResultProxyFunction = New-OutputFolder -OutputFolderNameMidPart "BBB"
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -OutputFolderNameMidPart "BBB"
 
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType -OutputObjectNameMidPart "BBB"
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -OutputObjectNameMidPart "BBB"
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
@@ -226,6 +280,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
             }
+
         }
 
         $ContextName = "run with OutputObjectNameSuffix"
@@ -238,7 +293,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "Output-20161108-000002-CCC.txt"
 
-                $ResultProxyFunction = New-OutputFile -OutputFileNameSuffix "CCC"
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -OutputFileNameSuffix "CCC"
 
             }
             Else {
@@ -246,11 +301,11 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "Output-20161108-CCC"
 
-                $ResultProxyFunction = New-OutputFolder -OutputFolderNameSuffix "CCC"
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -OutputFolderNameSuffix "CCC"
 
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType -OutputObjectNameSuffix "CCC"
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -OutputObjectNameSuffix "CCC"
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
@@ -272,6 +327,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 0
 
                 $ResultProxyFunction.ExitCode | Should Be 0
+
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
@@ -279,7 +335,9 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+
             }
+
         }
 
 
@@ -293,19 +351,20 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "Output-20161101-120001.txt"
 
-                $ResultProxyFunction = New-OutputFile -DateTimePartInOutputFileName (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MM-dd hh:mm:ss")
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -DateTimePartInOutputFileName (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MM-dd hh:mm:ss")
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161101' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "Output-20161101"
 
-                $ResultProxyFunction = New-OutputFolder -DateTimePartInOutputFolderName (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MM-dd hh:mm:ss")
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -DateTimePartInOutputFolderName (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MM-dd hh:mm:ss")
 
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType -DateTimePartInOutputObjectName (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MM-dd hh:mm:ss")
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartInOutputObjectName (Get-Date -Date "2016-11-01 12:00:01" -Format "yyyy-MM-dd hh:mm:ss")
 
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
@@ -313,6 +372,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
 
                 $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
@@ -320,6 +380,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
@@ -327,6 +388,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 0
 
                 $ResultProxyFunction.ExitCode | Should Be 0
+
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
@@ -334,7 +396,9 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+
             }
+
         }
 
         $ContextName = "run with DateTimePartInOutputObjectName, without DateTimePart"
@@ -353,7 +417,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 }
 
-                $ResultProxyFunction = New-OutputFile @params
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal @params
 
             }
             Else {
@@ -368,9 +432,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 }
 
-                $ResultProxyFunction = New-OutputFolder @params
-
-
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal @params
 
             }
 
@@ -382,7 +444,6 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 IncludeDateTimePartInOutputObjectName = $false
 
-
             }
 
             $Result = New-OutputObject @params
@@ -392,6 +453,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
 
                 $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
@@ -399,6 +461,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
@@ -406,6 +469,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 0
 
                 $ResultProxyFunction.ExitCode | Should Be 0
+
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
@@ -413,7 +477,9 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+
             }
+
         }
 
         $ContextName = "run with OutputFileNameExtension"
@@ -426,25 +492,27 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "Output-20161108-000002.csv"
 
-                $ResultProxyFunction = New-OutputFile -OutputFileNameExtension ".csv"
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -OutputFileNameExtension ".csv"
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "Output-20161108"
 
-                $ResultProxyFunction = New-OutputFolder
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal
 
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType -OutputFileNameExtension "csv"
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -OutputFileNameExtension "csv"
 
             It "Function $FunctionName - $ContextName - an object type" {
 
                 $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
 
                 $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
@@ -452,6 +520,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
@@ -459,6 +528,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 0
 
                 $ResultProxyFunction.ExitCode | Should Be 0
+
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
@@ -466,7 +536,9 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+
             }
+
         }
 
         $ContextName = "run with NamePartsSeparator"
@@ -479,25 +551,27 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "Output_20161108-000002.txt"
 
-                $ResultProxyFunction = New-OutputFile -NamePartsSeparator "_"
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -NamePartsSeparator "_"
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "Output_20161108"
 
-                $ResultProxyFunction = New-OutputFolder -NamePartsSeparator "_"
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -NamePartsSeparator "_"
 
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType -NamePartsSeparator "_"
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -NamePartsSeparator "_"
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
                 $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
 
                 $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
@@ -505,6 +579,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
             }
 
 
@@ -513,6 +588,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 0
 
                 $ResultProxyFunction.ExitCode | Should Be 0
+
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
@@ -520,6 +596,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+
             }
 
         }
@@ -527,8 +604,6 @@ foreach ($ObjectType in $ObjectTypes) {
         $ContextName = "run with all name parts, with DateTimePartInOutputObjectName"
 
         Context "Function $FunctionName - $ContextName" {
-
-
 
             If ($ObjectType -eq 'File') {
 
@@ -548,10 +623,11 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 }
 
-                $ResultProxyFunction = New-OutputFile @params
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal @params
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161101' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "AAA-BBB-20161101-CCC"
@@ -568,7 +644,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 }
 
-                $ResultProxyFunction = New-OutputFolder @params
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal @params
 
             }
 
@@ -593,6 +669,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
 
                 $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
             }
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - Name " {
@@ -600,6 +677,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
             }
 
             It "Function $FunctionName -  $ContextName - exit code" {
@@ -607,6 +685,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 0
 
                 $ResultProxyFunction.ExitCode | Should Be 0
+
             }
 
             It "Function $FunctionName -  $ContextName - exit code description" {
@@ -614,7 +693,9 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+
             }
+
         }
 
         $ContextName = "run with all name parts, without DateTimePart"
@@ -639,7 +720,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 }
 
-                $ResultProxyFunction = New-OutputFile @params
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal @params
 
             }
             Else {
@@ -660,7 +741,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 }
 
-                $ResultProxyFunction = New-OutputFolder @params
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal @params
 
             }
 
@@ -713,6 +794,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
 
             }
+
         }
 
         $ContextName = "run without parameters, non existing destination directory."
@@ -727,24 +809,27 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 $ExpectedOutputObjectName = "Output-20161108-000002.txt"
 
-                $ResultProxyFunction = New-OutputFile -ParentPath $ParentPath
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -ParentPath $ParentPath
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "Output-20161108"
 
-                $ResultProxyFunction = New-OutputFolder -ParentPath $ParentPath
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -ParentPath $ParentPath
+
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType -ParentPath $ParentPath
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -ParentPath $ParentPath
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
 
                 $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
 
                 $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
             }
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - Name " {
@@ -752,6 +837,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
             }
 
             It "Function $FunctionName -  $ContextName - exit code" {
@@ -759,6 +845,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 1
 
                 $ResultProxyFunction.ExitCode | Should Be 1
+
             }
 
             It "Function $FunctionName -  $ContextName - exit code description" {
@@ -766,7 +853,9 @@ foreach ($ObjectType in $ObjectTypes) {
                 [System.String]$RequiredMessage = "Provided parent path {0} doesn't exist" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$ParentPath")
 
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
+
             }
+
         }
 
         $ContextName = "run with existing, non writable destination folder."
@@ -781,55 +870,64 @@ foreach ($ObjectType in $ObjectTypes) {
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "Output-20161108"
 
             }
 
-            $TestDestinationFolder = "TestDrive:\ExistingNotWritable\"
+            [String]$TestDestinationFolder = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("TestDrive:\ExistingNotWritable\")
 
             New-Item -Path $TestDestinationFolder -ItemType Directory | Out-Null
 
-            $ChangedACL = $OriginalAcl = Get-Acl -Path $TestDestinationFolder
+            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
 
-            $colRights = [System.Security.AccessControl.FileSystemRights]"AppendData,WriteData"
+                & chmod 0550 $TestDestinationFolder
 
-            $InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::None
+            }
+            #Windows
+            Else {
 
-            $PropagationFlag = [System.Security.AccessControl.PropagationFlags]::InheritOnly
+                $ChangedACL = $OriginalAcl = Get-Acl -Path $TestDestinationFolder
 
-            $objType = [System.Security.AccessControl.AccessControlType]::Deny
+                $colRights = [System.Security.AccessControl.FileSystemRights]"AppendData,WriteData"
 
-            $objUser = New-Object System.Security.Principal.NTAccount($(whoami))
+                $InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::None
 
-            $objACE = New-Object System.Security.AccessControl.FileSystemAccessRule ($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType)
+                $PropagationFlag = [System.Security.AccessControl.PropagationFlags]::InheritOnly
 
-            $ChangedACL.AddAccessRule($objACE)
+                $objType = [System.Security.AccessControl.AccessControlType]::Deny
 
-            Set-ACL -Path $TestDestinationFolder $ChangedACL
+                $objUser = New-Object System.Security.Principal.NTAccount($(whoami))
 
+                $objACE = New-Object System.Security.AccessControl.FileSystemAccessRule ($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType)
 
+                $ChangedACL.AddAccessRule($objACE)
+
+                Set-ACL -Path $TestDestinationFolder $ChangedACL
+
+            }
 
             If ($ObjectType -eq 'File') {
 
-                $ResultProxyFunction = New-OutputFile -ParentPath $TestDestinationFolder
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder
 
             }
             Else {
 
-                $ResultProxyFunction = New-OutputFolder -ParentPath $TestDestinationFolder
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder
 
             }
 
-
-            $Result = New-OutputObject -ObjectType $ObjectType -ParentPath $TestDestinationFolder
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -ParentPath $TestDestinationFolder
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
 
                 $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
 
                 $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
             }
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - Name " {
@@ -837,6 +935,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
             }
 
             It "Function $FunctionName -  $ContextName - exit code" {
@@ -844,6 +943,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 3
 
                 $ResultProxyFunction.ExitCode | Should Be 3
+
             }
 
             It "Function $FunctionName -  $ContextName - exit code description" {
@@ -853,45 +953,71 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+
             }
+
+            #Restore ACLs to cleanly remove TestDrive
+            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
+
+                & chmod 0770 $TestDestinationFolder
+
+            }
+
+            Else {
+
+                Set-ACL -Path $TestDestinationFolder $OriginalAcl
+
+            }
+
         }
 
         $ContextName = "run with existing, non writable destination folder, break on error"
 
         Context "Function $FunctionName - $ContextName" {
 
-            $TestDestinationFolder = "TestDrive:\ExistingNotWritable\"
+            [String]$TestDestinationFolder = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("TestDrive:\ExistingNotWritable\")
 
             New-Item -Path $TestDestinationFolder -ItemType Container | Out-Null
 
-            $ChangedACL = $OriginalAcl = Get-Acl -Path $TestDestinationFolder
+            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
 
-            $colRights = [System.Security.AccessControl.FileSystemRights]"AppendData,WriteData"
+                & chmod 0550 $TestDestinationFolder
 
-            $InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::None
+            }
 
-            $PropagationFlag = [System.Security.AccessControl.PropagationFlags]::InheritOnly
+            Else {
 
-            $objType = [System.Security.AccessControl.AccessControlType]::Deny
+                $ChangedACL = $OriginalAcl = Get-Acl -Path $TestDestinationFolder
 
-            $objUser = New-Object System.Security.Principal.NTAccount($(whoami))
+                $colRights = [System.Security.AccessControl.FileSystemRights]"AppendData,WriteData"
 
-            $objACE = New-Object System.Security.AccessControl.FileSystemAccessRule ($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType)
+                $InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::None
 
-            $ChangedACL.AddAccessRule($objACE)
+                $PropagationFlag = [System.Security.AccessControl.PropagationFlags]::InheritOnly
 
-            Set-ACL -Path $TestDestinationFolder $ChangedACL
+                $objType = [System.Security.AccessControl.AccessControlType]::Deny
+
+                $objUser = New-Object System.Security.Principal.NTAccount($(whoami))
+
+                $objACE = New-Object System.Security.AccessControl.FileSystemAccessRule ($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType)
+
+                $ChangedACL.AddAccessRule($objACE)
+
+                Set-ACL -Path $TestDestinationFolder $ChangedACL
+
+            }
 
             If ($ObjectType -eq 'File') {
 
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108-000002' } -ParameterFilter { $Format }
 
                 It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
-                    { $Result = New-OutputObject -ObjectType $ObjectType -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
 
-                    { $ResultProxyFunction = New-OutputFile -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+
+                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+
                 }
-
 
             }
             Else {
@@ -899,14 +1025,27 @@ foreach ($ObjectType in $ObjectTypes) {
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
 
                 It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
-                    { $Result = New-OutputObject -ObjectType $ObjectType -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
 
-                    { $ResultProxyFunction = New-OutputFolder -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+
+                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+
                 }
 
             }
 
+            #Restore ACLs to cleanly remove TestDrive
+            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
 
+                & chmod 0770 $TestDestinationFolder
+
+            }
+
+            Else {
+
+                Set-ACL -Path $TestDestinationFolder $OriginalAcl
+
+            }
 
         }
 
@@ -934,8 +1073,8 @@ foreach ($ObjectType in $ObjectTypes) {
                 $OutputTypeToCreate = 'directory'
 
                 [System.String]$TestExistingObject = "TestDrive:\Output-20161108"
-            }
 
+            }
 
             New-Item -Path $TestExistingObject -ItemType $OutputTypeToCreate
 
@@ -943,22 +1082,23 @@ foreach ($ObjectType in $ObjectTypes) {
 
             If ($ObjectType -eq 'File') {
 
-                $ResultProxyFunction = New-OutputFile
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal
 
             }
             Else {
 
-                $ResultProxyFunction = New-OutputFolder
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal
 
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
                 $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
 
                 $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
@@ -966,14 +1106,15 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
-            }
 
+            }
 
             It "Function $FunctionName - $ContextName - exit code" {
 
                 $Result.ExitCode | Should Be 4
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
@@ -983,6 +1124,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+
             }
 
         }
@@ -1011,6 +1153,8 @@ foreach ($ObjectType in $ObjectTypes) {
                 $OutputTypeToCreate = 'directory'
 
                 [System.String]$TestExistingObject = "TestDrive:\Output-20161108"
+
+
             }
 
 
@@ -1020,22 +1164,23 @@ foreach ($ObjectType in $ObjectTypes) {
 
             If ($ObjectType -eq 'File') {
 
-                $ResultProxyFunction = New-OutputFile
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal
 
             }
             Else {
 
-                $ResultProxyFunction = New-OutputFolder
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal
 
             }
 
-            $Result = New-OutputObject -ObjectType $ObjectType
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
                 $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
 
                 $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
@@ -1043,14 +1188,15 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
 
                 $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
-            }
 
+            }
 
             It "Function $FunctionName - $ContextName - exit code" {
 
                 $Result.ExitCode | Should Be 5
 
                 $ResultProxyFunction.ExitCode | Should Be 5
+
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
@@ -1060,6 +1206,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+
             }
 
         }
@@ -1080,6 +1227,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
             }
             Else {
+
                 Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
 
                 $ExpectedOutputObjectName = "Output-20161108"
@@ -1087,9 +1235,8 @@ foreach ($ObjectType in $ObjectTypes) {
                 $OutputTypeToCreate = 'directory'
 
                 [System.String]$TestExistingObject = "TestDrive:\Output-20161108"
+
             }
-
-
 
             New-Item -Path $TestExistingObject -ItemType $OutputTypeToCreate
 
@@ -1099,26 +1246,28 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                    { $Result = New-OutputObject -ObjectType $ObjectType } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType } | Should Throw
 
-                    { $ResultProxyFunction = New-OutputFile } | Should Throw
+                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal } | Should Throw
 
                 }
+
             }
             Else {
 
                 It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
-                    { $Result = New-OutputObject -ObjectType $ObjectType } | Should Throw
 
-                    { $ResultProxyFunction = New-OutputFolder } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType } | Should Throw
+
+                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal } | Should Throw
+
 
                 }
             }
 
         }
 
-
-        $ContextName = "run without parameters, incorrect chars in DateTimePartFormat, BreakIfError"
+        $ContextName = "run with incorrect chars in DateTimePartFormat, BreakIfError"
 
         Context "Function $FunctionName - $ContextName" {
 
@@ -1137,47 +1286,47 @@ foreach ($ObjectType in $ObjectTypes) {
 
             }
 
-
             If ($ObjectType -eq 'File') {
 
                 It "Function $FunctionName - $ContextName" {
-                    { $Result = New-OutputObject -ObjectType $ObjectType -DateTimePartFormat "yyyyMMdd-HH:mm:ss" -BreakIfError } | Should Throw
 
-                    { $ResultProxyFunction = New-OutputFile -DateTimePartFormat "yyyyMMdd-HH:mm:ss" -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
+
+                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
 
                 }
+
             }
             Else {
 
                 It "Function $FunctionName - $ContextName" {
 
-                    { $Result = New-OutputObject -ObjectType $ObjectType -DateTimePartFormat "yyyyMMdd-HH>mm/ss" -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
 
-                    { $ResultProxyFunction = New-OutputFolder -DateTimePartFormat "yyyyMMdd-HH>mm/ss" -BreakIfError } | Should Throw
+                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
 
                 }
+
             }
 
         }
 
-
-        $ContextName = "run without parameters, incorrect chars in DateTimePartFormat, not BreakIfError"
+        $ContextName = "run with incorrect chars in DateTimePartFormat, not BreakIfError"
 
         Context "Function $FunctionName - $ContextName" {
 
             If ($ObjectType -eq 'File') {
 
-                $Result = New-OutputObject -ObjectType $ObjectType -DateTimePartFormat "yyyyMMdd-HH:mm:ss"
+                $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat
 
-                $ResultProxyFunction = New-OutputFile -DateTimePartFormat "yyyyMMdd-HH:mm:ss"
-
+                $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat
 
             }
             Else {
 
-                $Result = New-OutputObject -ObjectType $ObjectType -DateTimePartFormat "yyyyMMdd-HH>mm/ss"
+                $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat
 
-                $ResultProxyFunction = New-OutputFolder -DateTimePartFormat "yyyyMMdd-HH>mm/ss"
+                $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat
 
             }
 
@@ -1186,6 +1335,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCode | Should Be 2
 
                 $ResultProxyFunction.ExitCode | Should Be 2
+
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
@@ -1195,6 +1345,7 @@ foreach ($ObjectType in $ObjectTypes) {
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
 
                 $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+
             }
 
 

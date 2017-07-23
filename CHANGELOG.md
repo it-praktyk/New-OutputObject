@@ -75,6 +75,15 @@
   - New-OutputObject.Tests                  v. 0.9.7
   - Test-CharsInPath.Tests                  v. 0.5.3
 
+- 0.9.10 - 2017-07-23
+  - New-OutputObject                        v. 0.9.10
+  - New-OutputFile                          v. 0.9.10
+  - New-OutputFolder                        v. 0.9.10
+  - Test-CharsInPath                        v. 0.6.1
+  - Get-OverwriteDecision                   v. 0.1.2
+  - New-OutputObject-Module-Specific.Tests  v. 0.9.8
+  - New-OutputObject.Tests                  v. 0.9.10
+  - Test-CharsInPath.Tests                  v. 0.5.3
 
 ## General
 
@@ -99,6 +108,8 @@
   - Test-CharsInPath - functions work correctly even if StrictMode is on - fix #2
   - skiping inadequate PScriptAnalyzer rule (PSUseShouldProcessForStateChangingFunctions) implemented better
 
+- 0.9.10 - 2017-07-23
+  - Module compatibility with PowerShell Core 6.0.0 beta 4 achieved - tested on Fedora Linux 25, MacOS 10.12, Windows 10
 
 ## Function New-OutputObject
 
@@ -111,6 +122,10 @@
   - description for ExitCode = 1 little changed
   - message about ignoring extension for folders corrected
 - 0.9.9 - 2017-05-16 - skiping inadequate PScriptAnalyzer rule implemented better
+- 0.9.10 - 2017-07-23
+  - Support for PowerShell Core 6.0.0 beta 4 added
+  - Logic of preparing and merging of finale name rewritten
+  - Reference to VERSIONS.md changed to CHANGELOG.md
 
 ## Function New-OutputFile
 
@@ -136,6 +151,7 @@
 - 0.9.7 - 2017-05-02 - The function transformed to a wrapper for the function New-OutputObject
 - 0.9.8 - 2017-05-06 - Help updated due to change of description for the ExcitCode = 1, default value for the parameter DateTimePartFormat declared
 - 0.9.9 - 2017-05-16 - skiping inadequate PScriptAnalyzer rule implemented better
+- 0.9.10 - 2017-07-23 - Reference to VERSIONS.md changed to CHANGELOG.md
 
 ## Function New-OutputFolder
 
@@ -150,6 +166,7 @@
 - 0.9.7 - 2017-05-02 - The function transformed to a wrapper for the function New-OutputObject
 - 0.9.8 - 2017-05-06 - Help updated due to change of description for the ExcitCode = 1, default value for the parameter DateTimePartFormat declared
 - 0.9.9 - 2017-05-16 - An unused parameter removed - fix #2, skiping inadequate PScriptAnalyzer rule implemented better
+- 0.9.10 - 2017-07-23 - Reference to VERSIONS.md changed to CHANGELOG.md
 
 ## Function Test-CharsInPath
 
@@ -161,12 +178,17 @@
 - 0.5.1 - 2016-06-10 - Named blocks of code added
 - 0.5.2 - 2016-11-08 - Help updated, the TODO list moved to TODO.md file, history of version moved to VERSION.md file
 - 0.5.3 - 2017-05-02 - Code reformatted
-- 0.5.4 - 2017-05-16 - works when Set-StrictMode is on - fix #2
+- 0.5.4 - 2017-05-16 - Works when Set-StrictMode is on - fix #2
+- 0.6.0 - 2017-07-15
+  - Support for PowerShell Core 6.0.0 beta 4 added
+  - The parameter SkipDividingForParts added
+- 0.6.1 - 2017-07-23 - Reference to VERSIONS.md changed to CHANGELOG.md
 
 ## Function Get-OverwriteDecision
 
 - 0.1.0 - 2016-11-12 - Initial version
 - 0.1.1 - 2017-05-02 - Code reformatted
+- 0.1.2 - 2017-07-23 - Reference to VERSIONS.md changed to CHANGELOG.md
 
 ## New-OutputObject-Module-Specific.Tests
 
@@ -176,6 +198,9 @@
   - Pester tests to general validation of the New-OutputObject module - e.g. help, PSScriptAnalyzer results, style rules - moved from New-OutputObject.Tests to New-OutputObject-Module-Specific.Tests
   - Tests for style rules - based on style rules for the Pester module itself - added
 - 0.9.8 - 2017-05-16 - skiping some PScriptAnalyzer rules moved to functions
+- 0.9.10 - 2017-07-23
+  - Code reformatted, minor updates
+  - Reference to VERSIONS.md changed to CHANGELOG.md
 
 ## New-OutputObject.Tests
 
@@ -183,8 +208,18 @@
   - Tests for New-OutputFile.Tests and New-OutputFolder.Tests merged
   - Scope of tests extended and mostly rewritten
 - 0.9.8 - 2017-05-06 - Help updated due to change of description for the ExcitCode = 1
+- 0.9.9 - 2017-07-15 - Support for PowerShell Core 6.0.0 beta 4 added
+- 0.9.10 - 2017-07-23
+  - Code reformatted
+  - Reference to VERSIONS.md changed to CHANGELOG.md
+  - Support for PowerShell Core 6.0.0 beta 4 on Windows corrected
 
 ## Test-CharsInPath.Tests
 
 - 0.5.0 - 2016-11-11 - The tests versions history moved to VERSION.md file, help updated
 - 0.5.1 - 2017-05-02 - Code reformatted
+- 0.6.0 - 2017-07-03 - Support for PowerShell Core 6.0.0 beta 4 added
+- 0.6.1 - 2017-07-23
+  - Code reformatted
+  - Reference to VERSIONS.md changed to CHANGELOG.md
+  - Support for PowerShell Core 6.0.0 beta 4 on Windows corrected

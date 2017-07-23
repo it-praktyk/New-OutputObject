@@ -4,12 +4,23 @@
 
 The PowerShell module intended for preparing PowerShell objects what the next help output filesystem objects, means: files and folders.
 
-Would you like prepare names files/folders name like - where any part in "<>" can be provided directly as a parameter of function
+The module - since version 0.9.10 - is compatible with PowerShell Core 6.0.0 beta4 and tested on
+
+- Windows (5.1.x and 6.0.0 - beta4)
+- Linux Fedora 25 x64
+- MacOS 10.12
+
+Using the New-OutputObject you can prepare files/folders names like
 
 - a folder name like: \<MySuperServer>\<\_>\<DailyReport\>\<_\>\<1\>\<\_\>\<20170508\>
 
 ```powershell
-New-OutputFolder -OutputFolderNamePrefix MySuperServer -OutputFolderNameMidPart DailyReport -OutputFolderNameSuffix 1 -NamePartsSeparator "_"
+New-OutputFolder -OutputFolderNamePrefix MySuperServer -OutputFolderNameMidPart DailyReport -OutputFolderNameSuffix 1 -NamePartsSeparator "_" | Format-List
+
+OutputObjectPath    : C:\Users\UserName\Documents\Scripts\1 - GitHub My\New-OutputObject\MySuperServer_DailyReport_20170723_1
+OutputFolderPath    : C:\Users\UserName\Documents\Scripts\1 - GitHub My\New-OutputObject\MySuperServer_DailyReport_20170723_1
+ExitCode            : 0
+ExitCodeDescription : Everything is fine :-)
 ```
 
 or
@@ -17,8 +28,22 @@ or
 - a file name like: \<SuperImportantFile>\<->\<Generated on server>\<->\<SV004>-\<20170508-123400>.\<pdf>
 
 ```powershell
-New-OutputFile -OutputFileNamePrefix SuperImportantFile -OutputFileNameMidPart "Generated on server" -OutputFileNameSuffix $(Get-Item env:computername).value -OutputFileNameExtension pdf
+New-OutputFile -OutputFileNamePrefix SuperImportantFile -OutputFileNameMidPart "Generated on server" -OutputFileNameSuffix $(Get-Item env:computername).Value -OutputFileNameExtension pdf | Format-List
+
+OutputObjectPath    : C:\Users\Wojtek\Documents\Scripts\1 - GitHub My\New-OutputObject\SuperImportantFile-Generated on server-20170723-173456-TEST-COMPUTER.pdf
+OutputFilePath      : C:\Users\Wojtek\Documents\Scripts\1 - GitHub My\New-OutputObject\SuperImportantFile-Generated on server-20170723-173456-TEST-COMPUTER.pdf
+ExitCode            : 0
+ExitCodeDescription : Everything is fine :-)
 ```
+
+where any part in "<>" can be provided directly as a parameter of function.
+
+For more examples please use:
+
+- Get-Help New-OutputObject -Examples
+- Get-Content -Path .\Demo\Demo.txt
+
+Examples are based on Windows.
 
 Functions from the New-OutputObject module do:
 
@@ -38,8 +63,8 @@ Functions from the New-OutputObject don't
 
 Your comments - preferable via GitHub issues - and  pull requests are welcomed.
 
-The current module version: 0.9.9 - 2017-05-16.  
-The history of versions you can find [here](VERSIONS.md).
+The current module version: 0.9.10 - 2017-07-23.  
+The history of versions you can find [here](CHANGELOG.md).
 
 The module you can download directly from GitHub or  from the [PowerShellGallery](https://www.powershellgallery.com/packages/New-OutputObject/).
 
