@@ -74,7 +74,7 @@
     # [char]0 = NULL
 
     CURRENT VERSION
-    - 0.6.1 - 2017-07-23
+    - 0.7.0 - 2017-10-16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -100,7 +100,7 @@
 
     BEGIN {
 
-        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
+        If ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and $ISLinux) {
 
             #[char]0 = NULL
             $PathInvalidChars = [char]0
@@ -110,7 +110,7 @@
             $PathSeparators = @('/')
 
         }
-        Elseif ( $PSVersionTable.PSEdition -EQ 'Core' -and $IsOSX) {
+        Elseif ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -EQ 'Core') -and $IsMacOS) {
 
             #[char]58 = ':'
             $PathInvalidChars = [char]58
@@ -141,7 +141,7 @@
 
     }
 
-    PROCESS {
+    END {
 
         [String]$DirectoryPath = ""
 
@@ -274,10 +274,6 @@
             }
 
         }
-
-    }
-
-    END {
 
         If ($IncorectCharFundInPath -and $IncorectCharFundInFileName) {
 

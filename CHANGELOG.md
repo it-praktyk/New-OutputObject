@@ -54,7 +54,6 @@
   - New-OutputObject-Module-Specific.Tests  v. 0.9.7
   - New-OutputObject.Tests                  v. 0.9.7
   - Test-CharsInPath.Tests                  v. 0.5.3
-
 - 0.9.8 - 2017-05-06
   - New-OutputObject                        v. 0.9.8
   - New-OutputFile                          v. 0.9.8
@@ -64,7 +63,6 @@
   - New-OutputObject-Module-Specific.Tests  v. 0.9.8
   - New-OutputObject.Tests                  v. 0.9.7
   - Test-CharsInPath.Tests                  v. 0.5.3
-
 - 0.9.9 - 2017.05-15
   - New-OutputObject                        v. 0.9.9
   - New-OutputFile                          v. 0.9.9
@@ -74,7 +72,6 @@
   - New-OutputObject-Module-Specific.Tests  v. 0.9.8
   - New-OutputObject.Tests                  v. 0.9.7
   - Test-CharsInPath.Tests                  v. 0.5.3
-
 - 0.9.10 - 2017-07-23
   - New-OutputObject                        v. 0.9.10
   - New-OutputFile                          v. 0.9.10
@@ -84,6 +81,15 @@
   - New-OutputObject-Module-Specific.Tests  v. 0.9.8
   - New-OutputObject.Tests                  v. 0.9.10
   - Test-CharsInPath.Tests                  v. 0.5.3
+- 0.9.11 - 2017-10-16
+  - New-OutputObject                        v. 0.9.11
+  - New-OutputFile                          v. 0.9.10
+  - New-OutputFolder                        v. 0.9.10
+  - Test-CharsInPath                        v. 0.7.0
+  - Get-OverwriteDecision                   v. 0.1.2
+  - New-OutputObject-Module-Specific.Tests  v. 0.9.11
+  - New-OutputObject.Tests                  v. 0.9.11
+  - Test-CharsInPath.Tests                  v. 0.7.0
 
 ## General
 
@@ -97,19 +103,19 @@
   - Pester tests to general validation of the New-OutputObject module - e.g. help, PSScriptAnalyzer results, style rules - moved from New-OutputObject.Tests to New-OutputObject-Module-Specific.Tests
   - The version number of module-wide tests (New-OutputObject-Module-Specific.Tests.ps1) alligned to the module version
   - Tests for New-OutputFile.Tests and New-OutputFolder.Tests merged in New-OutputObject.Tests
-
 - 0.9.8 - 2017-05-06
   - TODO updated
   - unneeded code in the New-OutputObject removed
   - description for ExitCode = 1 little changed
   - message about ignoring extension for folders corrected
-
 - 0.9.9 - 2017-05-15
   - Test-CharsInPath - functions work correctly even if StrictMode is on - fix #2
   - skiping inadequate PScriptAnalyzer rule (PSUseShouldProcessForStateChangingFunctions) implemented better
-
 - 0.9.10 - 2017-07-23
   - Module compatibility with PowerShell Core 6.0.0 beta 4 achieved - tested on Fedora Linux 25, MacOS 10.12, Windows 10
+- 0.9.11 - 2017-10-16
+  - Module can run when Set-StrictMode -Value Latest is set
+  - Compatibility with PowerShell Core 6.0 beta 8
 
 ## Function New-OutputObject
 
@@ -126,6 +132,10 @@
   - Support for PowerShell Core 6.0.0 beta 4 added
   - Logic of preparing and merging of finale name rewritten
   - Reference to VERSIONS.md changed to CHANGELOG.md
+- 0.9.11 - 2017.10.16
+  - The function can run when Set-StrictMode -Value Latest is set
+  - Compatibility with PowerShell Core 6.0 beta 8
+
 
 ## Function New-OutputFile
 
@@ -183,6 +193,10 @@
   - Support for PowerShell Core 6.0.0 beta 4 added
   - The parameter SkipDividingForParts added
 - 0.6.1 - 2017-07-23 - Reference to VERSIONS.md changed to CHANGELOG.md
+- 0.7.0 - 2017-10-16
+  - The function can run when Set-StrictMode -Value Latest is set
+  - Compatibility with PowerShell Core 6.0 beta 8
+  - The structure corrected - thanks Iain Brighton!
 
 ## Function Get-OverwriteDecision
 
@@ -201,6 +215,10 @@
 - 0.9.10 - 2017-07-23
   - Code reformatted, minor updates
   - Reference to VERSIONS.md changed to CHANGELOG.md
+- 0.9.11 - 2017-10-16
+  - The function can run when Set-StrictMode -Value Latest is set
+  - Compatibility with PowerShell Core 6.0 beta 8
+  - folder separators generalized to support differences between Windows/Linux/macOS
 
 ## New-OutputObject.Tests
 
@@ -213,6 +231,10 @@
   - Code reformatted
   - Reference to VERSIONS.md changed to CHANGELOG.md
   - Support for PowerShell Core 6.0.0 beta 4 on Windows corrected
+- 0.9.11 - 2017-10-16
+  - The function can run when Set-StrictMode -Value Latest is set
+  - Compatibility with PowerShell Core 6.0 beta 8
+  - folder separators generalized to support differences between Windows/Linux/macOS
 
 ## Test-CharsInPath.Tests
 
@@ -223,3 +245,7 @@
   - Code reformatted
   - Reference to VERSIONS.md changed to CHANGELOG.md
   - Support for PowerShell Core 6.0.0 beta 4 on Windows corrected
+- 0.7.0 - 2017-11-16
+  - The function can run when Set-StrictMode -Value Latest is set
+  - Compatibility with PowerShell Core 6.0 beta 8
+  - folder separators generalized to support differences between Windows/Linux/macOS

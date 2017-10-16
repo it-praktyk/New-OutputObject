@@ -145,7 +145,7 @@ Function New-OutputObject {
     KEYWORDS: PowerShell, File, Folder, FileSystem
 
     CURRENT VERSION
-    - 0.9.10 - 2017-07-15
+    - 0.9.11- 2017-10-16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -212,7 +212,7 @@ Function New-OutputObject {
 
     $Result = New-Object -TypeName PSObject
 
-    If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux -or $IsOSX)) {
+    If ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and ($ISLinux -or $IsMacOS)) {
 
         $PathSeparator = '/'
 

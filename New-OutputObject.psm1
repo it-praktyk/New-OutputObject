@@ -14,7 +14,7 @@
     KEYWORDS: PowerShell, FileSystem, File, Folder
 
     CURRENT VERSION
-    - 0.2.2 - 2016-11-13
+    - 0.3.0 - 2017-10-16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -24,8 +24,12 @@
 Set-StrictMode -Version Latest
 
 #Get public and private function definition files
-$Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue )
-$Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue )
+
+[String]$PublicFolderPath = "{0}{1}Public{1}*" -f $PSScriptRoot, [System.IO.Path]::DirectorySeparatorChar
+[String]$PrivateFolderPath = "{0}{1}Private{1}*" -f $PSScriptRoot, [System.IO.Path]::DirectorySeparatorChar
+
+$Public  = @( Get-ChildItem -Path $PublicFolderPath -Include *.ps1 -ErrorAction SilentlyContinue )
+$Private = @( Get-ChildItem -Path $PrivateFolderPath -Include *.ps1 -ErrorAction SilentlyContinue )
 
 #Dot source the files
 Foreach($import in @($Public + $Private))

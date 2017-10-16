@@ -14,7 +14,7 @@
     https://www.linkedin.com/in/sciesinskiwojciech
 
     CURRENT VERSION
-    - 0.9.10 - 2017.07.23
+    - 0.9.11 - 2017.10.16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -23,9 +23,9 @@
 
 $ModuleName = "New-OutputObject"
 
-$RelativePathToModuleRoot = "{0}\.." -f $PSScriptRoot
+$RelativePathToModuleRoot = "{0}{1}.." -f $PSScriptRoot, [System.IO.Path]::DirectorySeparatorChar
 
-$RelativePathToModuleManifest = "{0}\{1}.psd1" -f $RelativePathToModuleRoot, $ModuleName
+$RelativePathToModuleManifest = "{0}{1}{2}.psd1" -f $RelativePathToModuleRoot, [System.IO.Path]::DirectorySeparatorChar, $ModuleName
 
 Describe "General tests for the $ModuleName module"  {
 
@@ -132,9 +132,9 @@ Describe "Module $ModuleName functions help" -Tags "Help" {
 
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-$Scripts = Get-ChildItem "$here\..\" -Filter "*.ps1" -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
+$Scripts = Get-ChildItem $(Join-Path -Path $here -ChildPath "..") -Filter "*.ps1" -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
 
-$Modules = Get-ChildItem "$here\..\" -Filter "*.psm1" -Recurse
+$Modules = Get-ChildItem $(Join-Path -Path $here -ChildPath "..") -Filter "*.psm1" -Recurse
 
 $Excluderules = @()
 
@@ -142,7 +142,7 @@ Import-Module -Name PSScriptAnalyzer -ErrorAction Stop
 
 $Rules = Get-ScriptAnalyzerRule | Where-Object -FilterScript { $_.RuleName -notin $Excluderules }
 
-if ($Modules.count -gt 0) {
+if ((Measure-Object -InputObject $Modules).count -gt 0) {
 
     Describe "Testing all Modules in this Repo to be be correctly formatted" -Tag "PSScriptAnalyzer" {
 
@@ -154,7 +154,7 @@ if ($Modules.count -gt 0) {
 
                     It "passes the PSScriptAnalyzer Rule $rule" {
 
-                        (Invoke-ScriptAnalyzer -Path $module.FullName -IncludeRule $rule.RuleName ).Count | Should Be 0
+                        (Measure-Object -InputObject $(Invoke-ScriptAnalyzer -Path $module.FullName -IncludeRule $rule.RuleName )).Count | Should Be 0
 
                     }
 
@@ -180,7 +180,7 @@ if ($Scripts.count -gt 0) {
 
                     It "passes the PSScriptAnalyzer Rule $rule" {
 
-                        (Invoke-ScriptAnalyzer -Path $script.FullName -IncludeRule $rule.RuleName ).Count | Should Be 0
+                        (Measure-Object -InputObject $(Invoke-ScriptAnalyzer -Path $script.FullName -IncludeRule $rule.RuleName )).Count | Should Be 0
 
                     }
 

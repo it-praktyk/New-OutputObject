@@ -10,7 +10,7 @@
     KEYWORDS: PowerShell, Pester, psd1, New-OutputObject, New-OutputObject
 
     CURRENT VERSION
-    - 0.9.10 - 2017-07-23
+    - 0.9.11 - 2017-10-16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -22,7 +22,7 @@ $ModuleName = "New-OutputObject"
 $VerboseInternal = $false
 
 #Provided path asume that your module manifest (a file with the psd1 extension) exists in the parent directory for directory where the current test script is stored
-$RelativePathToModuleManifest = "{0}\..\{1}.psd1" -f $PSScriptRoot, $ModuleName
+$RelativePathToModuleManifest = "{0}{2}..{2}{1}.psd1" -f $PSScriptRoot, $ModuleName, [System.IO.Path]::DirectorySeparatorChar
 
 #Remove module if it's currently loaded
 Get-Module -Name $ModuleName -ErrorAction SilentlyContinue | Remove-Module
@@ -43,14 +43,14 @@ foreach ($ObjectType in $ObjectTypes) {
 
         [System.String]$DateTimeFormatToMock = 'yyyyMMdd-HHmmss'
 
-        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
+        If ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and $ISLinux) {
 
             [String]$IncorrectFileNameOnly = "Test-File-201606$([char]0)08-1315.txt"
 
             [String]$IncorrectDateTimeFormat = "yyyy/MM/dd-HH:mm:ss"
 
         }
-        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
+        ElseIf ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and $IsMacOS) {
 
             [String]$IncorrectFileNameOnly = "Test-File-201606$([char]58)08-1315.txt"
 
@@ -74,21 +74,21 @@ foreach ($ObjectType in $ObjectTypes) {
 
         [System.String]$DateTimeObjectToMock = 'yyyyMMdd'
 
-        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
+        If ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and $ISLinux) {
 
             [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]0)al/"
 
             [String]$IncorrectDateTimeFormat = "yyyy/MM/dd-HH:mm:ss"
 
         }
-        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
+        ElseIf ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and $IsMacOS) {
 
             [String]$IncorrectDirectoryOnly = "/usr/share/loc$([char]58)al/"
 
             [String]$IncorrectDateTimeFormat = "yyyy-MM-dd-HH:mm:ss"
 
         }
-        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsWindows) {
+        ElseIf ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and $IsWindows) {
 
             #The differences between 'normal' PowerShell (based on PSEdition: Desktop, PSVersion 5.1.15063.483) and
             #PowerShell Core (based on PSEdition: Core, PSVersion: 6.0.0-beta) are
@@ -881,7 +881,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
             New-Item -Path $TestDestinationFolder -ItemType Directory | Out-Null
 
-            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
+            If ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and ($ISLinux - $IsMacOS))  {
 
                 & chmod 0550 $TestDestinationFolder
 
@@ -957,7 +957,7 @@ foreach ($ObjectType in $ObjectTypes) {
             }
 
             #Restore ACLs to cleanly remove TestDrive
-            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
+            If ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and ($ISLinux - $IsMacOS))  {
 
                 & chmod 0770 $TestDestinationFolder
 
@@ -979,7 +979,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
             New-Item -Path $TestDestinationFolder -ItemType Container | Out-Null
 
-            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
+            If ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and ($ISLinux - $IsMacOS))  {
 
                 & chmod 0550 $TestDestinationFolder
 
@@ -1035,7 +1035,7 @@ foreach ($ObjectType in $ObjectTypes) {
             }
 
             #Restore ACLs to cleanly remove TestDrive
-            If ( $PSVersionTable.PSEdition -eq 'Core' -and ($ISLinux - $IsOSX))  {
+            If ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and ($ISLinux - $IsMacOS))  {
 
                 & chmod 0770 $TestDestinationFolder
 

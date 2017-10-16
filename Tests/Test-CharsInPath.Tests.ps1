@@ -14,7 +14,7 @@
     KEYWORDS: PowerShell, FileSystem, Pester
 
     CURRENT VERSION
-    - 0.6.1 - 2017-07-23
+    - 0.7.0 - 2017-10-16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -26,7 +26,9 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 
-. "$here\..\Private\$sut"
+[String]$PrivateFolderPath = "{0}{1}..{1}Private{1}" -f $here, [System.IO.Path]::DirectorySeparatorChar
+
+. "$PrivateFolderPath$sut"
 
 [Bool]$VerboseFunctionOutput = $false
 
@@ -54,7 +56,7 @@ Describe "Test-CharsInPath" {
 
     Context "Input is a string" {
 
-        If ( $PSVersionTable.PSEdition -eq 'Core' -and $ISLinux) {
+        If ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and $ISLinux) {
 
             #[char]58 = NULL
 
@@ -75,7 +77,7 @@ Describe "Test-CharsInPath" {
             [String]$CorrectFileNameOnly = 'Test-File-20160608-1315.txt'
 
         }
-        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsOSX) {
+        ElseIf ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and $IsMacOS) {
 
             #[char]58 = ':'
 
@@ -96,7 +98,7 @@ Describe "Test-CharsInPath" {
             [String]$CorrectFileNameOnly = 'Test-File-20160608-1315.txt'
 
         }
-        ElseIf ( $PSVersionTable.PSEdition -eq 'Core' -and $IsWindows )  {
+        ElseIf ( ($PSVersionTable.ContainsKey('PSEdition')) -and ($PSVersionTable.PSEdition -eq 'Core') -and $IsWindows )  {
 
             #The differences between 'normal' PowerShell (based on PSEdition: Desktop, PSVersion 5.1.15063.483) and
             #PowerShell Core (based on PSEdition: Core, PSVersion: 6.0.0-beta) are
