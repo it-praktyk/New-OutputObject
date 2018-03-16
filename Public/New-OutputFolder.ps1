@@ -50,6 +50,9 @@ Function New-OutputFolder {
     .PARAMETER BreakIfError
     Break function execution if parameters provided for output folder creation are not correct or destination folder path is not writables
 
+    .PARAMETER Force
+    If used the function Doesn't ask for an overwrite decission, assumes that the file can be overwritten
+
     .EXAMPLE
 
     PS \> (Get-Item env:COMPUTERNAME).Value
@@ -126,7 +129,7 @@ Function New-OutputFolder {
     KEYWORDS: PowerShell, Folder, FileSystem
 
     CURRENT VERSION
-    - 0.9.10 - 2017-07-23
+    - 0.9.11 - 2018-03-16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -160,8 +163,9 @@ Function New-OutputFolder {
         [alias("Separator")]
         [String]$NamePartsSeparator="-",
         [parameter(Mandatory = $false)]
-        [Switch]$BreakIfError
-
+        [Switch]$BreakIfError,
+        [parameter(Mandatory = $false)]
+        [Switch]$Force
     )
 
     $params = @{

@@ -13,8 +13,7 @@ Alligned to the version 0.9.10 - 2017-07-23
 - Exit codes and descriptions of them should to be moved to external parsable file
 - Static descriptions should be replaced by description from the external file
 - Check the function behaviour when called from other PSProvider than Filesystem
-- Add support for the Force parameter (if the parent path doesn't exist) or to replace/don't ask about overwrite decission
-- Catch situation when provided relative parent path is to high like "..\..\..\..\" - throw error(?)
+- Catch situation when provided relative parent path is too high, like "..\..\..\..\" - throw error(?)
   The current behaviouris: return root of psdrive
 - Trim provided parameters and display warning (?)
 - Replace non standard chars (?)

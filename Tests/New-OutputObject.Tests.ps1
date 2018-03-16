@@ -10,7 +10,7 @@
     KEYWORDS: PowerShell, Pester, psd1, New-OutputObject, New-OutputObject
 
     CURRENT VERSION
-    - 0.9.11 - 2017-10-16
+    - 0.9.12 - 2017-03-16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -1119,7 +1119,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                [System.String]$RequiredMessage = "The {0} {1} already exist  - can be overwritten" -f $ObjectType, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingObject")
+                [System.String]$RequiredMessage = "The {0} {1} already exist - can be overwritten" -f $ObjectType, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingObject")
 
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
 
@@ -1201,7 +1201,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                [System.String]$RequiredMessage = "The {0} {1} already exist  - can't be overwritten" -f $ItemTypeLower, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingObject")
+                [System.String]$RequiredMessage = "The {0} {1} already exist - can't be overwritten" -f $ItemTypeLower, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingObject")
 
                 $Result.ExitCodeDescription | Should Be $RequiredMessage
 
@@ -1263,6 +1263,88 @@ foreach ($ObjectType in $ObjectTypes) {
 
 
                 }
+            }
+
+        }
+
+        [System.String]$ContextName = "run without parameters, destination {0} exists, the Force defined" -f $ObjectType
+
+        Context "Function $FunctionName - $ContextName" {
+
+            If ($ObjectType -eq 'File') {
+
+                Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108-000002' } -ParameterFilter { $Format }
+
+                $ExpectedOutputObjectName = "Output-20161108-000002.txt"
+
+                $OutputTypeToCreate = 'file'
+
+                [System.String]$TestExistingObject = "TestDrive:\Output-20161108-000002.txt"
+
+            }
+            Else {
+
+                Mock -ModuleName New-OutputObject -CommandName Get-Date -MockWith { Return [System.String]'20161108' } -ParameterFilter { $Format }
+
+                $ExpectedOutputObjectName = "Output-20161108"
+
+                $OutputTypeToCreate = 'directory'
+
+                [System.String]$TestExistingObject = "TestDrive:\Output-20161108"
+
+
+            }
+
+
+            New-Item -Path $TestExistingObject -ItemType $OutputTypeToCreate
+
+            Mock -ModuleName New-OutputObject -CommandName Get-OverwriteDecision -MockWith { Return [int]1 }
+
+            If ($ObjectType -eq 'File') {
+
+                $ResultProxyFunction = New-OutputFile  -Force -Verbose:$VerboseInternal
+
+            }
+            Else {
+
+                $ResultProxyFunction = New-OutputFolder -Force -Verbose:$VerboseInternal
+
+            }
+
+            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType
+
+            It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
+
+                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
+                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+
+            }
+
+            It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
+
+                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
+                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+
+            }
+
+            It "Function $FunctionName - $ContextName - exit code" {
+
+                $Result.ExitCode | Should Be 6
+
+                $ResultProxyFunction.ExitCode | Should Be 6
+
+            }
+
+            It "Function $FunctionName - $ContextName - exit code description" {
+
+                [System.String]$RequiredMessage = "The {0} {1} already exist - can be overwritten due to used the Force switch" -f $ItemTypeLower, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingObject")
+
+                $Result.ExitCodeDescription | Should Be $RequiredMessage
+
+                $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+
             }
 
         }

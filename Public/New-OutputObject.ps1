@@ -18,8 +18,9 @@ Function New-OutputObject {
     - 1 = "Provided parent path <PATH> doesn't exist"
     - 2 = "The name not created due to unaccepatable chars"
     - 3 = "Provided patch <PATH> is not writable"
-    - 4 = "The file\folder <PATH>\\<FILE_OR_FOLDER_NAME> already exist  - can be overwritten"
-    - 5 = "The file\folder <PATH>\\<FILE_OR_FOLDER_NAME> already exist  - can't be overwritten"
+    - 4 = "The file\folder <PATH>\\<FILE_OR_FOLDER_NAME> already exist - can be overwritten"
+    - 5 = "The file\folder <PATH>\\<FILE_OR_FOLDER_NAME> already exist - can't be overwritten"
+    - 6 = "The file\folder <PATH>\\<FILE_OR_FOLDER_NAME> already exist - can be overwritten due to used the Force switch"
 
     .PARAMETER ObjectType
     Type of object to prepare - file or folder
@@ -57,6 +58,9 @@ Function New-OutputObject {
     .PARAMETER BreakIfError
     Break function execution if parameters provided for output file creation are not correct or destination file path is not writables
 
+    .PARAMETER Force
+    If used the function Doesn't ask for an overwrite decission, assumes that the file can be overwritten
+
     .EXAMPLE
 
     PS \> (Get-Item env:COMPUTERNAME).Value
@@ -68,8 +72,6 @@ Function New-OutputObject {
         OutputObjectNamePrefix = 'Messages';
         OutputObjectNameMidPart = (Get-Item env:COMPUTERNAME).Value;
         IncludeDateTimePartInOutputObjectName = $true;
-        IncludeDateTimePartInOutputObjectName = $true;
-
         BreakIfError = $true
     }
 
@@ -145,7 +147,7 @@ Function New-OutputObject {
     KEYWORDS: PowerShell, File, Folder, FileSystem
 
     CURRENT VERSION
-    - 0.9.11- 2017-10-16
+    - 0.9.12- 2018-03-16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -185,8 +187,9 @@ Function New-OutputObject {
         [alias("Separator")]
         [String]$NamePartsSeparator = "-",
         [parameter(Mandatory = $false)]
-        [Switch]$BreakIfError
-
+        [Switch]$BreakIfError,
+        [parameter(Mandatory = $false)]
+        [Switch]$Force
     )
 
     #Declare variable
@@ -197,8 +200,9 @@ Function New-OutputObject {
                                 1 = "Provided parent path {0} doesn't exist"; # $ParentPath
                                 2 = 'The name not created due to unaccepatable chars';
                                 3 = "Provided path {0} is not writable"; # $ParentPath
-                                4 = "The {0} {1} already exist  - can be overwritten" # $ItemTypeLowerCase, $OutputObjectPath.FullName
-                                5 = "The {0} {1} already exist  - can't be overwritten" # $ItemTypeLowerCase, $OutputObjectPath
+                                4 = "The {0} {1} already exist - can be overwritten" # $ItemTypeLowerCase, $OutputObjectPath.FullName
+                                5 = "The {0} {1} already exist - can't be overwritten" # $ItemTypeLowerCase, $OutputObjectPath
+                                6 = "The {0} {1} already exist - can be overwritten due to used the Force switch" # $ItemTypeLowerCase, $OutputObjectPath
     }
 
     [String]$ExitCodeDescription = 'Everything is fine :-)'
@@ -474,37 +478,50 @@ Function New-OutputObject {
 
         If (Test-Path -Path $OutputObjectPath -PathType $PathType) {
 
-            $Answer = Get-OverwriteDecision -Path $OutputObjectPath -ItemType $ObjectType
+            If ( -not $Force.IsPresent) {
 
-            switch ($Answer) {
+                $Answer = Get-OverwriteDecision -Path $OutputObjectPath -ItemType $ObjectType
 
-                0 {
+                switch ($Answer) {
 
-                    [Int]$ExitCode = 4
+                    0 {
 
-                    [String]$MessageText = $ExitCodesDescriptions[$ExitCode] -f $ItemTypeLowerCase, $OutputObjectPath.FullName
+                        [Int]$ExitCode = 4
 
-                    [String]$ExitCodeDescription = $MessageText
+                        [String]$MessageText = $ExitCodesDescriptions[$ExitCode] -f $ItemTypeLowerCase, $OutputObjectPath.FullName
+
+                        [String]$ExitCodeDescription = $MessageText
+
+                    }
+
+                    1 {
+
+                        [Int]$ExitCode = 5
+
+                        [String]$MessageText = $ExitCodesDescriptions[$ExitCode] -f $ItemTypeLowerCase, $OutputObjectPath
+
+                        [String]$ExitCodeDescription = $MessageText
+
+                    }
+
+                    2 {
+
+                        [String]$MessageText = "The {0} {1} already exist  - operation canceled by user" -f $ItemTypeLowerCase, $OutputObjectPath
+
+                        Throw $MessageText
+
+                    }
 
                 }
 
-                1 {
+            }
+            else {
 
-                    [Int]$ExitCode = 5
+                [Int]$ExitCode = 6
 
-                    [String]$MessageText = "The {0} {1} already exist  - can't be overwritten" -f $ItemTypeLowerCase, $OutputObjectPath
+                [String]$MessageText = $ExitCodesDescriptions[$ExitCode] -f $ItemTypeLowerCase, $OutputObjectPath
 
-                    [String]$ExitCodeDescription = $MessageText
-
-                }
-
-                2 {
-
-                    [String]$MessageText = "The {0} {1} already exist  - operation canceled by user" -f $ItemTypeLowerCase, $OutputObjectPath
-
-                    Throw $MessageText
-
-                }
+                [String]$ExitCodeDescription = $MessageText
 
             }
 

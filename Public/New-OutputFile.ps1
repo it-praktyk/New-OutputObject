@@ -17,8 +17,9 @@ Function New-OutputFile {
     - 1 = "Provided parent path <PATH> doesn't exist"
     - 2 = "The result name contains unacceptable chars"
     - 3 = "Provided patch <PATH> is not writable"
-    - 4 = "The file <PATH>\\<FILE_NAME> already exist  - can be overwritten"
-    - 5 = "The file <PATH>\\<FILE_NAME> already exist  - can't be overwritten"
+    - 4 = "The file <PATH>\\<FILE_NAME> already exist - can be overwritten"
+    - 5 = "The file <PATH>\\<FILE_NAME> already exist - can't be overwritten"
+    - 6 = "The file <PATH>\\<FILE_NAME> already exist - can be overwritten due to used the Force switch"
 
     .PARAMETER ParentPath
     The folder path what will be used as the parent path for the new created object.
@@ -52,6 +53,9 @@ Function New-OutputFile {
 
     .PARAMETER BreakIfError
     Break function execution if parameters provided for output file creation are not correct or destination file path is not writables
+
+    .PARAMETER Force
+    If used the function Doesn't ask for an overwrite decission, assumes that the file can be overwritten
 
     .EXAMPLE
 
@@ -131,7 +135,7 @@ Function New-OutputFile {
     KEYWORDS: PowerShell, File, FileSystem
 
     CURRENT VERSION
-    - 0.9.10 - 2017-07-23
+    - 0.9.11 - 2018-03-16
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -167,7 +171,9 @@ Function New-OutputFile {
         [alias("Separator")]
         [String]$NamePartsSeparator = "-",
         [parameter(Mandatory = $false)]
-        [Switch]$BreakIfError
+        [Switch]$BreakIfError,
+        [parameter(Mandatory = $false)]
+        [Switch]$Force
     )
 
 
