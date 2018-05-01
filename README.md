@@ -1,14 +1,12 @@
 # New-OutputObject Module
 
+[![Build Status](https://travis-ci.org/it-praktyk/New-OutputObject.svg?branch=master)](https://travis-ci.org/it-praktyk/New-OutputObject)
+
 ## Description and examples of usage
 
 The PowerShell module intended for preparing PowerShell objects what the next help output filesystem objects, means: files and folders.
 
-The module - since version 0.9.10 - is compatible with PowerShell Core 6.0.0 beta4 and tested on
-
-- Windows (5.1.x and 6.0.0 - beta4)
-- Linux Fedora 25 x64
-- MacOS 10.12
+The module - since version 0.9.10 - is compatible with PowerShell Core 6.0.0.
 
 Using the New-OutputObject you can prepare files/folders names like
 
@@ -58,12 +56,12 @@ Functions from the New-OutputObject don't
 
 - create file/folder (except that used to check if destination - parent path - is writable but that files/folders are not retained).
 
-
 ## Feedbacks and comments
 
 Your comments - preferable via GitHub issues - and  pull requests are welcomed.
 
-The current module version: 0.9.10 - 2017-07-23.  
+The current module version: 0.9.13 - 2018-05-01.
+
 The history of versions you can find [here](CHANGELOG.md).
 
 The module you can download directly from GitHub or  from the [PowerShellGallery](https://www.powershellgallery.com/packages/New-OutputObject/).
@@ -84,7 +82,7 @@ Function intended for preparing a PowerShell custom object what contains e.g. fi
 
 |ParameterName|DefaultValue|Remarks|
 |:---|:---:|:---|
-|ParentPath| .\\||
+|ParentPath| .| |
 |OutputFileNamePrefix|Output||
 |OutputFileNameMidPart|||
 |OutputFileNameSuffix|||
@@ -94,6 +92,7 @@ Function intended for preparing a PowerShell custom object what contains e.g. fi
 |OutputFileNameExtension|txt||
 |NamePartsSeparator|-||
 |BreakIfError||If not used for some non critical errors returned object can't be suitable to create file|
+|Force||If used the exising objects will be overwirten without questions|
 
 ##### Returned object contains properties
 
@@ -112,8 +111,9 @@ Function intended for preparing a PowerShell custom object what contains e.g. fi
 |  1  |Provided path \<PATH> doesn't exist|
 |  2  |The result name contains unacceptable chars|
 |  3  |Provided patch \<PATH> is not writable|
-|  4  |The file \<PATH>\\<FILE_NAME> already exist  - can be overwritten|
-|  5  |The file \<PATH>\\<FILE_NAME> already exist  - can't be overwritten|
+|  4  |The file \<PATH>\\<FILE_NAME> already exist - can be overwritten|
+|  5  |The file \<PATH>\\<FILE_NAME> already exist - can't be overwritten|
+|  6  |The file \<PATH>\\<FILE_NAME> already exist - can be overwritten due to used the Force switch|
 
 Detailed help and examples for the New-ObjectFile you can find  [here\](Help/New-OutputFile.md)
 
@@ -160,16 +160,17 @@ Function intended for preparing a PowerShell custom object what contains e.g.fol
 |  3  |Provided patch \<PATH> is not writable|
 |  4  |The folder \<PATH>\\<FOLDER_NAME> already exist  - can be overwritten|
 |  5  |The folder \<PATH>\\<FOLDER_NAME> already exist  - can't be overwritten|
+|  6  |The file <PATH>\\<FOLDER_NAME> already exist - can be overwritten due to used the Force switch|
 
 Detailed help and examples for the New-ObjectFolder you can find  [here\](Help/New-OutputFolder.md)
 
 ### New-OutputObject
 
-The behaviour of the New-OutputObject is determined by the value of parameter ObjectType what can be: File or Folder. Generally it's a main functiot, functions New-OutputFile and New-OutputFolder are only proxy to call the New-OutputObject with selected parameter ObjectType.
+The behaviour of the New-OutputObject is determined by the value of parameter ObjectType what can be: File or Folder. Generally it's a main function, functions New-OutputFile and New-OutputFolder are only proxy to call the New-OutputObject with selected parameter ObjectType.
 
 ## LICENSE
 
-Copyright (c) 2016 Wojciech Sciesinski  
+Copyright (c) 2016-2018 Wojciech Sciesinski  
 This function is licensed under The MIT License (MIT)  
 Full license text: https://opensource.org/licenses/MIT
 
