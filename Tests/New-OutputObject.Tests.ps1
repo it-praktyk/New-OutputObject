@@ -10,7 +10,7 @@
     KEYWORDS: PowerShell, Pester, psd1, New-OutputObject, New-OutputObject
 
     CURRENT VERSION
-    - 0.9.12 - 2017-03-16
+    - 0.9.13 - 2017-05-01
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -1298,11 +1298,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
             New-Item -Path $TestExistingObject -ItemType $OutputTypeToCreate
 
-            Mock -ModuleName New-OutputObject -CommandName Get-OverwriteDecision -MockWith { Return [int]1 }
-
             If ($ObjectType -eq 'File') {
 
-                $ResultProxyFunction = New-OutputFile  -Force -Verbose:$VerboseInternal
+                $ResultProxyFunction = New-OutputFile -Force -Verbose:$VerboseInternal
 
             }
             Else {
@@ -1311,7 +1309,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
             }
 
-            $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType
+            $Result = New-OutputObject -Force -Verbose:$VerboseInternal -ObjectType $ObjectType
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 

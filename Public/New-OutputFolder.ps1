@@ -129,7 +129,7 @@ Function New-OutputFolder {
     KEYWORDS: PowerShell, Folder, FileSystem
 
     CURRENT VERSION
-    - 0.9.11 - 2018-03-16
+    - 0.9.12 - 2018-05-01
 
     HISTORY OF VERSIONS
     https://github.com/it-praktyk/New-OutputObject/CHANGELOG.md
@@ -189,6 +189,8 @@ Function New-OutputFolder {
         NamePartsSeparator = $NamePartsSeparator
 
         BreakIfError = $BreakIfError
+
+        Force = $Force
 
     }
 
