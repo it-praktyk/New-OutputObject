@@ -99,6 +99,15 @@
   - New-OutputObject-Module-Specific.Tests  v. 0.9.11
   - New-OutputObject.Tests                  v. 0.9.12
   - Test-CharsInPath.Tests                  v. 0.7.0
+- 0.9.13 - 2018-05-01
+  - New-OutputObject                        v. 0.9.12
+  - New-OutputFile                          v. 0.9.12
+  - New-OutputFolder                        v. 0.9.12
+  - Test-CharsInPath                        v. 0.7.0
+  - Get-OverwriteDecision                   v. 0.1.2
+  - New-OutputObject-Module-Specific.Tests  v. 0.9.11
+  - New-OutputObject.Tests                  v. 0.9.13
+  - Test-CharsInPath.Tests                  v. 0.7.0
 
 ## General
 
@@ -128,6 +137,8 @@
 - 0.9.12 - 2018-03-16
   - The parameter Force added
   - minor formating updates
+- 0.9.13 - 2018-05-01
+  - The implementation of the Force parameter corrected
 
 ## Function New-OutputObject
 
@@ -177,6 +188,7 @@
 - 0.9.9 - 2017-05-16 - skiping inadequate PScriptAnalyzer rule implemented better
 - 0.9.10 - 2017-07-23 - Reference to VERSIONS.md changed to CHANGELOG.md
 - 0.9.11 - 2018-03-16 - The parameter Force added, minor formating updates
+- 0.9.12 - 2018-05-01 - The implementation of the Force parameter corrected
 
 ## Function New-OutputFolder
 
@@ -193,6 +205,7 @@
 - 0.9.9 - 2017-05-16 - An unused parameter removed - fix #2, skiping inadequate PScriptAnalyzer rule implemented better
 - 0.9.10 - 2017-07-23 - Reference to VERSIONS.md changed to CHANGELOG.md
 - 0.9.11 - 2018-03-16 - The parameter Force added, minor formating updates
+- 0.9.12 - 2018-05-01 - The implementation of the Force parameter corrected
 
 ## Function Test-CharsInPath
 
@@ -252,6 +265,7 @@
   - Compatibility with PowerShell Core 6.0 beta 8
   - folder separators generalized to support differences between Windows/Linux/macOS
 - 0.9.12 - 2018-03-16 - The parameter Force added, minor formating updates
+- 0.9.13 - 2018-05-01 - The implementation of the Force parameter corrected
 
 ## Test-CharsInPath.Tests
 
