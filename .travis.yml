@@ -22,4 +22,4 @@ matrix:
             - powershell
 
 script:
-  - pwsh -c 'Install-Module Pester -Force -Scope CurrentUser; Invoke-Pester -ExcludeTag PSScriptAnalyzer -EnableExit'
+  - pwsh -c 'Install-Module Pester,PSScriptAnalyzer -Force -Scope CurrentUser; Invoke-Pester -ExcludeTag PSScriptAnalyzer -EnableExit'
