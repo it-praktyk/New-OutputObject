@@ -42,13 +42,13 @@ Describe "Test-CharsInPath" {
 
         It "Input is a directory, SkipCheckCharsInFolderPart" {
 
-            Test-CharsInPath -path $TestDir -SkipCheckCharsInFolderPart | Should Be 1
+            Test-CharsInPath -path $TestDir -SkipCheckCharsInFolderPart | Should -Be 1
 
         }
 
         It "Input is a file, SkipCheckCharsInFileNamePart" {
 
-            Test-CharsInPath -path $TestFile -SkipCheckCharsInFileNamePart | Should Be 1
+            Test-CharsInPath -path $TestFile -SkipCheckCharsInFileNamePart | Should -Be 1
 
         }
 
@@ -144,79 +144,79 @@ Describe "Test-CharsInPath" {
 
         It "Input is string, CorrectPathString" {
 
-            Test-CharsInPath -Path $CorrectPathString -verbose:$VerboseFunctionOutput | should be 0
+            Test-CharsInPath -Path $CorrectPathString -verbose:$VerboseFunctionOutput | should -be 0
 
         }
 
         It "Input is string, SkipCheckCharsInFolderPart, CorrectPathString" {
 
-            Test-CharsInPath -Path $CorrectPathString -SkipCheckCharsInFolderPart -verbose:$VerboseFunctionOutput | should be 0
+            Test-CharsInPath -Path $CorrectPathString -SkipCheckCharsInFolderPart -verbose:$VerboseFunctionOutput | should -be 0
 
         }
 
         It "Input is string, SkipCheckCharsInFileNamePart, CorrectPathString" {
 
-            Test-CharsInPath -Path $CorrectPathString -SkipCheckCharsInFileNamePart -verbose:$VerboseFunctionOutput | should be 0
+            Test-CharsInPath -Path $CorrectPathString -SkipCheckCharsInFileNamePart -verbose:$VerboseFunctionOutput | should -be 0
 
         }
 
         It "Input is string, SkipCheckCharsInFolderPart, IncorrectDirectoryOnly" {
 
-            Test-CharsInPath -Path $IncorrectDirectoryOnly -SkipCheckCharsInFolderPart -verbose:$VerboseFunctionOutput | should be 1
+            Test-CharsInPath -Path $IncorrectDirectoryOnly -SkipCheckCharsInFolderPart -verbose:$VerboseFunctionOutput | should -be 1
 
         }
 
         It "Input is string, IncorrectDirectoryOnly" {
 
-            Test-CharsInPath -Path $IncorrectDirectoryOnly  -verbose:$VerboseFunctionOutput | should be 2
+            Test-CharsInPath -Path $IncorrectDirectoryOnly  -verbose:$VerboseFunctionOutput | should -be 2
 
         }
 
         It "Input is string, CorrectDirectoryOnly only" {
 
-            Test-CharsInPath -Path $CorrectDirectoryOnly -verbose:$VerboseFunctionOutput | should be 0
+            Test-CharsInPath -Path $CorrectDirectoryOnly -verbose:$VerboseFunctionOutput | should -be 0
 
         }
 
         It "Input is string, SkipCheckCharsInFileNamePart, InCorrectFileNameString" {
 
-            Test-CharsInPath -Path $InCorrectFileNameString -SkipCheckCharsInFileNamePart -verbose:$VerboseFunctionOutput | should be 0
+            Test-CharsInPath -Path $InCorrectFileNameString -SkipCheckCharsInFileNamePart -verbose:$VerboseFunctionOutput | should -be 0
 
         }
 
         It "Input is string, InCorrectFileNameString" {
 
-            Test-CharsInPath -Path $InCorrectFileNameString -verbose:$VerboseFunctionOutput | should be 3
+            Test-CharsInPath -Path $InCorrectFileNameString -verbose:$VerboseFunctionOutput | should -be 3
 
         }
 
         It "Input is string, SkipCheckCharsInFileNamePart, IncorrectFileNameOnly" {
 
-            Test-CharsInPath -Path $IncorrectFileNameOnly -SkipCheckCharsInFileNamePart -verbose:$VerboseFunctionOutput | should be 1
+            Test-CharsInPath -Path $IncorrectFileNameOnly -SkipCheckCharsInFileNamePart -verbose:$VerboseFunctionOutput | should -be 1
 
         }
 
         It "Input is string, IncorrectFileNameOnly only" {
 
-            Test-CharsInPath -Path $IncorrectFileNameOnly -verbose:$VerboseFunctionOutput | should be 3
+            Test-CharsInPath -Path $IncorrectFileNameOnly -verbose:$VerboseFunctionOutput | should -be 3
 
         }
 
         It "Input is string, SkipCheckCharsInFileNamePart, CorrectFileNameOnly" {
 
-            Test-CharsInPath -Path $CorrectFileNameOnly -SkipCheckCharsInFileNamePart -verbose:$VerboseFunctionOutput | should be 1
+            Test-CharsInPath -Path $CorrectFileNameOnly -SkipCheckCharsInFileNamePart -verbose:$VerboseFunctionOutput | should -be 1
 
         }
 
         It "Input is string, CorrectFileNameOnly only" {
 
-            Test-CharsInPath -Path $CorrectFileNameOnly -verbose:$VerboseFunctionOutput | should be 0
+            Test-CharsInPath -Path $CorrectFileNameOnly -verbose:$VerboseFunctionOutput | should -be 0
 
         }
 
         It "Input is string, SkipCheckCharsInFolderPart and SkipCheckCharsInFileNamePart, InCorrectPathString" {
 
-            Test-CharsInPath -Path $CorrectPathString -SkipCheckCharsInFileNamePart -SkipCheckCharsInFolderPart -verbose:$VerboseFunctionOutput | should be 1
+            Test-CharsInPath -Path $CorrectPathString -SkipCheckCharsInFileNamePart -SkipCheckCharsInFolderPart -verbose:$VerboseFunctionOutput | should -be 1
 
         }
 
@@ -228,7 +228,7 @@ Describe "Test-CharsInPath" {
 
             [Int]$PathToTest = 23
 
-            { Test-CharsInPath -Path $PathToTest -verbose:$VerboseFunctionOutput } | should Throw
+            { Test-CharsInPath -Path $PathToTest -verbose:$VerboseFunctionOutput } | should -Throw
 
         }
 
@@ -236,7 +236,7 @@ Describe "Test-CharsInPath" {
 
             $PathToTest = Get-Process | Select-Object -First 1
 
-            { Test-CharsInPath -Path $PathToTest -verbose:$VerboseFunctionOutput } | should Throw
+            { Test-CharsInPath -Path $PathToTest -verbose:$VerboseFunctionOutput } | should -Throw
 
         }
 

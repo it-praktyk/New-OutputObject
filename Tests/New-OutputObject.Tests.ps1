@@ -142,31 +142,31 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
             }
 
         }
@@ -197,33 +197,33 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
             }
         }
 
@@ -254,31 +254,31 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
             }
 
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
             }
 
         }
@@ -309,32 +309,32 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
             }
 
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
 
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
             }
 
@@ -369,33 +369,33 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
 
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
             }
 
@@ -450,33 +450,33 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
 
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
             }
 
@@ -509,33 +509,33 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
 
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
             }
 
@@ -568,34 +568,34 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
 
             }
 
             It "Function $FunctionName - $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
             }
 
@@ -666,33 +666,33 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName -  $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
 
             }
 
             It "Function $FunctionName -  $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
             }
 
@@ -765,33 +765,33 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName -  $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 0
+                $Result.ExitCode | Should -Be 0
 
-                $ResultProxyFunction.ExitCode | Should Be 0
+                $ResultProxyFunction.ExitCode | Should -Be 0
 
             }
 
             It "Function $FunctionName -  $ContextName - exit code description" {
 
-                $Result.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $Result.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be "Everything is fine :-)"
+                $ResultProxyFunction.ExitCodeDescription | Should -Be "Everything is fine :-)"
 
             }
 
@@ -826,25 +826,25 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName -  $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 1
+                $Result.ExitCode | Should -Be 1
 
-                $ResultProxyFunction.ExitCode | Should Be 1
+                $ResultProxyFunction.ExitCode | Should -Be 1
 
             }
 
@@ -852,7 +852,7 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 [System.String]$RequiredMessage = "Provided parent path {0} doesn't exist" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$ParentPath")
 
-                $Result.ExitCodeDescription | Should Be $RequiredMessage
+                $Result.ExitCodeDescription | Should -Be $RequiredMessage
 
             }
 
@@ -924,25 +924,25 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName -  $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName -  $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 3
+                $Result.ExitCode | Should -Be 3
 
-                $ResultProxyFunction.ExitCode | Should Be 3
+                $ResultProxyFunction.ExitCode | Should -Be 3
 
             }
 
@@ -950,9 +950,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 [System.String]$RequiredMessage = "Provided path {0} is not writable" -f $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestDestinationFolder")
 
-                $Result.ExitCodeDescription | Should Be $RequiredMessage
+                $Result.ExitCodeDescription | Should -Be $RequiredMessage
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+                $ResultProxyFunction.ExitCodeDescription | Should -Be $RequiredMessage
 
             }
 
@@ -1013,9 +1013,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
 
-                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -ParentPath $TestDestinationFolder -BreakIfError } | Should -Throw
 
-                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder -BreakIfError } | Should -Throw
 
                 }
 
@@ -1026,9 +1026,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 It "Function $FunctionName -  $ContextName - OutputObjectPath - an object type" {
 
-                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -ParentPath $TestDestinationFolder -BreakIfError } | Should -Throw
 
-                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder -BreakIfError } | Should Throw
+                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -ParentPath $TestDestinationFolder -BreakIfError } | Should -Throw
 
                 }
 
@@ -1095,25 +1095,25 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 4
+                $Result.ExitCode | Should -Be 4
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
@@ -1121,9 +1121,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 [System.String]$RequiredMessage = "The {0} {1} already exist - can be overwritten" -f $ObjectType, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingObject")
 
-                $Result.ExitCodeDescription | Should Be $RequiredMessage
+                $Result.ExitCodeDescription | Should -Be $RequiredMessage
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+                $ResultProxyFunction.ExitCodeDescription | Should -Be $RequiredMessage
 
             }
 
@@ -1177,25 +1177,25 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 5
+                $Result.ExitCode | Should -Be 5
 
-                $ResultProxyFunction.ExitCode | Should Be 5
+                $ResultProxyFunction.ExitCode | Should -Be 5
 
             }
 
@@ -1203,9 +1203,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 [System.String]$RequiredMessage = "The {0} {1} already exist - can't be overwritten" -f $ItemTypeLower, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingObject")
 
-                $Result.ExitCodeDescription | Should Be $RequiredMessage
+                $Result.ExitCodeDescription | Should -Be $RequiredMessage
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+                $ResultProxyFunction.ExitCodeDescription | Should -Be $RequiredMessage
 
             }
 
@@ -1246,9 +1246,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType } | Should -Throw
 
-                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal } | Should Throw
+                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal } | Should -Throw
 
                 }
 
@@ -1257,9 +1257,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType } | Should -Throw
 
-                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal } | Should Throw
+                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal } | Should -Throw
 
 
                 }
@@ -1313,25 +1313,25 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - an object type" {
 
-                $Result.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $Result.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
-                $ResultProxyFunction.OutputObjectPath | Should BeOfType $ExpectedObjectType
+                $ResultProxyFunction.OutputObjectPath | Should -BeOfType $ExpectedObjectType
 
             }
 
             It "Function $FunctionName - $ContextName - OutputObjectPath - Name " {
 
-                $Result.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $Result.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
-                $ResultProxyFunction.OutputObjectPath.Name | Should Be $ExpectedOutputObjectName
+                $ResultProxyFunction.OutputObjectPath.Name | Should -Be $ExpectedOutputObjectName
 
             }
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 6
+                $Result.ExitCode | Should -Be 6
 
-                $ResultProxyFunction.ExitCode | Should Be 6
+                $ResultProxyFunction.ExitCode | Should -Be 6
 
             }
 
@@ -1339,9 +1339,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 [System.String]$RequiredMessage = "The {0} {1} already exist - can be overwritten due to used the Force switch" -f $ItemTypeLower, $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$TestExistingObject")
 
-                $Result.ExitCodeDescription | Should Be $RequiredMessage
+                $Result.ExitCodeDescription | Should -Be $RequiredMessage
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+                $ResultProxyFunction.ExitCodeDescription | Should -Be $RequiredMessage
 
             }
 
@@ -1370,9 +1370,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 It "Function $FunctionName - $ContextName" {
 
-                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should -Throw
 
-                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
+                    { $ResultProxyFunction = New-OutputFile -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should -Throw
 
                 }
 
@@ -1381,9 +1381,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 It "Function $FunctionName - $ContextName" {
 
-                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
+                    { $Result = New-OutputObject -Verbose:$VerboseInternal -ObjectType $ObjectType -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should -Throw
 
-                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should Throw
+                    { $ResultProxyFunction = New-OutputFolder -Verbose:$VerboseInternal -DateTimePartFormat $IncorrectDateTimeFormat -BreakIfError } | Should -Throw
 
                 }
 
@@ -1412,9 +1412,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
             It "Function $FunctionName - $ContextName - exit code" {
 
-                $Result.ExitCode | Should Be 2
+                $Result.ExitCode | Should -Be 2
 
-                $ResultProxyFunction.ExitCode | Should Be 2
+                $ResultProxyFunction.ExitCode | Should -Be 2
 
             }
 
@@ -1422,9 +1422,9 @@ foreach ($ObjectType in $ObjectTypes) {
 
                 [System.String]$RequiredMessage = "The name not created due to unaccepatable chars"
 
-                $Result.ExitCodeDescription | Should Be $RequiredMessage
+                $Result.ExitCodeDescription | Should -Be $RequiredMessage
 
-                $ResultProxyFunction.ExitCodeDescription | Should Be $RequiredMessage
+                $ResultProxyFunction.ExitCodeDescription | Should -Be $RequiredMessage
 
             }
 

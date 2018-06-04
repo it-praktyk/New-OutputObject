@@ -39,9 +39,9 @@ Describe "General tests for the $ModuleName module"  {
 
         it "$ModuleName should load without error" -Skip:$false {
 
-            {Import-Module -FullyQualifiedName $RelativePathToModuleManifest -Force -Scope Global } | should not throw
+            {Import-Module -FullyQualifiedName $RelativePathToModuleManifest -Force -Scope Global } | should -not -throw
 
-            Get-Module -Name $ModuleName | should not be null
+            Get-Module -Name $ModuleName | should -not -be null
 
             # Since BeforeAll has passed, set skip to false
             $Global:PSDefaultParameterValues["It:Skip"]=$false
@@ -74,9 +74,9 @@ Describe "Module $ModuleName functions help" -Tags "Help" {
 
         Context "$Function - Help"{
 
-            It "Synopsis"{ $help.Synopsis | Should not BeNullOrEmpty }
+            It "Synopsis"{ $help.Synopsis | Should -not -BeNullOrEmpty }
 
-            It "Description"{ $help.Description | Should not BeNullOrEmpty }
+            It "Description"{ $help.Description | Should -not -BeNullOrEmpty }
 
             # Get the parameters declared in the Comment Based Help
             $RiskMitigationParameters = 'Whatif', 'Confirm'
@@ -87,7 +87,7 @@ Describe "Module $ModuleName functions help" -Tags "Help" {
 
             It "Parameter - Compare amount of parameters Help vs AST" {
 
-                $HelpParameters.count -eq $ASTParameters.count | Should Be $true
+                $HelpParameters.count -eq $ASTParameters.count | Should -Be $true
 
             }
 
@@ -96,7 +96,7 @@ Describe "Module $ModuleName functions help" -Tags "Help" {
 
                 It "Parameter $($_.Name) - Should contains description"{
 
-                    $_.description | Should not BeNullOrEmpty
+                    $_.description | Should -not -BeNullOrEmpty
 
                 }
 
@@ -105,7 +105,7 @@ Describe "Module $ModuleName functions help" -Tags "Help" {
             # Examples
             it "Example - Count should be greater than 0"{
 
-                $Help.examples.example.code.count | Should BeGreaterthan 0
+                $Help.examples.example.code.count | Should -BeGreaterthan 0
 
             }
 
@@ -114,7 +114,7 @@ Describe "Module $ModuleName functions help" -Tags "Help" {
 
                 it "Example - Remarks on $($Example.Title)"{
 
-                    $Example.remarks | Should not BeNullOrEmpty
+                    $Example.remarks | Should -not -BeNullOrEmpty
 
                 }
 
@@ -154,7 +154,7 @@ if ((Measure-Object -InputObject $Modules).count -gt 0) {
 
                     It "passes the PSScriptAnalyzer Rule $rule" {
 
-                        (Measure-Object -InputObject $(Invoke-ScriptAnalyzer -Path $module.FullName -IncludeRule $rule.RuleName )).Count | Should Be 0
+                        (Measure-Object -InputObject $(Invoke-ScriptAnalyzer -Path $module.FullName -IncludeRule $rule.RuleName )).Count | Should -Be 0
 
                     }
 
@@ -180,7 +180,7 @@ if ($Scripts.count -gt 0) {
 
                     It "passes the PSScriptAnalyzer Rule $rule" {
 
-                        (Measure-Object -InputObject $(Invoke-ScriptAnalyzer -Path $script.FullName -IncludeRule $rule.RuleName )).Count | Should Be 0
+                        (Measure-Object -InputObject $(Invoke-ScriptAnalyzer -Path $script.FullName -IncludeRule $rule.RuleName )).Count | Should -Be 0
 
                     }
 
