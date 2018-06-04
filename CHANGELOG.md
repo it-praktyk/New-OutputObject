@@ -109,6 +109,17 @@
   - New-OutputObject.Tests                  v. 0.9.13
   - Test-CharsInPath.Tests                  v. 0.7.0
 
+- 0.9.14 - 2018-06-04
+  - New-OutputObject                        v. 0.9.13
+  - New-OutputFile                          v. 0.9.12
+  - New-OutputFolder                        v. 0.9.12
+  - Test-CharsInPath                        v. 0.7.0
+  - Get-OverwriteDecision                   v. 0.1.2
+  - New-OutputObject-Module-Specific.Tests  v. 0.9.12
+  - New-OutputObject.Tests                  v. 0.9.14
+  - Test-CharsInPath.Tests                  v. 0.8.0
+
+
 ## General
 
 - 0.9.6 - 2016-11-13
@@ -161,6 +172,7 @@
 - 0.9.12 - 2018-03-16
   - The parameter Force added
   - minor formating updates
+- 0.9.14 - 2018-06-04 - unused variables removed
 
 ## Function New-OutputFile
 
@@ -248,6 +260,7 @@
   - The function can run when Set-StrictMode -Value Latest is set
   - Compatibility with PowerShell Core 6.0 beta 8
   - folder separators generalized to support differences between Windows/Linux/macOS
+- 0.9.12 - syntax of assertions updated to Pester v4.x notation
 
 ## New-OutputObject.Tests
 
@@ -266,6 +279,7 @@
   - folder separators generalized to support differences between Windows/Linux/macOS
 - 0.9.12 - 2018-03-16 - The parameter Force added, minor formating updates
 - 0.9.13 - 2018-05-01 - The implementation of the Force parameter corrected
+- 0.9.14 - syntax of assertions updated to Pester v4.x notation
 
 ## Test-CharsInPath.Tests
 
@@ -280,3 +294,4 @@
   - The function can run when Set-StrictMode -Value Latest is set
   - Compatibility with PowerShell Core 6.0 beta 8
   - folder separators generalized to support differences between Windows/Linux/macOS
+- 0.8.0 - syntax of assertions updated to Pester v4.x notation

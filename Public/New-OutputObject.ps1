@@ -233,8 +233,6 @@ Function New-OutputObject {
 
         $ItemTypeLowerCase = 'file'
 
-        $ItemTypeCapitalized = 'File'
-
         $SkipInFinalName = @()
 
         If ([String]::IsNullOrEmpty($DateTimePartFormat)) {
@@ -286,8 +284,6 @@ Function New-OutputObject {
         $PathType = 'Container'
 
         $ItemTypeLowerCase = 'folder'
-
-        $ItemTypeCapitalized = 'Folder'
 
         $SkipInFinalName = @('FileNameExtension')
 

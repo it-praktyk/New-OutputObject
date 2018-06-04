@@ -60,7 +60,7 @@ Functions from the New-OutputObject don't
 
 Your comments - preferable via GitHub issues - and  pull requests are welcomed.
 
-The current module version: 0.9.13 - 2018-05-01.
+The current module version: 0.9.14 - 2018-06-04.
 
 The history of versions you can find [here](CHANGELOG.md).
 
